@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -115,6 +115,9 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="Model\FileIO\DatabaseIO.cs" />
+    <Compile Include="Model\FileIO\FileIO.cs" />
+    <Compile Include="Model\FileIO\JsonIO.cs" />
     <Compile Include="Model\GeoLocation\GPS.cs" />
     <Compile Include="Model\GeoLocation\GPSPoint.cs" />
     <Compile Include="Model\Information\OpenComponent.cs" />
@@ -141,6 +144,7 @@
     <Compile Include="Screens\RoutePage.xaml.cs">
       <DependentUpon>RoutePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\DataModel.cs" />
     <Compile Include="Utilities\StorageController.cs" />
   </ItemGroup>
   <ItemGroup>
