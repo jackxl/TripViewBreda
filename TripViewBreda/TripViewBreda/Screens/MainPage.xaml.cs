@@ -107,5 +107,10 @@ namespace TripViewBreda
         }
 
         #endregion
+
+        private void Button_Help_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(HelpPage));
+        }
     }
 }
