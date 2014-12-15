@@ -118,11 +118,9 @@
     <Compile Include="Model\GeoLocation\GPS.cs" />
     <Compile Include="Model\GeoLocation\GPSPoint.cs" />
     <Compile Include="Model\Navigation\DefaultRoutes.cs" />
-    <Compile Include="Model\Navigation\NavigationManager.cs" 
+    <Compile Include="Model\Navigation\NavigationManager.cs" />
     <Compile Include="Model\Navigation\Route.cs" />
     <Compile Include="Model\Navigation\RoutePlanner.cs" />
-    <Compile Include="Model\GeoLocation\GPS.cs" />
-    <Compile Include="Model\GeoLocation\GPSPoint.cs" />
     <Compile Include="Screens\WelkomPage.xaml.cs">
       <DependentUpon>WelkomPage.xaml</DependentUpon>
     </Compile>
