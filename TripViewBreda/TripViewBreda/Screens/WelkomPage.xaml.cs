@@ -15,27 +15,31 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using TripViewBreda.Screens;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
-namespace TripViewBreda
+namespace TripViewBreda.Screens
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class WelkomPage : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
-        public MainPage()
+        public WelkomPage()
         {
             this.InitializeComponent();
 
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            string text = "Welkom user\n";
+            text += "This is the guide for Breda.\n\n";
+            text += "For more information contact the VVV\n\n";
+            text += "To continue press 'Next'";
+            this.Text_Welkom.Text = text;
         }
 
         /// <summary>
@@ -109,22 +113,9 @@ namespace TripViewBreda
 
         #endregion
 
-        private void Button_Routes_Click(object sender, RoutedEventArgs e)
+        private void Button_Back_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(RoutePage), e);
-        }
-        private void Button_Help_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(HelpPage));
-        }
-        private void MapButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(MapPage));
-        }
-
-        private void Button_Exit_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Exit();
+            this.Frame.Navigate(typeof(MainPage), e);
         }
     }
 }
