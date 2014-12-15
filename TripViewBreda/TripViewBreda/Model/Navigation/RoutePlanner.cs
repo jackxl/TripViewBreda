@@ -9,7 +9,7 @@ namespace TripViewBreda.Navigation
 {
     public class RoutePlanner
     {
-        public Route GenerateRoute(GPSPoint startpoint, GPSPoint eind)
+        public Route GenerateRoute(GPSPoint startpoint, GPSPoint endpoint)
         {
             return null;
         }

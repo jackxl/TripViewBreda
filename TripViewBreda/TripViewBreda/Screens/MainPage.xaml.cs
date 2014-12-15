@@ -110,6 +110,7 @@ namespace TripViewBreda
 
         private void Button_Routes_Click(object sender, RoutedEventArgs e)
         {
+            this.Frame.Navigate(typeof(RoutePage), e);
         }
         private void Button_Help_Click(object sender, RoutedEventArgs e)
         {
