@@ -105,6 +105,11 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="Navigation\DefaultRoutes.cs" />
+    <Compile Include="Navigation\GPSPoint.cs" />
+    <Compile Include="Navigation\NavigationManager.cs" />
+    <Compile Include="Navigation\Route.cs" />
+    <Compile Include="Navigation\RoutePlanner.cs" />
     <Compile Include="Screens\HelpPage.xaml.cs">
       <DependentUpon>HelpPage.xaml</DependentUpon>
     </Compile>
