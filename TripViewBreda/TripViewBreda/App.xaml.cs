@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TripViewBreda.Screens;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -91,7 +92,7 @@ namespace TripViewBreda
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (!rootFrame.Navigate(typeof(MainPage), e.Arguments))
+                if (SelectFirstScreen(e, rootFrame))
                 {
                     throw new Exception("Failed to create initial page");
                 }
@@ -99,6 +100,19 @@ namespace TripViewBreda
 
             // Ensure the current window is active
             Window.Current.Activate();
+        }
+
+        private static bool SelectFirstScreen(LaunchActivatedEventArgs e, Frame rootFrame)
+        {
+            bool firstTimeOpen = true; // TODO: load in!
+            if (firstTimeOpen)
+            {
+                return !rootFrame.Navigate(typeof(WelkomPage), e.Arguments);
+            }
+            else
+            {
+                return !rootFrame.Navigate(typeof(MainPage), e.Arguments);
+            }
         }
 
         /// <summary>

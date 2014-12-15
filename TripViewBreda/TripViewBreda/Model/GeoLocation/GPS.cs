@@ -10,7 +10,7 @@ namespace TripViewBreda.GeoLocation
     public class GPS
     {
        private Geopoint myPoint;
-        private async void UpdateCurrentLocation()
+       private async void UpdateCurrentLocation()
         {
             var locator = new Geolocator();
             locator.DesiredAccuracyInMeters = 50;

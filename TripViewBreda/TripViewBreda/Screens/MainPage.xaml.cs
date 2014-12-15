@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using TripViewBreda.Screens;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -110,6 +111,7 @@ namespace TripViewBreda
 
         private void Button_Routes_Click(object sender, RoutedEventArgs e)
         {
+            this.Frame.Navigate(typeof(RoutePage), e);
         }
         private void Button_Help_Click(object sender, RoutedEventArgs e)
         {
@@ -124,6 +126,5 @@ namespace TripViewBreda
         {
             Application.Current.Exit();
         }
-
     }
 }

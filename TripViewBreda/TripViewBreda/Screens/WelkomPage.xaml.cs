@@ -15,29 +15,31 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using TripViewBreda.GeoLocation;
-using Windows.Devices.Geolocation;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
-namespace TripViewBreda
+namespace TripViewBreda.Screens
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MapPage : Page
+    public sealed partial class WelkomPage : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private GPS gps= new GPS();
 
-        public MapPage()
+        public WelkomPage()
         {
             this.InitializeComponent();
 
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            string text = "Welkom user\n";
+            text += "This is the guide for Breda.\n\n";
+            text += "For more information contact the VVV\n\n";
+            text += "To continue press 'Next'";
+            this.Text_Welkom.Text = text;
         }
 
         /// <summary>
@@ -52,7 +54,6 @@ namespace TripViewBreda
         /// Gets the view model for this <see cref="Page"/>.
         /// This can be changed to a strongly typed view model.
         /// </summary>
-        /// 
         public ObservableDictionary DefaultViewModel
         {
             get { return this.defaultViewModel; }
@@ -103,18 +104,6 @@ namespace TripViewBreda
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            NavigateToVVV();
-        }
-        private async void NavigateToVVV()
-        {
-            var locator = new Geolocator();
-            locator.DesiredAccuracyInMeters = 50;
-
-            var position = await locator.GetGeopositionAsync();
-            Geopoint myPoint = position.Coordinate.Point;
-            await MyMap.TrySetViewAsync(myPoint);
-            MyMap.ZoomLevel = 16;
-            MyMap.LandmarksVisible = true;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -123,5 +112,10 @@ namespace TripViewBreda
         }
 
         #endregion
+
+        private void Button_Back_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(MainPage), e);
+        }
     }
 }
