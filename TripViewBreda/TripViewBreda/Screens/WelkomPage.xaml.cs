@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Media.Imaging;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -35,11 +36,6 @@ namespace TripViewBreda.Screens
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            string text = "Welkom user\n";
-            text += "This is the guide for Breda.\n\n";
-            text += "For more information contact the VVV\n\n";
-            text += "To continue press 'Next'";
-            this.Text_Welkom.Text = text;
         }
 
         /// <summary>
@@ -72,6 +68,15 @@ namespace TripViewBreda.Screens
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            this.Text_Welkom.Text = GetWelkomText();
+        }
+        private string GetWelkomText()
+        {
+            string text = "Welkom user\n";
+            text += "This is the guide for Breda.\n\n";
+            text += "For more information contact the VVV\n\n";
+            text += "To continue press 'Next'";
+            return text;
         }
 
         /// <summary>
