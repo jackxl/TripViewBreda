@@ -112,5 +112,9 @@ namespace TripViewBreda
         {
             this.Frame.Navigate(typeof(HelpPage));
         }
+        private void MapButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(MapPage));
+        }
     }
 }
