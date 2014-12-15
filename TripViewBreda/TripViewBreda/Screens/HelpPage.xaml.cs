@@ -67,6 +67,20 @@ namespace TripViewBreda
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            TextBox_HelpContent.Text = getHelpText();
+        }
+
+        private string getHelpText()
+        {
+            string helpText = "";
+            helpText += "Gebruik van de applicatie." + "\n";
+            helpText += "Het startmenu bevat vier items." + "\n";
+            helpText += "Door op 'Route' te drukken kunt u de navigatie van een route starten." + "\n";
+            helpText += "Door op 'Kaart' te drukken maakt u de kaart zichtbaar en kunt u de omgeving verkennen." + "\n";
+            helpText += "De 'Help' knop laat dit helpscherm zien." + "\n";
+            helpText += "De 'Exit' knop zal de applicatie afsluiten" + "\n";
+            return helpText;
+            
         }
 
         /// <summary>
