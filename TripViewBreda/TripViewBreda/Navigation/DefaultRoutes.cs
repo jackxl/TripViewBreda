@@ -8,7 +8,7 @@ namespace TripViewBreda.Navigation
 {
     public class DefaultRoutes
     {
-        private List<Route> Routes { get; private set; }
+        public List<Route> Routes { get; private set; }
         public DefaultRoutes()
         {
             this.Routes = new List<Route>();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TripViewBreda.GeoLocation
 {
-    class GPSPoint
+    public class GPSPoint
     {
         //OVERBODIG????
         //
@@ -28,6 +28,6 @@ namespace TripViewBreda.GeoLocation
         {
             return this.longitude;
         }
-        
+
     }
 }
