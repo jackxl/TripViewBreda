@@ -7,9 +7,9 @@ using Windows.Devices.Geolocation;
 
 namespace TripViewBreda.GeoLocation
 {
-    class GPS
+    public class GPS
     {
-        Geopoint myPoint;
+       private Geopoint myPoint;
         private async void UpdateCurrentLocation()
         {
             var locator = new Geolocator();
@@ -18,10 +18,10 @@ namespace TripViewBreda.GeoLocation
             var position = await locator.GetGeopositionAsync();
             myPoint = position.Coordinate.Point;
         }
-        public GPSPoint getCurrentLocation()
+        public Geopoint GetCurrentLocation()
         {
             UpdateCurrentLocation();
-            return new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude);
+            return myPoint;
         }
     }
 }

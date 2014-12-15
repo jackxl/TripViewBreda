@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using TripViewBreda.GeoLocation;
+using Windows.Devices.Geolocation;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -27,6 +29,7 @@ namespace TripViewBreda
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private GPS gps= new GPS();
 
         public MapPage()
         {
@@ -49,6 +52,7 @@ namespace TripViewBreda
         /// Gets the view model for this <see cref="Page"/>.
         /// This can be changed to a strongly typed view model.
         /// </summary>
+        /// 
         public ObservableDictionary DefaultViewModel
         {
             get { return this.defaultViewModel; }
@@ -96,9 +100,10 @@ namespace TripViewBreda
         /// </summary>
         /// <param name="e">Provides data for navigation methods and event
         /// handlers that cannot cancel the navigation request.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
+            await myMap.TrySetViewAsync(gps.GetCurrentLocation(), 12D);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
