@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TripViewBreda.Model.Information
 {
-    class OpenComponent
+    public class OpenComponent
     {
         public enum Day { Maandag, Dinsdag, Woensdag, Donderdag, Vrijdag, Zaterdag, Zondag };
         private Day day;
