@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="TripViewBreda.Screens.WelkomPage"
+    x:Class="TripViewBreda.Screens.DetailPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TripViewBreda.Screens"
@@ -19,19 +19,19 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
 
         <!-- Title Panel -->
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
-            <TextBlock Text="Tripview Breda" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-            <TextBlock Text="Welkom!" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+            <TextBlock x:Name="subjectName" Text="Subject Name" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+
         </StackPanel>
-        <Grid Grid.Row="1" Margin="19,0,0,0">
-            <TextBlock x:Name="Text_Welkom" Text="Welkom..." FontSize="24" TextWrapping="Wrap"/>
-        </Grid>
-        <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button x:Name="Button_Back" Content="Next" FontSize="32" Click="Button_Back_Click"/>
+
+        <!--TODO: Content should be placed within the following grid-->
+        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
+            <TextBlock HorizontalAlignment="Left" Margin="0,10,0,0" TextWrapping="Wrap" Text="Information" VerticalAlignment="Top" FontSize="18"/>
+            <TextBlock x:Name="subjectInformation" HorizontalAlignment="Left" Margin="0,37,0,0" TextWrapping="Wrap" Text="information of an subject" VerticalAlignment="Top" FontSize="12" Height="548" Width="352"/>
+
         </Grid>
     </Grid>
 </Page>

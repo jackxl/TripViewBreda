@@ -85,6 +85,10 @@
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
+    <Page Include="Screens\DetailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Screens\WelkomPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -117,10 +121,17 @@
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Model\GeoLocation\GPS.cs" />
     <Compile Include="Model\GeoLocation\GPSPoint.cs" />
+    <Compile Include="Model\Information\OpenComponent.cs" />
+    <Compile Include="Model\Information\OpeningHours.cs" />
+    <Compile Include="Model\Information\Subject.cs" />
+    <Compile Include="Model\Information\Subjects.cs" />
     <Compile Include="Model\Navigation\DefaultRoutes.cs" />
     <Compile Include="Model\Navigation\NavigationManager.cs" />
     <Compile Include="Model\Navigation\Route.cs" />
     <Compile Include="Model\Navigation\RoutePlanner.cs" />
+    <Compile Include="Screens\DetailPage.xaml.cs">
+      <DependentUpon>DetailPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Screens\WelkomPage.xaml.cs">
       <DependentUpon>WelkomPage.xaml</DependentUpon>
     </Compile>

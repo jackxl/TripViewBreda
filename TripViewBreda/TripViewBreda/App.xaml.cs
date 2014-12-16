@@ -8,6 +8,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -104,15 +105,20 @@ namespace TripViewBreda
 
         private static bool SelectFirstScreen(LaunchActivatedEventArgs e, Frame rootFrame)
         {
-            bool firstTimeOpen = true; // TODO: load in!
-            if (firstTimeOpen)
+            if (IsFirstLaunch())
             {
+                ApplicationData.Current.LocalSettings.Values["IsFirstLaunch"] = true;
                 return !rootFrame.Navigate(typeof(WelkomPage), e.Arguments);
             }
             else
             {
                 return !rootFrame.Navigate(typeof(MainPage), e.Arguments);
             }
+        }
+
+        public static bool IsFirstLaunch()
+        {
+            return !ApplicationData.Current.LocalSettings.Values.ContainsKey("IsFirstLaunch");
         }
 
         /// <summary>
