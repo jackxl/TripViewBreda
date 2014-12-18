@@ -1,4 +1,5 @@
-﻿using TripViewBreda.Common;
+﻿using Windows.Devices.Geolocation.Geofencing;
+using TripViewBreda.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -49,6 +50,7 @@ namespace TripViewBreda
             foreach(Subject s in subjects.GetSubjects())
             {
                 AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
+                CreateGeofence(s);
                 
             }
             GetRouteAndDirections(subjects.GetSubjects().First<Subject>(), subjects.GetSubjects().Last<Subject>());
@@ -78,6 +80,25 @@ namespace TripViewBreda
 
         }
 
+        private void CreateGeofence(Subject s)
+        {
+            var position = new BasicGeoposition
+            {
+                Latitude = s.GetLocation().GetLattitude(),
+                Longitude = s.GetLocation().GetLongitude()
+            };
+
+            var georcircle = new Geocircle(position, 20);
+
+            var mask = MonitoredGeofenceStates.Entered | MonitoredGeofenceStates.Exited;
+
+            var dwellTime = TimeSpan.FromSeconds(0);
+
+            var geofence = new Geofence(s.GetName(), georcircle, mask, false, dwellTime);
+            GeofenceMonitor.Current.Geofences.Add(geofence);
+        }
+
+        
         private async void GetRouteAndDirections(Subject start, Subject end)
         {
             // Start at start subject
