@@ -133,7 +133,7 @@ namespace TripViewBreda
 
         private void Button_ResetSettings_Click(object sender, RoutedEventArgs e)
         {
-            ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch] = false;
+            ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch] = true;
             Debug.WriteLine(AppSettings.IsFirstLaunch + ": " + ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch]);
         }
     }

@@ -107,20 +107,7 @@ namespace TripViewBreda
 
         private static bool SelectFirstScreen(LaunchActivatedEventArgs e, Frame rootFrame)
         {
-            if (IsFirstLaunch())
-            {
-                return !rootFrame.Navigate(typeof(WelcomePage), e.Arguments);
-            }
-            else
-            {
-                return !rootFrame.Navigate(typeof(MainPage), e.Arguments);
-            }
-        }
-
-        public static bool IsFirstLaunch()
-        {
-            Debug.WriteLine(AppSettings.IsFirstLaunch + ": " + ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch]);
-            return !(bool)(ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch]);
+            return !rootFrame.Navigate(typeof(MainPage), e.Arguments);
         }
 
         /// <summary>
