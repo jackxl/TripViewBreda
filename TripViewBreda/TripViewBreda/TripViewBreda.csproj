@@ -115,7 +115,6 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
-    <Compile Include="Model\FileIO\DatabaseIO.cs" />
     <Compile Include="Model\FileIO\FileIO.cs" />
     <Compile Include="Model\FileIO\JsonIO.cs" />
     <Compile Include="Model\GeoLocation\GPS.cs" />
@@ -144,7 +143,7 @@
     <Compile Include="Screens\RoutePage.xaml.cs">
       <DependentUpon>RoutePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\DataModel.cs" />
+    <Compile Include="Utilities\DataSource.cs" />
     <Compile Include="Utilities\StorageController.cs" />
   </ItemGroup>
   <ItemGroup>
