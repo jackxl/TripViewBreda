@@ -108,7 +108,7 @@ namespace TripViewBreda
             if (IsFirstLaunch())
             {
                 ApplicationData.Current.LocalSettings.Values["IsFirstLaunch"] = true;
-                return !rootFrame.Navigate(typeof(WelkomPage), e.Arguments);
+                return !rootFrame.Navigate(typeof(WelcomePage), e.Arguments);
             }
             else
             {
