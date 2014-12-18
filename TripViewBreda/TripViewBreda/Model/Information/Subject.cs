@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TripViewBreda.Model.Information
 {
-    class Subject
+    public class Subject
     {
         public GeoLocation.GPSPoint location;
         private string name;
