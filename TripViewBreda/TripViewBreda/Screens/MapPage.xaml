@@ -32,7 +32,7 @@
             <Maps:MapControl x:Name="MyMap" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Top"
-                             Width="362" Height="400"/>
+                             Width="362" Height="400" />
             <TextBlock HorizontalAlignment="Left" Margin="10,405,0,0" TextWrapping="Wrap" Text="Route" VerticalAlignment="Top" FontSize="20"/>
             <TextBlock x:Name="InstructionsLabel" HorizontalAlignment="Left" Margin="10,434,0,0" TextWrapping="Wrap" Text="Instructions" VerticalAlignment="Top" Height="100" Width="342"/>
             <TextBlock x:Name="DestinationLabel" HorizontalAlignment="Left" Margin="10,539,0,0" TextWrapping="Wrap" Text="Next hotspot:" VerticalAlignment="Top" FontSize="20" Width="342" Height="46"/>
