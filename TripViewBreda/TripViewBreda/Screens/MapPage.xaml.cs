@@ -19,6 +19,7 @@ using TripViewBreda.GeoLocation;
 using Windows.Devices.Geolocation;
 using TripViewBreda.Navigation;
 using Windows.UI.Xaml.Controls.Maps;
+using TripViewBreda.Model.Information;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -32,7 +33,7 @@ namespace TripViewBreda
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private GPS gps= new GPS();
-        private DefaultRoutes DefRoute = new DefaultRoutes();
+        private Subjects subjects = new Subjects();
         public MapPage()
         {
             this.InitializeComponent();
@@ -40,12 +41,9 @@ namespace TripViewBreda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            foreach(Route r in DefRoute.GetRoutes())
+            foreach(Subject s in subjects.GetSubjects())
             {
-                foreach(GPSPoint p in r.GetRoutePoints())
-                {
-                    AddPoint_Map(p.GetLattitude(), p.GetLongitude(), "");
-                }
+                AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
             }
         }
 

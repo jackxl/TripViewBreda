@@ -8,7 +8,7 @@ namespace TripViewBreda.GeoLocation
 {
     public class GPSPoint
     {
-  
+
         private double lattitude;
         private double longitude;
 
