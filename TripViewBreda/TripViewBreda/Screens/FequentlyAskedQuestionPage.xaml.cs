@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -23,12 +24,14 @@ namespace TripViewBreda.Screens
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MuchAskedQuestionPage : Page
+    public sealed partial class FrequentlyAskedQuestionPage : Page
     {
+        private int FontSizeTopic = 24;
+        private int FontSizeDescription = 16;
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
-        public MuchAskedQuestionPage()
+        public FrequentlyAskedQuestionPage()
         {
             this.InitializeComponent();
 
@@ -54,50 +57,19 @@ namespace TripViewBreda.Screens
             get { return this.defaultViewModel; }
         }
 
-        /// <summary>
-        /// Populates the page with content passed during navigation.  Any saved state is also
-        /// provided when recreating a page from a prior session.
-        /// </summary>
-        /// <param name="sender">
-        /// The source of the event; typically <see cref="NavigationHelper"/>
-        /// </param>
-        /// <param name="e">Event data that provides both the navigation parameter passed to
-        /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
-        /// a dictionary of state preserved by this page during an earlier
-        /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             this.TextBox_Project.Text = AppSettings.APP_NAME;
             LoadQuestions();
         }
 
-        /// <summary>
-        /// Preserves state associated with this page in case the application is suspended or the
-        /// page is discarded from the navigation cache.  Values must conform to the serialization
-        /// requirements of <see cref="SuspensionManager.SessionState"/>.
-        /// </summary>
-        /// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
-        /// <param name="e">Event data that provides an empty dictionary to be populated with
-        /// serializable state.</param>
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
         }
 
         #region NavigationHelper registration
 
-        /// <summary>
-        /// The methods provided in this section are simply used to allow
-        /// NavigationHelper to respond to the page's navigation methods.
-        /// <para>
-        /// Page specific logic should be placed in event handlers for the  
-        /// <see cref="NavigationHelper.LoadState"/>
-        /// and <see cref="NavigationHelper.SaveState"/>.
-        /// The navigation parameter is available in the LoadState method 
-        /// in addition to page state preserved during an earlier session.
-        /// </para>
-        /// </summary>
-        /// <param name="e">Provides data for navigation methods and event
-        /// handlers that cannot cancel the navigation request.</param>
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
@@ -112,31 +84,49 @@ namespace TripViewBreda.Screens
 
         private void LoadQuestions()
         {
-            foreach (string[] question in Information.MuchAskedQuestions)
+            foreach (string[] question in Information.FrequentlyAskedQuestions)
             {
-                this.ContentRoot.Children.Add(CreateStackPanel(question));
+                this.StackPanel_F_A_Q.Children.Add(CreateStackPanel(question));
             }
         }
         private StackPanel CreateStackPanel(string[] question)
         {
             StackPanel panel = new StackPanel();
             panel.Orientation = Orientation.Vertical;
-            panel.Height = 100; // TODO: Make Algoritme
+            panel.Height = CalculationStackPanelHeigth(question); // TODO: Make Algoritme
+            panel.Background = new SolidColorBrush(Colors.Brown);
+            panel.Margin = new Thickness(0, 10, 0, 10);
 
             TextBlock topic = new TextBlock();
-            topic.FontSize = 24;
+            topic.FontSize = FontSizeTopic;
             topic.TextWrapping = TextWrapping.Wrap;
             topic.Text = question[0];
 
             TextBlock description = new TextBlock();
-            description.FontSize = 16;
+            description.FontSize = FontSizeDescription;
             description.TextWrapping = TextWrapping.Wrap;
             description.Text = question[1];
+            description.Margin = new Thickness(10, 0, 0, 0);
 
             panel.Children.Add(topic);
             panel.Children.Add(description);
 
             return panel;
+        }
+        private double CalculationStackPanelHeigth(string[] question)
+        {
+            double factor = 1.1;
+            int topicLines = (question[0].Length / 29);
+            int descriptionLines = (question[1].Length / 44);
+            int topicHeight = (int)(FontSizeTopic * factor);
+            int descriptionHeight = (int)(FontSizeDescription * factor);
+            double total = 0;
+
+            total += topicHeight + (topicHeight * topicLines);
+            total += descriptionHeight + (descriptionHeight * descriptionLines);
+            total += descriptionHeight / 2;
+
+            return total;
         }
     }
 }

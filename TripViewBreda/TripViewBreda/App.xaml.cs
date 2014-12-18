@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TripViewBreda.Common;
 using TripViewBreda.Screens;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -117,7 +119,8 @@ namespace TripViewBreda
 
         public static bool IsFirstLaunch()
         {
-            return !ApplicationData.Current.LocalSettings.Values.ContainsKey("IsFirstLaunch");
+            Debug.WriteLine(AppSettings.IsFirstLaunch + ": " + ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch]);
+            return !(bool)(ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch]);
         }
 
         /// <summary>

@@ -124,7 +124,7 @@ namespace TripViewBreda.Screens
         {
             if (CheckBox_Dont_Show_Again.IsChecked == true)
             {
-                ApplicationData.Current.LocalSettings.Values["IsFirstLaunch"] = true;
+                ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch] = true;
             }
             this.Frame.Navigate(typeof(MainPage), e);
         }

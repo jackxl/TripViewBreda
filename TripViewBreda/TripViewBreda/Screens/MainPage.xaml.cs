@@ -38,12 +38,23 @@ namespace TripViewBreda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            //HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+            HardwareButtons.BackPressed += HardwareButtons_BackPressed;
         }
 
-        //void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
-        //{
-        //}
+        void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
+        {
+            Frame frame = Window.Current.Content as Frame;
+            if (frame == new MainPage() as Frame)
+            {
+                e.Handled = true;
+                return;
+            }
+            if (Frame.CanGoBack)
+            {
+                this.Frame.GoBack();
+                e.Handled = true;
+            }
+        }
 
         /// <summary>
         /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
