@@ -68,6 +68,7 @@ namespace TripViewBreda.Screens
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            this.TextBox_Project.Text = AppSettings.APP_NAME;
             this.Text_Welkom.Text = GetWelkomText();
         }
         private string GetWelkomText()

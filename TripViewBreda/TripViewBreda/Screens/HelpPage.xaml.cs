@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using TripViewBreda.Screens;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -67,6 +68,7 @@ namespace TripViewBreda
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            TextBox_Projectname.Text = AppSettings.APP_NAME;
             TextBox_HelpContent.Text = getHelpText();
         }
 
@@ -80,7 +82,7 @@ namespace TripViewBreda
             helpText += "De 'Help' knop laat dit helpscherm zien." + "\n";
             helpText += "De 'Exit' knop zal de applicatie afsluiten" + "\n";
             return helpText;
-            
+
         }
 
         /// <summary>
@@ -121,5 +123,10 @@ namespace TripViewBreda
         }
 
         #endregion
+
+        private void Button_M_A_Q_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(MuchAskedQuestionPage), e);
+        }
     }
 }

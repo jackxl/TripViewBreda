@@ -18,17 +18,17 @@ using Windows.UI.Xaml.Navigation;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
-namespace TripViewBreda
+namespace TripViewBreda.Screens
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class RoutePage : Page
+    public sealed partial class MuchAskedQuestionPage : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
-        public RoutePage()
+        public MuchAskedQuestionPage()
         {
             this.InitializeComponent();
 
@@ -68,6 +68,7 @@ namespace TripViewBreda
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             this.TextBox_Project.Text = AppSettings.APP_NAME;
+            LoadQuestions();
         }
 
         /// <summary>
@@ -108,5 +109,34 @@ namespace TripViewBreda
         }
 
         #endregion
+
+        private void LoadQuestions()
+        {
+            foreach (string[] question in Information.MuchAskedQuestions)
+            {
+                this.ContentRoot.Children.Add(CreateStackPanel(question));
+            }
+        }
+        private StackPanel CreateStackPanel(string[] question)
+        {
+            StackPanel panel = new StackPanel();
+            panel.Orientation = Orientation.Vertical;
+            panel.Height = 100; // TODO: Make Algoritme
+
+            TextBlock topic = new TextBlock();
+            topic.FontSize = 24;
+            topic.TextWrapping = TextWrapping.Wrap;
+            topic.Text = question[0];
+
+            TextBlock description = new TextBlock();
+            description.FontSize = 16;
+            description.TextWrapping = TextWrapping.Wrap;
+            description.Text = question[1];
+
+            panel.Children.Add(topic);
+            panel.Children.Add(description);
+
+            return panel;
+        }
     }
 }

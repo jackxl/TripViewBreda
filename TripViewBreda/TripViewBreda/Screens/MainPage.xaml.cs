@@ -38,7 +38,12 @@ namespace TripViewBreda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            //HardwareButtons.BackPressed += HardwareButtons_BackPressed;
         }
+
+        //void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
+        //{
+        //}
 
         /// <summary>
         /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
@@ -70,6 +75,7 @@ namespace TripViewBreda
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            this.TextBox_Project.Text = AppSettings.APP_NAME;
         }
 
         /// <summary>
