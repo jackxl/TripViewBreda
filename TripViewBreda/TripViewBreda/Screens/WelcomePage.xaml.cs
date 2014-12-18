@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.Storage;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -24,12 +25,12 @@ namespace TripViewBreda.Screens
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class WelkomPage : Page
+    public sealed partial class WelcomePage : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
-        public WelkomPage()
+        public WelcomePage()
         {
             this.InitializeComponent();
 
@@ -68,6 +69,7 @@ namespace TripViewBreda.Screens
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            this.TextBox_Project.Text = AppSettings.APP_NAME;
             this.Text_Welkom.Text = GetWelkomText();
         }
         private string GetWelkomText()
@@ -120,6 +122,10 @@ namespace TripViewBreda.Screens
 
         private void Button_Back_Click(object sender, RoutedEventArgs e)
         {
+            if (CheckBox_Dont_Show_Again.IsChecked == true)
+            {
+                ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch] = true;
+            }
             this.Frame.Navigate(typeof(MainPage), e);
         }
     }

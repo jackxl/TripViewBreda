@@ -22,12 +22,30 @@
 
         <!-- Title Panel -->
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
-            <TextBlock Text="TripView Breda" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-            <TextBlock Text="Start" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+            <TextBlock x:Name="TextBox_Project" Text="[project]" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+            <TextBlock x:Name="TextBox_Title" Text="Start" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
+            <FlyoutPresenter x:Name="Flyout_Welcome">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100*"/>
+                        <RowDefinition Height="300"/>
+                        <RowDefinition Height="75"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <TextBlock x:Name="Title_Flyout" Text="Welcome" FontSize="32"/>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <TextBlock x:Name="TextBlok_WelcomeMessage" Text="hello...." FontSize="20"/>
+                    </Grid>
+                    <Button Grid.Row="2" x:Name="Button_Close" Content="Close" Click="Button_Close_Click" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="2" x:Name="CheckBox_Dont_Show_Again" Content="Don't Show Again" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                </Grid>
+            </FlyoutPresenter>
+            
             <Button x:Name="Button_Routes" Content="Routes" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="60" BorderThickness="0" ToolTipService.ToolTip="Start a route" FontSize="24" Click="Button_Routes_Click"/>
             <Button x:Name="Button_Map" Content="Map" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Height="60" BorderThickness="0" ToolTipService.ToolTip="Start a route" FontSize="24" Click="MapButton_Click"/>
             <Button x:Name="Button_Help" Content="Help" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Margin="10,120,0,0" VerticalAlignment="Top" Height="60" BorderThickness="0" ToolTipService.ToolTip="Start a route" FontSize="24" Click="Button_Help_Click"/>

@@ -1,4 +1,5 @@
-﻿using TripViewBreda.Common;
+﻿using System.Xml.Linq;
+using TripViewBreda.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,18 +18,19 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
+using TripViewBreda.Model.Information;
 
-namespace TripViewBreda
+namespace TripViewBreda.Screens
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class RoutePage : Page
+    public sealed partial class DetailPage : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
-        public RoutePage()
+        public DetailPage()
         {
             this.InitializeComponent();
 
@@ -67,7 +69,6 @@ namespace TripViewBreda
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            this.TextBox_Project.Text = AppSettings.APP_NAME;
         }
 
         /// <summary>

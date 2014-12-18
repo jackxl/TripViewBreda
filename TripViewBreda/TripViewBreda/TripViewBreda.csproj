@@ -85,7 +85,15 @@
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="Screens\WelkomPage.xaml">
+    <Page Include="Screens\DetailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\FequentlyAskedQuestionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\WelcomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -111,6 +119,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\AppSettings.cs" />
+    <Compile Include="Common\Information.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
@@ -127,8 +136,14 @@
     <Compile Include="Model\Navigation\NavigationManager.cs" />
     <Compile Include="Model\Navigation\Route.cs" />
     <Compile Include="Model\Navigation\RoutePlanner.cs" />
-    <Compile Include="Screens\WelkomPage.xaml.cs">
-      <DependentUpon>WelkomPage.xaml</DependentUpon>
+    <Compile Include="Screens\DetailPage.xaml.cs">
+      <DependentUpon>DetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\FequentlyAskedQuestionPage.xaml.cs">
+      <DependentUpon>FequentlyAskedQuestionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\WelcomePage.xaml.cs">
+      <DependentUpon>WelcomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Screens\HelpPage.xaml.cs">
       <DependentUpon>HelpPage.xaml</DependentUpon>
@@ -168,12 +183,10 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-    </Reference>
+    <PRIResource Include="Model\LanguageResources\Nederlands.resw" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <PRIResource Include="Model\LanguageResources\English.resw" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

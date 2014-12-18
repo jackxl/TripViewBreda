@@ -17,5 +17,9 @@ namespace TripViewBreda.Navigation
         {
             return routes;
         }
+        public void SetRoutes(List<Route> routes)
+        {
+            this.routes = routes;
+        }
     }
 }

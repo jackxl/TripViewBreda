@@ -19,18 +19,26 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="150"/>
         </Grid.RowDefinitions>
 
         <!-- Title Panel -->
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
-            <TextBlock Text="TripView Breda" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+            <TextBlock x:Name="TextBox_Projectname" Text="[project]" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
             <TextBlock Text="Help" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
-        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            <TextBlock x:Name="TextBox_HelpContent" HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Height="491" Width="362" FontSize="18"/>
+        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="350" Height="400">
+            <TextBlock x:Name="TextBox_HelpContent" TextWrapping="Wrap" Text="TextBox" FontSize="18"/>
 
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <StackPanel>
+                <Button x:Name="Button_F_A_Q" Content="Frequently Asked Questions" FontSize="20" Click="Button_F_A_Q_Click" HorizontalAlignment="Center"/>
+                <Button x:Name="Button_ResetSettings" Content="Reset Settings" FontSize="20" Click="Button_ResetSettings_Click" HorizontalAlignment="Center"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

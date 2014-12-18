@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TripViewBreda.Common;
 using TripViewBreda.Screens;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -104,15 +107,7 @@ namespace TripViewBreda
 
         private static bool SelectFirstScreen(LaunchActivatedEventArgs e, Frame rootFrame)
         {
-            bool firstTimeOpen = true; // TODO: load in!
-            if (firstTimeOpen)
-            {
-                return !rootFrame.Navigate(typeof(WelkomPage), e.Arguments);
-            }
-            else
-            {
-                return !rootFrame.Navigate(typeof(MainPage), e.Arguments);
-            }
+            return !rootFrame.Navigate(typeof(MainPage), e.Arguments);
         }
 
         /// <summary>

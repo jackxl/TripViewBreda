@@ -8,9 +8,7 @@ namespace TripViewBreda.GeoLocation
 {
     public class GPSPoint
     {
-        //OVERBODIG????
-        //
-        //
+
         private double lattitude;
         private double longitude;
 
@@ -19,11 +17,19 @@ namespace TripViewBreda.GeoLocation
             this.lattitude = lattitude;
             this.longitude = longitude;
         }
-
+        /// <summary>
+        /// Description: 
+        /// This is the vertical line around the earth.
+        /// </summary>
         public double GetLattitude()
         {
-            return this.lattitude;
+            return lattitude;
         }
+
+        /// <summary>
+        /// Description:
+        /// This is the horizontal line around the earth.
+        /// </summary>
         public double GetLongitude()
         {
             return this.longitude;

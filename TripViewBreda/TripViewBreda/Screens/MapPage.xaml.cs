@@ -1,4 +1,5 @@
-﻿using TripViewBreda.Common;
+﻿using Windows.Devices.Geolocation.Geofencing;
+using TripViewBreda.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +16,14 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using TripViewBreda.GeoLocation;
+using Windows.Devices.Geolocation;
+using TripViewBreda.Navigation;
+using Windows.UI.Xaml.Controls.Maps;
+using TripViewBreda.Model.Information;
+using Windows.Services.Maps;
+using Windows.UI;
+using Windows.UI.Xaml.Documents;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -27,7 +36,8 @@ namespace TripViewBreda
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
+        private GPS gps= new GPS();
+        private Subjects subjects = new Subjects();
         public MapPage()
         {
             this.InitializeComponent();
@@ -35,8 +45,151 @@ namespace TripViewBreda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            subjects.AddSubject(new Subject(new GPSPoint(51.592342, 4.548881), "Thuis"));
+            subjects.AddSubject(new Subject(new GPSPoint(51.585477, 4.793091), "School"));
+            foreach(Subject s in subjects.GetSubjects())
+            {
+                AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
+                CreateGeofence(s);
+                
+            }
+            GetRouteAndDirections(subjects.GetSubjects().First<Subject>(), subjects.GetSubjects().Last<Subject>());
         }
 
+        private void AddPoint_Map(double lattitude, double longitude, String name)
+        {
+            MapIcon addIcon = new MapIcon();
+            
+            var myPosition = new Windows.Devices.Geolocation.BasicGeoposition();
+            myPosition.Longitude = longitude;
+            myPosition.Latitude = lattitude;
+            addIcon.Location = new Geopoint(myPosition);
+            addIcon.Title = name;
+            addIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
+            MyMap.MapElements.Add(addIcon);
+        }
+
+        public async void GoToCurrentPosition()
+        {
+            var locator = new Geolocator();
+            locator.DesiredAccuracyInMeters = 50;
+
+            var position = await locator.GetGeopositionAsync();
+            Geopoint myPoint = position.Coordinate.Point;
+            await MyMap.TrySetViewAsync(myPoint, 16D);
+
+        }
+
+        private void CreateGeofence(Subject s)
+        {
+            var position = new BasicGeoposition
+            {
+                Latitude = s.GetLocation().GetLattitude(),
+                Longitude = s.GetLocation().GetLongitude()
+            };
+
+            var georcircle = new Geocircle(position, 20);
+
+            var mask = MonitoredGeofenceStates.Entered | MonitoredGeofenceStates.Exited;
+
+            var dwellTime = TimeSpan.FromSeconds(0);
+
+            var geofence = new Geofence(s.GetName(), georcircle, mask, false, dwellTime);
+            GeofenceMonitor.Current.Geofences.Add(geofence);
+        }
+
+        
+        private async void GetRouteAndDirections(Subject start, Subject end)
+        {
+            // Start at start subject
+            BasicGeoposition startLocation = new BasicGeoposition();
+            startLocation.Latitude = start.GetLocation().GetLattitude();
+            startLocation.Longitude = start.GetLocation().GetLongitude();
+            Geopoint startPoint = new Geopoint(startLocation);
+
+            // End at end subject
+            BasicGeoposition endLocation = new BasicGeoposition();
+            endLocation.Latitude = end.GetLocation().GetLattitude();
+            endLocation.Longitude = end.GetLocation().GetLongitude();
+            Geopoint endPoint = new Geopoint(endLocation);
+
+            // Get the route between the points.
+            MapRouteFinderResult routeResult =
+                await MapRouteFinder.GetDrivingRouteAsync(
+                startPoint,
+                endPoint,
+                MapRouteOptimization.Time,
+                MapRouteRestrictions.None);
+
+            //Display route with text
+            if (routeResult.Status == MapRouteFinderStatus.Success)
+            {
+                // Display summary info about the route.
+                InstructionsLabel.Inlines.Add(new Run()
+                {
+                    Text = "Total estimated time (minutes) = "
+                        + routeResult.Route.EstimatedDuration.TotalMinutes.ToString()
+                });
+                InstructionsLabel.Inlines.Add(new LineBreak());
+                InstructionsLabel.Inlines.Add(new Run()
+                {
+                    Text = "Total length (kilometers) = "
+                        + (routeResult.Route.LengthInMeters / 1000).ToString()
+                });
+                InstructionsLabel.Inlines.Add(new LineBreak());
+                InstructionsLabel.Inlines.Add(new LineBreak());
+
+                // Display the directions.
+                InstructionsLabel.Inlines.Add(new Run()
+                {
+                    Text = "DIRECTIONS"
+                });
+                InstructionsLabel.Inlines.Add(new LineBreak());
+
+                foreach (MapRouteLeg leg in routeResult.Route.Legs)
+                {
+                    foreach (MapRouteManeuver maneuver in leg.Maneuvers)
+                    {
+                        InstructionsLabel.Inlines.Add(new Run()
+                        {
+                            Text = maneuver.InstructionText
+                        });
+                        InstructionsLabel.Inlines.Add(new LineBreak());
+                    }
+                }
+            }
+            else
+            {
+                InstructionsLabel.Text =
+                    "A problem occurred: " + routeResult.Status.ToString();
+            }
+
+           // Displaying route on map
+            if (routeResult.Status == MapRouteFinderStatus.Success)
+            {
+                // Use the route to initialize a MapRouteView.
+                MapRouteView viewOfRoute = new MapRouteView(routeResult.Route);
+                viewOfRoute.RouteColor = Colors.Yellow;
+                viewOfRoute.OutlineColor = Colors.Black;
+
+                // Add the new MapRouteView to the Routes collection
+                // of the MapControl.
+                MyMap.Routes.Add(viewOfRoute);
+
+                // Fit the MapControl to the route.
+                await MyMap.TrySetViewBoundsAsync(
+                    routeResult.Route.BoundingBox,
+                    null,
+                    Windows.UI.Xaml.Controls.Maps.MapAnimationKind.None);
+            }
+            else
+            {
+                InstructionsLabel.Text =
+                   "A problem occurred: " + routeResult.Status.ToString();
+                
+            }
+
+        }
         /// <summary>
         /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
         /// </summary>
@@ -49,6 +202,7 @@ namespace TripViewBreda
         /// Gets the view model for this <see cref="Page"/>.
         /// This can be changed to a strongly typed view model.
         /// </summary>
+        /// 
         public ObservableDictionary DefaultViewModel
         {
             get { return this.defaultViewModel; }
@@ -99,6 +253,18 @@ namespace TripViewBreda
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
+            NavigateToVVV();
+        }
+        private async void NavigateToVVV()
+        {
+            var locator = new Geolocator();
+            locator.DesiredAccuracyInMeters = 50;
+
+            var position = await locator.GetGeopositionAsync();
+            Geopoint myPoint = position.Coordinate.Point;
+            await MyMap.TrySetViewAsync(myPoint);
+            MyMap.ZoomLevel = 16;
+            MyMap.LandmarksVisible = true;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

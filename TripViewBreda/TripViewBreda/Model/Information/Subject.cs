@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TripViewBreda.Model.Information
 {
-    class Subject
+    public class Subject
     {
-        private GeoLocation.GPSPoint location;
+        public GeoLocation.GPSPoint location;
         private string name;
         private string information;
         private OpeningHours openingHours;
@@ -29,7 +29,7 @@ namespace TripViewBreda.Model.Information
             this.openingHours = openingHours;
         }
 
-        private GeoLocation.GPSPoint GetLocation()
+        public GeoLocation.GPSPoint GetLocation()
         {
             return location;
         }

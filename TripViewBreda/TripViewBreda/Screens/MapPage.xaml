@@ -28,8 +28,11 @@
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
-        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            <Maps:MapControl HorizontalAlignment="Left" VerticalAlignment="Top" Width="362" Height="400"/>
+        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="0,9.167,0,0">
+            <Maps:MapControl x:Name="MyMap" 
+                             HorizontalAlignment="Left" 
+                             VerticalAlignment="Top"
+                             Width="400" Height="400" />
             <TextBlock HorizontalAlignment="Left" Margin="10,405,0,0" TextWrapping="Wrap" Text="Route" VerticalAlignment="Top" FontSize="20"/>
             <TextBlock x:Name="InstructionsLabel" HorizontalAlignment="Left" Margin="10,434,0,0" TextWrapping="Wrap" Text="Instructions" VerticalAlignment="Top" Height="100" Width="342"/>
             <TextBlock x:Name="DestinationLabel" HorizontalAlignment="Left" Margin="10,539,0,0" TextWrapping="Wrap" Text="Next hotspot:" VerticalAlignment="Top" FontSize="20" Width="342" Height="46"/>

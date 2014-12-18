@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TripViewBreda.Model.Information
 {
-    class OpeningHours
+    public class OpeningHours
     {
         private List<OpenComponent> openingHours;
 

@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Navigation;
 using TripViewBreda.Screens;
 using Windows.Phone.UI.Input;
 using System.Diagnostics;
+using Windows.Storage;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -39,7 +40,6 @@ namespace TripViewBreda
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
         }
-
         /// <summary>
         /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
         /// </summary>
@@ -70,6 +70,30 @@ namespace TripViewBreda
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            this.TextBox_Project.Text = AppSettings.APP_NAME;
+            if (ApplicationData.Current.LocalSettings.Values.ContainsKey(AppSettings.IsFirstLaunch))
+            { ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch] = true; }
+            else if (ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch] == null)
+            { ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch] = true; }
+
+            bool IsFirstLaunch = (bool)(ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch]);
+            if (IsFirstLaunch)
+            {
+                MakeButtonsCollapsed();
+                this.TextBlok_WelcomeMessage.Text = CreateWelcomeMessage();
+            }
+            else
+            {
+                this.Flyout_Welcome.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+        }
+        private string CreateWelcomeMessage()
+        {
+            string text = "Welkom user\n";
+            text += "This is the guide for Breda.\n\n";
+            text += "For more information contact the VVV\n\n";
+            text += "To continue press '" + this.Button_Close.Content + "'";
+            return text;
         }
 
         /// <summary>
@@ -127,6 +151,34 @@ namespace TripViewBreda
         private void Button_Exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Exit();
+        }
+
+        private void Button_Close_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.CheckBox_Dont_Show_Again.IsChecked == true)
+            {
+                ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch] = false;
+            }
+            MakeButtonsVisible();
+            this.Flyout_Welcome.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
+        public void MakeButtonsCollapsed()
+        {
+            this.TextBox_Project.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            this.TextBox_Title.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            this.Button_Routes.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            this.Button_Map.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            this.Button_Help.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            this.Button_Exit.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
+        public void MakeButtonsVisible()
+        {
+            this.TextBox_Project.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            this.TextBox_Title.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            this.Button_Routes.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            this.Button_Map.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            this.Button_Help.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            this.Button_Exit.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
     }
 }
