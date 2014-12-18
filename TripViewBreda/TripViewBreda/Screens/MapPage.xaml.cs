@@ -80,13 +80,13 @@ namespace TripViewBreda
 
         private async void GetRouteAndDirections(Subject start, Subject end)
         {
-            // Start at Microsoft in Redmond, Washington.
+            // Start at start subject
             BasicGeoposition startLocation = new BasicGeoposition();
             startLocation.Latitude = start.GetLocation().GetLattitude();
             startLocation.Longitude = start.GetLocation().GetLongitude();
             Geopoint startPoint = new Geopoint(startLocation);
 
-            // End at the city of Seattle, Washington.
+            // End at end subject
             BasicGeoposition endLocation = new BasicGeoposition();
             endLocation.Latitude = end.GetLocation().GetLattitude();
             endLocation.Longitude = end.GetLocation().GetLongitude();
