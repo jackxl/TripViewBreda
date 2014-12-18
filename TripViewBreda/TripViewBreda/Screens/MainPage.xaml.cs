@@ -71,6 +71,11 @@ namespace TripViewBreda
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             this.TextBox_Project.Text = AppSettings.APP_NAME;
+            if (ApplicationData.Current.LocalSettings.Values.ContainsKey(AppSettings.IsFirstLaunch))
+            { ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch] = true; }
+            else if (ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch] == null)
+            { ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch] = true; }
+
             bool IsFirstLaunch = (bool)(ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch]);
             if (IsFirstLaunch)
             {
