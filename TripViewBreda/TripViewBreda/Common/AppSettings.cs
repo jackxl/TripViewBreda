@@ -9,5 +9,9 @@ namespace TripViewBreda.Common
     static class AppSettings
     {
         public static readonly string APP_NAME = "TripView Breda";
+
+
+        // Local Data Storage
+        public static readonly string IsFirstLaunch = "IsFirstLaunch";
     }
 }

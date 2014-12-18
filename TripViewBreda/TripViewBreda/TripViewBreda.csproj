@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -89,11 +89,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Screens\MuchAskedQuestionPage.xaml">
+    <Page Include="Screens\FequentlyAskedQuestionPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-
     <Page Include="Screens\WelcomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -138,8 +137,8 @@
     <Compile Include="Screens\DetailPage.xaml.cs">
       <DependentUpon>DetailPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Screens\MuchAskedQuestionPage.xaml.cs">
-      <DependentUpon>MuchAskedQuestionPage.xaml</DependentUpon>
+    <Compile Include="Screens\FequentlyAskedQuestionPage.xaml.cs">
+      <DependentUpon>FequentlyAskedQuestionPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Screens\WelcomePage.xaml.cs">
       <DependentUpon>WelcomePage.xaml</DependentUpon>

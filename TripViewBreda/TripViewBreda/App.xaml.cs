@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TripViewBreda.Common;
 using TripViewBreda.Screens;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -105,19 +107,7 @@ namespace TripViewBreda
 
         private static bool SelectFirstScreen(LaunchActivatedEventArgs e, Frame rootFrame)
         {
-            if (IsFirstLaunch())
-            {
-                return !rootFrame.Navigate(typeof(WelcomePage), e.Arguments);
-            }
-            else
-            {
-                return !rootFrame.Navigate(typeof(MainPage), e.Arguments);
-            }
-        }
-
-        public static bool IsFirstLaunch()
-        {
-            return !ApplicationData.Current.LocalSettings.Values.ContainsKey("IsFirstLaunch");
+            return !rootFrame.Navigate(typeof(MainPage), e.Arguments);
         }
 
         /// <summary>

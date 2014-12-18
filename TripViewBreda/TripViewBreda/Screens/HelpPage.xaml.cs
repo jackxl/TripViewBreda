@@ -16,6 +16,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using TripViewBreda.Screens;
+using Windows.Storage;
+using System.Diagnostics;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -124,9 +126,15 @@ namespace TripViewBreda
 
         #endregion
 
-        private void Button_M_A_Q_Click(object sender, RoutedEventArgs e)
+        private void Button_F_A_Q_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MuchAskedQuestionPage), e);
+            this.Frame.Navigate(typeof(FrequentlyAskedQuestionPage), e);
+        }
+
+        private void Button_ResetSettings_Click(object sender, RoutedEventArgs e)
+        {
+            ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch] = true;
+            Debug.WriteLine(AppSettings.IsFirstLaunch + ": " + ApplicationData.Current.LocalSettings.Values[AppSettings.IsFirstLaunch]);
         }
     }
 }
