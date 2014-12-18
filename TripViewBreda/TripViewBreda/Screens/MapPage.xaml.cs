@@ -17,6 +17,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using TripViewBreda.GeoLocation;
 using Windows.Devices.Geolocation;
+using TripViewBreda.Navigation;
+using Windows.UI.Xaml.Controls.Maps;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -30,7 +32,7 @@ namespace TripViewBreda
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private GPS gps= new GPS();
-
+        private DefaultRoutes DefRoute = new DefaultRoutes();
         public MapPage()
         {
             this.InitializeComponent();
@@ -38,8 +40,26 @@ namespace TripViewBreda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            foreach(Route r in DefRoute.GetRoutes())
+            {
+                foreach(GPSPoint p in r.GetRoutePoints())
+                {
+                    AddPoint_Map(p.GetLattitude(), p.GetLongitude(), "");
+                }
+            }
         }
 
+        private void AddPoint_Map(double lattitude, double longitude, String name)
+        {
+            MapIcon addIcon = new MapIcon();
+            var myPosition = new Windows.Devices.Geolocation.BasicGeoposition();
+            myPosition.Longitude = longitude;
+            myPosition.Latitude = lattitude;
+            addIcon.Location = new Geopoint(myPosition);
+            addIcon.Title = name;
+            addIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
+            MyMap.MapElements.Add(addIcon);
+        }
         /// <summary>
         /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
         /// </summary>
