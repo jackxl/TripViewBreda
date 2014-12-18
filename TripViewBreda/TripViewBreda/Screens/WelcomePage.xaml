@@ -19,19 +19,22 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="150"/>
         </Grid.RowDefinitions>
 
         <!-- Title Panel -->
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
             <TextBlock x:Name="TextBox_Project" Text="[project]" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-            <TextBlock Text="Welkom!" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+            <TextBlock Text="Welcome!" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
         </StackPanel>
         <Grid Grid.Row="1" Margin="19,0,0,0">
             <TextBlock x:Name="Text_Welkom" Text="Welkom..." FontSize="24" TextWrapping="Wrap"/>
         </Grid>
-        <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button x:Name="Button_Back" Content="Get started" FontSize="32" Click="Button_Back_Click"/>
+        <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <StackPanel>
+                <Button x:Name="Button_Back" Content="Get started" FontSize="32" Click="Button_Back_Click"/>
+                <CheckBox x:Name="CheckBox_Dont_Show_Again" Content="Don't show this again" FontSize="10"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

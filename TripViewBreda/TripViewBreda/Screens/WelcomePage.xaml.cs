@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.Storage;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -121,6 +122,10 @@ namespace TripViewBreda.Screens
 
         private void Button_Back_Click(object sender, RoutedEventArgs e)
         {
+            if (CheckBox_Dont_Show_Again.IsChecked == true)
+            {
+                ApplicationData.Current.LocalSettings.Values["IsFirstLaunch"] = true;
+            }
             this.Frame.Navigate(typeof(MainPage), e);
         }
     }
