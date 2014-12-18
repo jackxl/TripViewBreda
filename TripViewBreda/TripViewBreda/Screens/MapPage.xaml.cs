@@ -41,6 +41,7 @@ namespace TripViewBreda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            subjects.AddSubject(new Subject(new GPSPoint(51.592342, 4.548881), "Thuis"));
             foreach(Subject s in subjects.GetSubjects())
             {
                 AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
@@ -50,6 +51,7 @@ namespace TripViewBreda
         private void AddPoint_Map(double lattitude, double longitude, String name)
         {
             MapIcon addIcon = new MapIcon();
+            
             var myPosition = new Windows.Devices.Geolocation.BasicGeoposition();
             myPosition.Longitude = longitude;
             myPosition.Latitude = lattitude;
@@ -57,6 +59,17 @@ namespace TripViewBreda
             addIcon.Title = name;
             addIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
             MyMap.MapElements.Add(addIcon);
+        }
+
+        public async void GoToCurrentPosition()
+        {
+            var locator = new Geolocator();
+            locator.DesiredAccuracyInMeters = 50;
+
+            var position = await locator.GetGeopositionAsync();
+            Geopoint myPoint = position.Coordinate.Point;
+            await MyMap.TrySetViewAsync(myPoint, 16D);
+
         }
         /// <summary>
         /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
