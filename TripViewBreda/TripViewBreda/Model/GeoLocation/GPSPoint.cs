@@ -23,7 +23,7 @@ namespace TripViewBreda.GeoLocation
         /// </summary>
         public double GetLattitude()
         {
-            return lattitude;
+            return this.lattitude;
         }
 
         /// <summary>

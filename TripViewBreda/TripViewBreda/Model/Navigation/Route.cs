@@ -12,6 +12,7 @@ namespace TripViewBreda.Navigation
         private LinkedList<GPSPoint> routePoints;
         public Route()
         {
+            this.routePoints = new LinkedList<GPSPoint>();
         }
         public void AddNode(GPSPoint node)
         {
