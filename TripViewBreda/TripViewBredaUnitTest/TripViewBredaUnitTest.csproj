@@ -79,6 +79,8 @@
     <Compile Include="Model\Information\OpeningHoursTest.cs" />
     <Compile Include="Model\Information\SubjectsTest.cs" />
     <Compile Include="Model\Information\SubjectTest.cs" />
+    <Compile Include="Model\Navigation\DefaultRoutesTest.cs" />
+    <Compile Include="Model\Navigation\NavigationManagerTest.cs" />
     <Compile Include="Model\Navigation\RoutePlannerTest.cs" />
     <Compile Include="Model\Navigation\RouteTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -13,7 +13,7 @@ namespace TripViewBredaUnitTest.Model.Navigation
     public class RoutePlannerTest
     {
         [TestMethod]
-        public void RoutePlannerObjectTest()
+        public Route RoutePlannerObjectTest()
         {
             RoutePlanner planner = new RoutePlanner();
 
@@ -21,13 +21,16 @@ namespace TripViewBredaUnitTest.Model.Navigation
             GPSPoint endpoint = new GPSPoint(51.001, 4.030);
 
             Route route = planner.GenerateRoute(startpoint, endpoint);
+            route.AddNode(new GPSPoint(51.001, 4.025));
 
             Assert.IsNotNull(planner);
             Assert.IsNotNull(startpoint);
             Assert.IsNotNull(endpoint);
             Assert.IsNotNull(route);
 
+            Assert.AreEqual(((double)((int)Math.Round(route.Distance * 1000)) / 1000), 0.010);
 
+            return route;
         }
     }
 }

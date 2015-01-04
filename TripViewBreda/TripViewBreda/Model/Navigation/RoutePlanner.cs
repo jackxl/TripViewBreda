@@ -11,11 +11,10 @@ namespace TripViewBreda.Navigation
     {
         public Route GenerateRoute(GPSPoint startpoint, GPSPoint endpoint)
         {
-            double startLattitude = startpoint.GetLattitude();
-            double startLongitude = startpoint.GetLongitude();
-            double endLattitude = endpoint.GetLattitude();
-            double endLongitude = endpoint.GetLongitude();
-            return null;
+            Route route = new Route();
+            route.AddNode(startpoint);
+            route.AddNode(endpoint);
+            return route;
         }
     }
 }

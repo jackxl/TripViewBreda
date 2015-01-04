@@ -17,12 +17,13 @@ namespace TripViewBredaUnitTest.Model.GeoLocation
         {
             GPS gps = new GPS();
             Geopoint point = null;
-            //point = gps.GetCurrentLocation();
+            point = gps.GetCurrentLocation();
 
             Assert.IsNotNull(gps);
             Assert.IsNotNull(point);
 
-            Assert.AreEqual((int)(point.Position.Latitude) - 1, 51);
+            Assert.AreEqual((int)(point.Position.Latitude), 51); // 51.35
+            Assert.AreEqual((int)(point.Position.Longitude), 4); // 4.47
         }
     }
 }
