@@ -148,7 +148,10 @@ namespace TripViewBreda
 
         #region Other Buttons
         private void Map_bn_Click(object sender, RoutedEventArgs e)
-        { this.Frame.Navigate(typeof(MapPage), e); }
+        {
+            Subjects subjects = new Subjects();
+            this.Frame.Navigate(typeof(MapPage), subjects);
+        }
         #endregion
     }
 }
