@@ -42,6 +42,8 @@ namespace TripViewBreda
         {
             this.InitializeComponent();
 
+            GeofenceMonitor.Current.Geofences.Clear();
+
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
