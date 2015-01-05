@@ -124,6 +124,7 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="Controllers\DetailController.cs" />
     <Compile Include="Model\GeoLocation\GPS.cs" />
     <Compile Include="Model\GeoLocation\GPSPoint.cs" />
     <Compile Include="Model\Information\OpenComponent.cs" />

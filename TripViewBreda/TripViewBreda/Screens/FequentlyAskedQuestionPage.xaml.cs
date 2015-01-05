@@ -40,18 +40,11 @@ namespace TripViewBreda.Screens
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
         }
 
-        /// <summary>
-        /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
-        /// </summary>
+        #region NavigationHelper registration
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
         }
-
-        /// <summary>
-        /// Gets the view model for this <see cref="Page"/>.
-        /// This can be changed to a strongly typed view model.
-        /// </summary>
         public ObservableDictionary DefaultViewModel
         {
             get { return this.defaultViewModel; }
@@ -66,9 +59,6 @@ namespace TripViewBreda.Screens
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
         }
-
-        #region NavigationHelper registration
-
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -89,6 +79,8 @@ namespace TripViewBreda.Screens
                 this.StackPanel_F_A_Q.Children.Add(CreateStackPanel(question));
             }
         }
+
+        #region Create StackPanel
         private StackPanel CreateStackPanel(string[] question)
         {
             StackPanel panel = new StackPanel();
@@ -128,5 +120,6 @@ namespace TripViewBreda.Screens
 
             return total;
         }
+        #endregion
     }
 }

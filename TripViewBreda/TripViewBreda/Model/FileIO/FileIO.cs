@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace TripViewBreda.Model.FileIO
 {
-    class FileIO
+    interface FileIO
     {
+        void read();
+        bool write(Model.Information.Subjects subject);
     }
 }
