@@ -153,6 +153,7 @@
     <Compile Include="Screens\RoutePage.xaml.cs">
       <DependentUpon>RoutePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\DataSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

@@ -73,6 +73,7 @@
     <SDKReference Include="TestPlatform, Version=12.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\FileIO\FileIOTest.cs" />
     <Compile Include="Model\GeoLocation\GPSPointTest.cs" />
     <Compile Include="Model\GeoLocation\GPSTest.cs" />
     <Compile Include="Model\Information\OpenComponentTest.cs" />

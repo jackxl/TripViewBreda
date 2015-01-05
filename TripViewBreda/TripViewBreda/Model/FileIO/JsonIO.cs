@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TripViewBreda.Model.FileIO
 {
-    class JsonIO : FileIO
+    public class JsonIO : FileIO
     {
         private ObservableCollection<Information.Subjects> subjects;
         private Utilities.DataSource datacontroller;
@@ -22,7 +22,7 @@ namespace TripViewBreda.Model.FileIO
         {
             return subjects;
         }
-        
+
         public async void read()
         {
             subjects = await datacontroller.GetRoutes();
