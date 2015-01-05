@@ -19,7 +19,6 @@ using Windows.UI.Xaml.Navigation;
 using TripViewBreda.GeoLocation;
 using Windows.Devices.Geolocation;
 using TripViewBreda.Navigation;
-using Windows.UI.Xaml.Controls.Maps;
 using TripViewBreda.Model.Information;
 using Windows.Services.Maps;
 using Windows.UI;
@@ -28,6 +27,7 @@ using Windows.UI.Xaml.Shapes;
 using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Popups;
+using Windows.UI.Xaml.Controls.Maps;
 using TripViewBreda.Screens;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
@@ -42,8 +42,7 @@ namespace TripViewBreda
         private NavigationHelper navigationHelper;
         private Geopoint myPoint;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private GPS gps= new GPS();
-        private Subjects subjects = new Subjects();
+        private Subjects subjects;
         public MapPage()
         {
             this.InitializeComponent();
@@ -94,6 +93,14 @@ namespace TripViewBreda
             await MyMap.TrySetViewAsync(myPoint, 16D);
             MyMap.ZoomLevel = 16;
             MyMap.LandmarksVisible = true;
+
+            Ellipse myCircle = new Ellipse();
+            myCircle.Fill = new SolidColorBrush(Colors.Blue);
+            myCircle.Height = 20;
+            myCircle.Width = 20;
+            myCircle.Opacity = 50;
+
+
         }
 
         private void CreateGeofence(Subject subject)
@@ -158,7 +165,7 @@ namespace TripViewBreda
             });
         }
         
-        private async void GetRouteAndDirections(Subject start, Subject end)
+        private async Task GetRouteAndDirections(Subject start, Subject end)
         {
             // Start at start subject
             BasicGeoposition startLocation = new BasicGeoposition();
@@ -171,7 +178,6 @@ namespace TripViewBreda
             endLocation.Latitude = end.GetLocation().GetLattitude();
             endLocation.Longitude = end.GetLocation().GetLongitude();
             Geopoint endPoint = new Geopoint(endLocation);
-            DestinationLabel.Text = end.GetName();
            
 
             // Get the route between the points.
@@ -179,27 +185,11 @@ namespace TripViewBreda
                 await MapRouteFinder.GetWalkingRouteAsync(
                 startPoint,
                 endPoint);
-               // MapRouteOptimization.Time,
-               // MapRouteRestrictions.None);
 
             //Display route with text
             if (routeResult.Status == MapRouteFinderStatus.Success)
             {
-                // Display summary info about the route.
-                InstructionsLabel.Inlines.Add(new Run()
-                {
-                  //  Text = "Total estimated time = "
-                    //    + routeResult.Route.EstimatedDuration.TotalMinutes.ToString().Split('.')[0] + "minutes"
-                });
-                InstructionsLabel.Inlines.Add(new LineBreak());
-                InstructionsLabel.Inlines.Add(new Run()
-                {
-                  //  Text = "Total length = "
-                  //      + (routeResult.Route.LengthInMeters / 1000).ToString() + " km"
-                });
-                InstructionsLabel.Inlines.Add(new LineBreak());
-                InstructionsLabel.Inlines.Add(new LineBreak());
-
+                InstructionsLabel.Text += "\n";
                 // Display the directions.
                 InstructionsLabel.Inlines.Add(new Run()
                 {
@@ -249,85 +239,50 @@ namespace TripViewBreda
                    "A problem occurred: " + routeResult.Status.ToString();
                 
             }
+            
 
         }
-        /// <summary>
-        /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
-        /// </summary>
+        #region NavigationHelper registration
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
         }
-
-        /// <summary>
-        /// Gets the view model for this <see cref="Page"/>.
-        /// This can be changed to a strongly typed view model.
-        /// </summary>
-        /// 
         public ObservableDictionary DefaultViewModel
         {
             get { return this.defaultViewModel; }
         }
-
-        /// <summary>
-        /// Populates the page with content passed during navigation.  Any saved state is also
-        /// provided when recreating a page from a prior session.
-        /// </summary>
-        /// <param name="sender">
-        /// The source of the event; typically <see cref="NavigationHelper"/>
-        /// </param>
-        /// <param name="e">Event data that provides both the navigation parameter passed to
-        /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
-        /// a dictionary of state preserved by this page during an earlier
-        /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
         }
-
-        /// <summary>
-        /// Preserves state associated with this page in case the application is suspended or the
-        /// page is discarded from the navigation cache.  Values must conform to the serialization
-        /// requirements of <see cref="SuspensionManager.SessionState"/>.
-        /// </summary>
-        /// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
-        /// <param name="e">Event data that provides an empty dictionary to be populated with
-        /// serializable state.</param>
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
         }
-
-        #region NavigationHelper registration
-
-        /// <summary>
-        /// The methods provided in this section are simply used to allow
-        /// NavigationHelper to respond to the page's navigation methods.
-        /// <para>
-        /// Page specific logic should be placed in event handlers for the  
-        /// <see cref="NavigationHelper.LoadState"/>
-        /// and <see cref="NavigationHelper.SaveState"/>.
-        /// The navigation parameter is available in the LoadState method 
-        /// in addition to page state preserved during an earlier session.
-        /// </para>
-        /// </summary>
-        /// <param name="e">Provides data for navigation methods and event
-        /// handlers that cannot cancel the navigation request.</param>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            //subjects = e.Parameter as Subjects;
             this.navigationHelper.OnNavigatedTo(e);
-            await GoToCurrentPosition();
-            Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
+            subjects = e.Parameter as Subjects;
+            
             foreach (Subject s in subjects.GetSubjects())
             {
+                AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
+                CreateGeofence(s);
+            }
+            await GoToCurrentPosition();
+            Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
+            DestinationLabel.Text = "";
+            foreach (Subject s in subjects.GetSubjects())
+            {
+                DestinationLabel.Text += s.GetName() + "\n";
                 if (lastSub != null)
                 {
-                    GetRouteAndDirections(lastSub, s);
+                   await GetRouteAndDirections(lastSub, s);
 
                 }
                 lastSub = s;
             }
-           // GoToCurrentPosition();
-            //GetRouteAndDirections(subjects.GetSubjects().First<Subject>(), subjects.GetSubjects().Last<Subject>());
+            MyMap.CancelDirectManipulations();
+            await GoToCurrentPosition();
+            
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -336,5 +291,6 @@ namespace TripViewBreda
         }
 
         #endregion
+
     }
 }

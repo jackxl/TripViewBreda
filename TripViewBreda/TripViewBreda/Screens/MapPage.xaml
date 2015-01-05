@@ -40,9 +40,10 @@
                 <ScrollViewer VerticalScrollMode="Enabled"  Height="150">
                 <TextBlock x:Name="InstructionsLabel" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="370" FontSize="14"/>
             </ScrollViewer>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Next hotspot:" VerticalAlignment="Top" FontSize="20" Width="370" />
-            <TextBlock x:Name="DestinationLabel" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Route aan het laden..." VerticalAlignment="Top" Width="370" FontSize="14"/>
-
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Bestemmingen in deze route:" VerticalAlignment="Top" FontSize="20" Width="370" />
+                <ScrollViewer VerticalScrollMode="Enabled" Height="70">
+                    <TextBlock x:Name="DestinationLabel" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Route aan het laden..." VerticalAlignment="Top" Width="370" FontSize="14"/>
+                </ScrollViewer>
             </StackPanel>
         </Grid>
     </Grid>
