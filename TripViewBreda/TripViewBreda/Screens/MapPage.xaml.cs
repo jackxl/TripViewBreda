@@ -50,6 +50,9 @@ namespace TripViewBreda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+
+            subjects = new Subjects();
+
             subjects.AddSubject(new Subject(new GPSPoint(51.587768, 4.776655), "'t Hart"));
             subjects.AddSubject(new Subject(new GPSPoint(51.587631, 4.776749), "Cafe SamSam"));
             subjects.AddSubject(new Subject(new GPSPoint(51.589645, 4.773857), "Studio Dependance"));
@@ -61,7 +64,7 @@ namespace TripViewBreda
             foreach (Subject s in subjects.GetSubjects())
             {
                 AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
-                CreateGeofence(s);
+                //CreateGeofence(s);
             }
 
            
