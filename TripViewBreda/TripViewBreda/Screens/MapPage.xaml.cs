@@ -40,7 +40,7 @@ namespace TripViewBreda
         private Geopoint myPoint;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private GPS gps= new GPS();
-        private Subjects subjects = new Subjects();
+        private Subjects subjects;
         public MapPage()
         {
             this.InitializeComponent();
@@ -50,15 +50,7 @@ namespace TripViewBreda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            subjects.AddSubject(new Subject(new GPSPoint(51.587768, 4.776655), "'t Hart"));
-            subjects.AddSubject(new Subject(new GPSPoint(51.587631, 4.776749), "Cafe SamSam"));
-            subjects.AddSubject(new Subject(new GPSPoint(51.589645, 4.773857), "Studio Dependance"));
-            subjects.AddSubject(new Subject(new GPSPoint(51.585477, 4.793091), "School"));
-            foreach (Subject s in subjects.GetSubjects())
-            {
-                AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
-                CreateGeofence(s);
-            }
+            
         }
 
         private void AddPoint_Map(double lattitude, double longitude, String name)
@@ -107,7 +99,7 @@ namespace TripViewBreda
         }
 
         
-        private async void GetRouteAndDirections(Subject start, Subject end)
+        private async Task GetRouteAndDirections(Subject start, Subject end)
         {
             // Start at start subject
             BasicGeoposition startLocation = new BasicGeoposition();
@@ -120,7 +112,6 @@ namespace TripViewBreda
             endLocation.Latitude = end.GetLocation().GetLattitude();
             endLocation.Longitude = end.GetLocation().GetLongitude();
             Geopoint endPoint = new Geopoint(endLocation);
-            DestinationLabel.Text = end.GetName();
            
 
             // Get the route between the points.
@@ -128,27 +119,11 @@ namespace TripViewBreda
                 await MapRouteFinder.GetWalkingRouteAsync(
                 startPoint,
                 endPoint);
-               // MapRouteOptimization.Time,
-               // MapRouteRestrictions.None);
 
             //Display route with text
             if (routeResult.Status == MapRouteFinderStatus.Success)
             {
-                // Display summary info about the route.
-                InstructionsLabel.Inlines.Add(new Run()
-                {
-                  //  Text = "Total estimated time = "
-                    //    + routeResult.Route.EstimatedDuration.TotalMinutes.ToString().Split('.')[0] + "minutes"
-                });
-                InstructionsLabel.Inlines.Add(new LineBreak());
-                InstructionsLabel.Inlines.Add(new Run()
-                {
-                  //  Text = "Total length = "
-                  //      + (routeResult.Route.LengthInMeters / 1000).ToString() + " km"
-                });
-                InstructionsLabel.Inlines.Add(new LineBreak());
-                InstructionsLabel.Inlines.Add(new LineBreak());
-
+                InstructionsLabel.Text += "\n";
                 // Display the directions.
                 InstructionsLabel.Inlines.Add(new Run()
                 {
@@ -198,6 +173,7 @@ namespace TripViewBreda
                    "A problem occurred: " + routeResult.Status.ToString();
                 
             }
+            
 
         }
         /// <summary>
@@ -262,21 +238,30 @@ namespace TripViewBreda
         /// handlers that cannot cancel the navigation request.</param>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            //subjects = e.Parameter as Subjects;
             this.navigationHelper.OnNavigatedTo(e);
-            await GoToCurrentPosition();
-            Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
+            subjects = e.Parameter as Subjects;
+            
             foreach (Subject s in subjects.GetSubjects())
             {
+                AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
+                CreateGeofence(s);
+            }
+            await GoToCurrentPosition();
+            Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
+            DestinationLabel.Text = "";
+            foreach (Subject s in subjects.GetSubjects())
+            {
+                DestinationLabel.Text += s.GetName() + "\n";
                 if (lastSub != null)
                 {
-                    GetRouteAndDirections(lastSub, s);
+                   await GetRouteAndDirections(lastSub, s);
 
                 }
                 lastSub = s;
             }
-           // GoToCurrentPosition();
-            //GetRouteAndDirections(subjects.GetSubjects().First<Subject>(), subjects.GetSubjects().Last<Subject>());
+            MyMap.CancelDirectManipulations();
+            await GoToCurrentPosition();
+            
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

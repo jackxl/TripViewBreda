@@ -74,6 +74,7 @@ namespace TripViewBreda
         private void RegistrationRouteButtons()
         {
             AddButton("Home", Home);
+            AddButton("Cafes", Cafes);
             AddButton("School", School);
             AddButton("Tourist Trail", Tourist_Trail);
             AddButton("Pubs Trip", Pubs_Trip);
@@ -107,6 +108,18 @@ namespace TripViewBreda
             Debug.WriteLine("School");
             Subjects subjects = new Subjects();
             subjects.AddSubject(new Subject(new GPSPoint(51.585477, 4.793091), "School"));
+
+            NavigateToMap(sender, subjects);
+        }
+
+        private void Cafes(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Cafes");
+            Subjects subjects = new Subjects();
+            subjects.AddSubject(new Subject(new GPSPoint(51.587768, 4.776655), "'t Hart"));
+            subjects.AddSubject(new Subject(new GPSPoint(51.587631, 4.776749), "Cafe SamSam"));
+            subjects.AddSubject(new Subject(new GPSPoint(51.589645, 4.773857), "Studio Dependance"));
+            subjects.AddSubject(new Subject(new GPSPoint(51.588621, 4.77313), "Millertime"));
 
             NavigateToMap(sender, subjects);
         }
