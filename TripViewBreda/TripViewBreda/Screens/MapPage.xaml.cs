@@ -39,7 +39,6 @@ namespace TripViewBreda
         private NavigationHelper navigationHelper;
         private Geopoint myPoint;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private GPS gps= new GPS();
         private Subjects subjects;
         public MapPage()
         {
@@ -78,6 +77,14 @@ namespace TripViewBreda
             await MyMap.TrySetViewAsync(myPoint, 16D);
             MyMap.ZoomLevel = 16;
             MyMap.LandmarksVisible = true;
+
+            Ellipse myCircle = new Ellipse();
+            myCircle.Fill = new SolidColorBrush(Colors.Blue);
+            myCircle.Height = 20;
+            myCircle.Width = 20;
+            myCircle.Opacity = 50;
+
+
         }
 
         private void CreateGeofence(Subject s)
