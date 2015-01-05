@@ -19,7 +19,6 @@ using Windows.UI.Xaml.Navigation;
 using TripViewBreda.GeoLocation;
 using Windows.Devices.Geolocation;
 using TripViewBreda.Navigation;
-using Windows.UI.Xaml.Controls.Maps;
 using TripViewBreda.Model.Information;
 using Windows.Services.Maps;
 using Windows.UI;

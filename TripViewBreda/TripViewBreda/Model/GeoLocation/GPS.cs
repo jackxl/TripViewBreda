@@ -13,7 +13,8 @@ namespace TripViewBreda.GeoLocation
        private async void UpdateCurrentLocation()
         {
             var locator = new Geolocator();
-            locator.DesiredAccuracyInMeters = 50;
+            locator.DesiredAccuracy = PositionAccuracy.High;
+            locator.DesiredAccuracyInMeters = 10;
 
             var position = await locator.GetGeopositionAsync();
             myPoint = position.Coordinate.Point;
