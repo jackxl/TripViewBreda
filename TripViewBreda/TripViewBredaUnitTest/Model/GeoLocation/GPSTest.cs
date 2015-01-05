@@ -13,17 +13,18 @@ namespace TripViewBredaUnitTest.Model.GeoLocation
     public class GPSTest
     {
         [TestMethod]
-        public void GSPObjectTest()
+        public async Task GSPObjectTest()
         {
             GPS gps = new GPS();
             Geopoint point = null;
-            point = gps.GetCurrentLocation();
+            point = await gps.GetCurrentLocation();
 
             Assert.IsNotNull(gps);
             Assert.IsNotNull(point);
 
-            Assert.AreEqual((int)(point.Position.Latitude), 51); // 51.35
-            Assert.AreEqual((int)(point.Position.Longitude), 4); // 4.47
+            //assertion of this test expects the simulator to have its default location wich is 47,-122
+            Assert.AreEqual(47, (int)(point.Position.Latitude)); // 47
+            Assert.AreEqual(-122, (int)(point.Position.Longitude)); // 4.47
         }
     }
 }

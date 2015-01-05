@@ -19,6 +19,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="75"/>
         </Grid.RowDefinitions>
 
         <!-- Title Panel -->
@@ -29,7 +30,13 @@
 
         <!--TODO: Content should be placed within the following grid-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-
+            <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
+                <StackPanel x:Name="Route_Buttons_panel">
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Button Content="Map" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="Map_bn_Click"/>
         </Grid>
     </Grid>
 </Page>

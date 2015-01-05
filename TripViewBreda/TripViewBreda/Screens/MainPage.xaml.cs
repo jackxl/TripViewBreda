@@ -121,7 +121,6 @@ namespace TripViewBreda
             this.TextBox_Project.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             this.TextBox_Title.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             this.Button_Routes.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            this.Button_Map.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             this.Button_Help.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             this.Button_Exit.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
@@ -130,7 +129,6 @@ namespace TripViewBreda
             this.TextBox_Project.Visibility = Windows.UI.Xaml.Visibility.Visible;
             this.TextBox_Title.Visibility = Windows.UI.Xaml.Visibility.Visible;
             this.Button_Routes.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            this.Button_Map.Visibility = Windows.UI.Xaml.Visibility.Visible;
             this.Button_Help.Visibility = Windows.UI.Xaml.Visibility.Visible;
             this.Button_Exit.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }

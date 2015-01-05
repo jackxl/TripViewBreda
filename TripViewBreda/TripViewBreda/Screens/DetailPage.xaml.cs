@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using TripViewBreda.Controllers;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 using TripViewBreda.Model.Information;
@@ -30,13 +31,22 @@ namespace TripViewBreda.Screens
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
-        public DetailPage()
+        private DetailController detailController;
+
+
+        
+        public DetailPage(Subject subject)
         {
             this.InitializeComponent();
 
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            
+
+            detailController = new DetailController(subject);
+            ReadData();
+          
         }
 
         /// <summary>
@@ -45,6 +55,12 @@ namespace TripViewBreda.Screens
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
+        }
+
+        private void ReadData()
+        {
+            subjectName.DataContext = detailController.GetSubject().GetName();
+            subjectInformation.DataContext = detailController.GetSubject().GetInformation();
         }
 
         /// <summary>
@@ -109,5 +125,11 @@ namespace TripViewBreda.Screens
         }
 
         #endregion
+
+        private void closeButton_Click(object sender, RoutedEventArgs e)
+        {
+            detailController = null;
+            this.Frame.Navigate(typeof(MapPage), e);
+        }
     }
 }
