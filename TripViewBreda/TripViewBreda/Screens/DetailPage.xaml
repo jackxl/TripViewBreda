@@ -23,14 +23,17 @@
 
         <!-- Title Panel -->
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
-            <TextBlock x:Name="subjectName" Text="Subject Name" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+            <TextBlock x:Name="title" Text="Details" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0" FontSize="22"/>
 
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            <TextBlock HorizontalAlignment="Left" Margin="0,10,0,0" TextWrapping="Wrap" Text="Information" VerticalAlignment="Top" FontSize="18"/>
-            <TextBlock x:Name="subjectInformation" HorizontalAlignment="Left" Margin="0,37,0,0" TextWrapping="Wrap" Text="information of an subject" VerticalAlignment="Top" FontSize="12" Height="548" Width="352"/>
+            <TextBlock HorizontalAlignment="Left" Margin="0,10,0,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" FontSize="18"/>
+            <TextBlock x:Name="subjectName" HorizontalAlignment="Left" Margin="0,37,0,0" TextWrapping="Wrap" Text="{Binding}" VerticalAlignment="Top" FontSize="12" Height="53" Width="362"/>
+            <TextBlock HorizontalAlignment="Left" Margin="0,95,0,0" TextWrapping="Wrap" Text="Information" VerticalAlignment="Top" FontSize="18"/>
+            <TextBlock x:Name="subjectInformation" HorizontalAlignment="Left" Margin="0,122,0,0" TextWrapping="Wrap" Text="{Binding}" VerticalAlignment="Top" FontSize="12" Height="398" Width="362"/>
+            <Button x:Name="closeButton" Content="Close" HorizontalAlignment="Left" Margin="243,533,0,0" VerticalAlignment="Top" Click="closeButton_Click"/>
 
         </Grid>
     </Grid>

@@ -21,6 +21,14 @@ namespace TripViewBreda.Model.Information
             openingHours = new OpeningHours();
         }
 
+        public Subject(GeoLocation.GPSPoint location, string name, string information)
+        {
+            this.location = location;
+            this.name = name;
+            this.information = information;
+            openingHours = new OpeningHours();
+        }
+
         public Subject(GeoLocation.GPSPoint location, string name, OpeningHours openingHours)
         {
             this.location = location;
