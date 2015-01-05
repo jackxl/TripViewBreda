@@ -93,10 +93,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Screens\WelcomePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Screens\HelpPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -141,9 +137,6 @@
     </Compile>
     <Compile Include="Screens\FequentlyAskedQuestionPage.xaml.cs">
       <DependentUpon>FequentlyAskedQuestionPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Screens\WelcomePage.xaml.cs">
-      <DependentUpon>WelcomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Screens\HelpPage.xaml.cs">
       <DependentUpon>HelpPage.xaml</DependentUpon>

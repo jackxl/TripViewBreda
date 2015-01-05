@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TripViewBreda.Model.Information
 {
-    class Subjects
+    public class Subjects
     {
         private List<Subject> subjects;
 
@@ -25,7 +25,7 @@ namespace TripViewBreda.Model.Information
             subjects.Add(subject);
         }
 
-        public void RemoveSbject(Subject subject)
+        public void RemoveSubject(Subject subject)
         {
             subjects.Remove(subject);
         }
