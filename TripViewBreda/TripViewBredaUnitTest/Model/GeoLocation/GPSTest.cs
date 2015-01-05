@@ -24,7 +24,7 @@ namespace TripViewBredaUnitTest.Model.GeoLocation
             Geopoint point = null;
 
             // act
-            point = await gps.GetCurrentLocation();
+            point = await gps.GetCurrentLocation(); // This method takes 5 sec
 
             // assert
             //assertion of this test expects the simulator to have its default location wich is 47,-122

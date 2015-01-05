@@ -12,7 +12,8 @@ namespace TripViewBredaUnitTest.Model.Navigation
     public class NavigationManagerTest
     {
         /// <summary>
-        /// This method does ????
+        /// This method does test if the NavigationManager can set and get the current Active Route and this doesn't return null
+        /// The currentstep can be increesed an decreesed.
         /// </summary>
         [TestMethod]
         public void NavigationManagerObjectTest()
@@ -31,6 +32,19 @@ namespace TripViewBredaUnitTest.Model.Navigation
             Assert.IsNotNull(actualManager);
             Assert.IsNotNull(actualRoute);
             Assert.IsNotNull(actualActiveRoute);
+            var actualValue = navManager.CurrentStep;
+            var expectedValue = 1;
+            Assert.AreEqual(expectedValue, actualValue);
+
+            // act
+            navManager.IncreesStep();
+            navManager.IncreesStep();
+            navManager.DecreesStep();
+
+            // assert
+            actualValue = navManager.CurrentStep;
+            expectedValue = 2;
+            Assert.AreEqual(expectedValue, actualValue);
 
         }
     }
