@@ -12,7 +12,7 @@ namespace TripViewBreda.Model.FileIO
         private ObservableCollection<Information.Subjects> subjects;
         private Utilities.DataSource datacontroller;
 
-        public JsonIO(ObservableCollection<Information.Subjects> subjects)
+        public JsonIO()
         {
             subjects = new ObservableCollection<Information.Subjects>();
             datacontroller = new Utilities.DataSource();

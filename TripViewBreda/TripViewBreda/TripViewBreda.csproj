@@ -159,7 +159,6 @@
       <DependentUpon>RoutePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\DataSource.cs" />
-    <Compile Include="Utilities\StorageController.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
