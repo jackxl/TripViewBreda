@@ -41,7 +41,7 @@
                     <Grid Grid.Row="1">
                         <TextBlock x:Name="TextBlok_WelcomeMessage" Text="hello...." FontSize="20"/>
                     </Grid>
-                    <Button Grid.Row="2" x:Name="Button_Close" Content="Close" Click="Button_Close_Click" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <Button Grid.Row="2" x:Name="Button_Close" Content="Continue" Click="Button_Close_Click" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     <CheckBox Grid.Row="2" x:Name="CheckBox_Dont_Show_Again" Content="Don't Show Again" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                 </Grid>
             </FlyoutPresenter>

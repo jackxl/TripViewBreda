@@ -120,8 +120,7 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
-    <Compile Include="Model\FileIO\FileIO.cs" />
-    <Compile Include="Model\FileIO\JsonIO.cs" />
+    <Compile Include="Controllers\DetailController.cs" />
     <Compile Include="Model\GeoLocation\GPS.cs" />
     <Compile Include="Model\GeoLocation\GPSPoint.cs" />
     <Compile Include="Model\Information\OpenComponent.cs" />
@@ -151,7 +150,6 @@
     <Compile Include="Screens\RoutePage.xaml.cs">
       <DependentUpon>RoutePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\DataSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -179,6 +177,11 @@
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="Model\LanguageResources\English.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="Microsoft.Advertising.Mobile.Display, Version=8.1">
+      <Name>Microsoft Advertising SDK for Windows Phone 8.1 %28XAML%29</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
