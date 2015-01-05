@@ -33,9 +33,11 @@ namespace TripViewBreda.Screens
 
         private DetailController detailController;
 
+        private Subject subject;
 
         
-        public DetailPage(Subject subject)
+        
+        public DetailPage()
         {
             this.InitializeComponent();
 
@@ -117,6 +119,7 @@ namespace TripViewBreda.Screens
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
+            subject = (Subject) e.Parameter;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
