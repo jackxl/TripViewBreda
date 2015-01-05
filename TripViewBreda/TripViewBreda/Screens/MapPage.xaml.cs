@@ -25,6 +25,7 @@ using Windows.UI;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Shapes;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls.Maps;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -214,7 +215,7 @@ namespace TripViewBreda
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
         }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             //subjects = e.Parameter as Subjects;
             this.navigationHelper.OnNavigatedTo(e);
