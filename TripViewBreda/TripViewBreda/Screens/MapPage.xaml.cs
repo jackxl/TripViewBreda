@@ -26,6 +26,7 @@ using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Shapes;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls.Maps;
+using Microsoft.Phone.Maps.Controls;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -83,6 +84,8 @@ namespace TripViewBreda
             myCircle.Height = 20;
             myCircle.Width = 20;
             myCircle.Opacity = 50;
+
+            MyMap.WatermarkMode = new MapWatermarkMode();
 
 
         }
@@ -161,8 +164,8 @@ namespace TripViewBreda
             {
                 // Use the route to initialize a MapRouteView.
                 MapRouteView viewOfRoute = new MapRouteView(routeResult.Route);
-                viewOfRoute.RouteColor = Colors.Yellow;
-                viewOfRoute.OutlineColor = Colors.Black;
+                viewOfRoute.RouteColor = Colors.LightBlue;
+                viewOfRoute.OutlineColor = Colors.DarkBlue;
 
                 // Add the new MapRouteView to the Routes collection
                 // of the MapControl.
@@ -217,6 +220,7 @@ namespace TripViewBreda
                 if (lastSub != null)
                 {
                    await GetRouteAndDirections(lastSub, s);
+                   MyMap.CancelDirectManipulations();
 
                 }
                 lastSub = s;
