@@ -26,6 +26,9 @@ using Windows.UI;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Shapes;
 using System.Threading.Tasks;
+using Windows.UI.Core;
+using Windows.UI.Popups;
+using TripViewBreda.Screens;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -45,8 +48,6 @@ namespace TripViewBreda
         {
             this.InitializeComponent();
 
-            GeofenceMonitor.Current.Geofences.Clear();
-
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
@@ -54,12 +55,19 @@ namespace TripViewBreda
             subjects.AddSubject(new Subject(new GPSPoint(51.587631, 4.776749), "Cafe SamSam"));
             subjects.AddSubject(new Subject(new GPSPoint(51.589645, 4.773857), "Studio Dependance"));
             subjects.AddSubject(new Subject(new GPSPoint(51.585477, 4.793091), "School"));
+
+            GeofenceMonitor.Current.Geofences.Clear();
+            GeofenceMonitor.Current.GeofenceStateChanged += Current_GeofenceStateChanged;
+
             foreach (Subject s in subjects.GetSubjects())
             {
                 AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
                 CreateGeofence(s);
             }
+
+           
         }
+
 
         private void AddPoint_Map(double lattitude, double longitude, String name)
         {
@@ -88,24 +96,67 @@ namespace TripViewBreda
             MyMap.LandmarksVisible = true;
         }
 
-        private void CreateGeofence(Subject s)
+        private void CreateGeofence(Subject subject)
         {
-            var position = new BasicGeoposition
-            {
-                Latitude = s.GetLocation().GetLattitude(),
-                Longitude = s.GetLocation().GetLongitude()
-            };
+                Geofence geofence = null;
 
-            var georcircle = new Geocircle(position, 20);
+                BasicGeoposition position;
+                position.Latitude = subject.GetLocation().GetLattitude();
+                position.Longitude = subject.GetLocation().GetLongitude();
+                position.Altitude = 0.0;
 
-            var mask = MonitoredGeofenceStates.Entered | MonitoredGeofenceStates.Exited;
+                double radius = 30;
 
-            var dwellTime = TimeSpan.FromSeconds(0);
+                Geocircle geocircle = new Geocircle(position,radius);
 
-            var geofence = new Geofence(s.GetName(), georcircle, mask, false, dwellTime);
-            GeofenceMonitor.Current.Geofences.Add(geofence);
+                MonitoredGeofenceStates mask = 0;
+
+                mask |= MonitoredGeofenceStates.Entered;
+                mask |= MonitoredGeofenceStates.Exited;
+
+                geofence = new Geofence(subjects.GetSubjects().IndexOf(subject).ToString(), geocircle, mask,true);
+                GeofenceMonitor.Current.Geofences.Add(geofence);
+            
         }
 
+        private async void Current_GeofenceStateChanged(GeofenceMonitor sender, object args)
+        {
+            var reports = sender.ReadReports();
+
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            {
+                foreach (var report in reports)
+                {
+                    var state = report.NewState;
+                    var geofence = report.Geofence;
+                    Subject subject = null;
+
+
+                    if (state == GeofenceState.Entered)
+                    {
+                        int id = Convert.ToInt32(geofence.Id);
+
+                        for (int i = 0; i < subjects.GetSubjects().Count; i++)
+                        {
+                            if (id == i)
+                            {
+                                subject = subjects.GetSubjects().ElementAt(id);
+                            }
+                        }
+
+                        // User has entered the area.
+                        this.Frame.Navigate(typeof(DetailPage), subject);
+
+                    }
+                    else if (state == GeofenceState.Exited)
+                    {
+                        // User has exited from the area.
+                        var dialog = new MessageDialog(geofence.Id, "Exited");
+                        await dialog.ShowAsync();
+                    }
+                }
+            });
+        }
         
         private async void GetRouteAndDirections(Subject start, Subject end)
         {
