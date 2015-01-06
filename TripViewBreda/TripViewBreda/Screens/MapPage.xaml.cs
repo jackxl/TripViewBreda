@@ -43,6 +43,9 @@ namespace TripViewBreda
         private Geopoint myPoint;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private Subjects subjects;
+
+        private Subject requestedSubject;
+
         public MapPage()
         {
             this.InitializeComponent();
@@ -144,16 +147,48 @@ namespace TripViewBreda
                                 subject = subjects.GetSubjects().ElementAt(id);
                             }
                         }
+                        setRequestedSubject(subject);
 
                         var dialog = new MessageDialog(subject.GetName(), "You have reach the following hotspot!");
+                        
+                        UICommand moreInfo = new UICommand("More info");
+                        moreInfo.Invoked = moreInfo_Click;
+                        dialog.Commands.Add(moreInfo);
+
+                        UICommand close = new UICommand("Close");
+                        close.Invoked = close_Click;
+                        dialog.Commands.Add(close);
+
+                        
+
                         await dialog.ShowAsync();
 
                         // User has entered the area.
-                        this.Frame.Navigate(typeof(DetailPage), subject);
+                        
 
                     }
                 }
             });
+        }
+
+        private void close_Click(IUICommand command)
+        {
+            
+        }
+
+        private void setRequestedSubject(Subject subject)
+        {
+            requestedSubject = subject;
+        }
+
+        private Subject getRequestedSubject()
+        {
+            return requestedSubject;
+        }
+
+        private void moreInfo_Click(IUICommand command)
+        {
+            this.Frame.Navigate(typeof(DetailPage), getRequestedSubject());
         }
         
         private async Task GetRouteAndDirections(Subject start, Subject end)
