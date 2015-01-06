@@ -22,11 +22,11 @@ namespace TripViewBreda.Navigation
         {
             this.activeRoute = activeRoute;
         }
-        public void IncreesStep()
+        public void IncreaseStep()
         {
             this.currentStep++;
         }
-        public void DecreesStep()
+        public void DecreaseStep()
         {
             this.currentStep--;
         }
