@@ -37,9 +37,9 @@ namespace TripViewBredaUnitTest.Model.Navigation
             Assert.AreEqual(expectedValue, actualValue);
 
             // act
-            navManager.IncreesStep();
-            navManager.IncreesStep();
-            navManager.DecreesStep();
+            navManager.IncreaseStep();
+            navManager.IncreaseStep();
+            navManager.DecreaseStep();
 
             // assert
             actualValue = navManager.CurrentStep;

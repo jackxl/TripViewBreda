@@ -85,6 +85,7 @@
     <Compile Include="Model\Navigation\RoutePlannerTest.cs" />
     <Compile Include="Model\Navigation\RouteTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\DataSourceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

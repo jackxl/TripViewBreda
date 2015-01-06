@@ -17,7 +17,7 @@ namespace TripViewBredaUnitTest.Model.GeoLocation
         /// 
         /// </summary>
         [TestMethod]
-        public async Task GSPObjectTest()
+        public async Task GPSObjectTest()
         {
             // arrange
             GPS gps = new GPS();
