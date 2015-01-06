@@ -107,7 +107,7 @@ namespace TripViewBreda
         {
             Debug.WriteLine("School");
             Subjects subjects = new Subjects();
-            subjects.AddSubject(new Subject(new GPSPoint(51.585477, 4.793091), "School"));
+            subjects.AddSubject(new Subject(new GPSPoint(51.585477, 4.793091), "School", "Avans Hogeschool info enzo...GG"));
 
             NavigateToMap(sender, subjects);
         }

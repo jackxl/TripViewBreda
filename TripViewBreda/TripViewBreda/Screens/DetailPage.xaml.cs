@@ -46,8 +46,7 @@ namespace TripViewBreda.Screens
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             
 
-            detailController = new DetailController(subject);
-            ReadData();
+            
           
         }
 
@@ -119,7 +118,10 @@ namespace TripViewBreda.Screens
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            subject = (Subject) e.Parameter;
+            subject = e.Parameter as Subject;
+
+            detailController = new DetailController(subject);
+            ReadData();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -131,8 +133,7 @@ namespace TripViewBreda.Screens
 
         private void closeButton_Click(object sender, RoutedEventArgs e)
         {
-            detailController = null;
-            this.Frame.Navigate(typeof(MapPage), e);
+            this.Frame.Navigate(typeof(MapPage));
         }
     }
 }

@@ -48,13 +48,14 @@ namespace TripViewBreda
             this.InitializeComponent();
 
             GeofenceMonitor.Current.Geofences.Clear();
+            GeofenceMonitor.Current.GeofenceStateChanged += Current_GeofenceStateChanged;
 
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
 
-            GeofenceMonitor.Current.Geofences.Clear();
-            GeofenceMonitor.Current.GeofenceStateChanged += Current_GeofenceStateChanged;
+
+            
   
         }
 
@@ -144,15 +145,12 @@ namespace TripViewBreda
                             }
                         }
 
+                        var dialog = new MessageDialog(subject.GetName(), "You have reach the following hotspot!");
+                        await dialog.ShowAsync();
+
                         // User has entered the area.
                         this.Frame.Navigate(typeof(DetailPage), subject);
 
-                    }
-                    else if (state == GeofenceState.Exited)
-                    {
-                        // User has exited from the area.
-                        var dialog = new MessageDialog(geofence.Id, "Exited");
-                        await dialog.ShowAsync();
                     }
                 }
             });
