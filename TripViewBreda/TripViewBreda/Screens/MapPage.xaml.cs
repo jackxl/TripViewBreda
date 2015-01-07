@@ -123,6 +123,8 @@ namespace TripViewBreda
         }
         private async void getCurrentPosition()
         {
+            var position = await locator.GetGeopositionAsync();
+            myPoint = position.Coordinate.Point;
         }
 
         public async Task GoToCurrentPosition()
@@ -340,7 +342,7 @@ namespace TripViewBreda
             }
             double[] lastKnownLocation = (double[])(ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation]);
             Geopoint point = ToGeopointConverter(lastKnownLocation[0], lastKnownLocation[1]);
-            await GoToCurrentPosition(point);
+            await GoToCurrentPosition();
             Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
             DestinationLabel.Text = "";
             foreach (Subject s in subjects.GetSubjects())

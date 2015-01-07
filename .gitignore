@@ -3,6 +3,7 @@ src/Server/build
 
 *.exe
 *.cache
+*.orig
 
 # User-specific files
 *.suo
