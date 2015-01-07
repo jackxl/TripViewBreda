@@ -21,6 +21,7 @@ using TripViewBreda.GeoLocation;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Devices.Geolocation;
+using TripViewBreda.Model.Routes;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -94,9 +95,9 @@ namespace TripViewBreda
             AddButton("Cafes", Cafes);
             AddButton("School", School);
             AddButton("Tourist Trail", Tourist_Trail);
-            AddButton("Pubs Trip", Pubs_Trip);
             AddButton("Remaining", Remaining);
         }
+
         private void AddButton(string text, Action<object, RoutedEventArgs> Method)
         {
             Button button = new Button();
@@ -106,60 +107,23 @@ namespace TripViewBreda
             this.Route_Buttons_panel.Children.Add(button);
         }
         #region Functions
-        private void Tourist_Trail(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("Tourist Trail");
-            Subjects subjects = new Subjects();
-
-            NavigateToMap(sender, subjects);
-        }
-        private void Pubs_Trip(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("Pubs Trip");
-            Subjects subjects = new Subjects();
-
-            NavigateToMap(sender, subjects);
-        }
-        private void School(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("School");
-            Subjects subjects = new Subjects();
-            subjects.AddSubject(new Subject(new GPSPoint(51.585477, 4.793091), "School", "Avans Hogeschool info enzo...GG"));
-
-            NavigateToMap(sender, subjects);
-        }
-
-        private void Cafes(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("Cafes");
-            Subjects subjects = new Subjects();
-            subjects.AddSubject(new Subject(new GPSPoint(51.587768, 4.776655), "'t Hart"));
-            subjects.AddSubject(new Subject(new GPSPoint(51.587631, 4.776749), "Cafe SamSam"));
-            subjects.AddSubject(new Subject(new GPSPoint(51.589645, 4.773857), "Studio Dependance"));
-            subjects.AddSubject(new Subject(new GPSPoint(51.588621, 4.77313), "Millertime"));
-
-            NavigateToMap(sender, subjects);
-        }
         private void Home(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("Home");
-            Subjects subjects = new Subjects();
-            subjects.AddSubject(new Subject(new GPSPoint(51.592342, 4.548881), "Thuis"));
-
-            NavigateToMap(sender, subjects);
-        }
-        private void Remaining(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("Remaining");
-            Subjects subjects = new Subjects();
-
-            NavigateToMap(sender, subjects);
-        }
-        private void NavigateToMap(object sender, Subjects subs)
+        { NavigateToMap(new Route.Home()); }
+        private void School(object sender, RoutedEventArgs e)
+        { NavigateToMap(new Route.School()); }
+        private void Tourist_Trail(object sender, RoutedEventArgs e)
+        { NavigateToMap(new Route.Tourist_Trail()); }
+        public void Cafes(object sender, RoutedEventArgs e)
+        { NavigateToMap(new Route.Cafes()); }
+        public void Remaining(object sender, RoutedEventArgs e)
+        { NavigateToMap(new Route.Remaining()); }
+        private void NavigateToMap(IRoute route)
+        { NavigateToMap(route.GetSubjects()); }
+        private void NavigateToMap(Subjects subs)
         {
             if (this.LocationCalculated)
             {
-                Debug.WriteLine("Navigate To Map With '" + sender.ToString() + "'.");
+                //Debug.WriteLine("Navigate To Map With '" + sender.Content.ToString() + "'.");
                 this.Frame.Navigate(typeof(MapPage), subs);
             }
         }

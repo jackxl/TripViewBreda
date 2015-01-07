@@ -134,6 +134,10 @@
     <Compile Include="Model\Navigation\NavigationManager.cs" />
     <Compile Include="Model\Navigation\Route.cs" />
     <Compile Include="Model\Navigation\RoutePlanner.cs" />
+    <Compile Include="Model\Routes\IRoutePoint.cs" />
+    <Compile Include="Model\Routes\IRoute.cs" />
+    <Compile Include="Model\Routes\Route.cs" />
+    <Compile Include="Model\Routes\RoutePoint.cs" />
     <Compile Include="Screens\DetailPage.xaml.cs">
       <DependentUpon>DetailPage.xaml</DependentUpon>
     </Compile>
