@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using TripViewBreda.Controllers;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 using TripViewBreda.Model.Information;
@@ -30,6 +31,12 @@ namespace TripViewBreda.Screens
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
+        private DetailController detailController;
+
+        private Subject subject;
+
+        
+        
         public DetailPage()
         {
             this.InitializeComponent();
@@ -37,6 +44,10 @@ namespace TripViewBreda.Screens
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            
+
+            
+          
         }
 
         /// <summary>
@@ -45,6 +56,12 @@ namespace TripViewBreda.Screens
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
+        }
+
+        private void ReadData()
+        {
+            subjectName.DataContext = detailController.GetSubject().GetName();
+            subjectInformation.DataContext = detailController.GetSubject().GetInformation();
         }
 
         /// <summary>
@@ -101,6 +118,10 @@ namespace TripViewBreda.Screens
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
+            subject = e.Parameter as Subject;
+
+            detailController = new DetailController(subject);
+            ReadData();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -109,5 +130,10 @@ namespace TripViewBreda.Screens
         }
 
         #endregion
+
+        private void closeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(MapPage));
+        }
     }
 }

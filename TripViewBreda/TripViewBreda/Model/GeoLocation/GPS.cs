@@ -10,17 +10,18 @@ namespace TripViewBreda.GeoLocation
     public class GPS
     {
        private Geopoint myPoint;
-       private async void UpdateCurrentLocation()
+       private async Task UpdateCurrentLocation()
         {
             var locator = new Geolocator();
-            locator.DesiredAccuracyInMeters = 50;
+            locator.DesiredAccuracy = PositionAccuracy.High;
+            locator.DesiredAccuracyInMeters = 10;
 
             var position = await locator.GetGeopositionAsync();
             myPoint = position.Coordinate.Point;
         }
-        public Geopoint GetCurrentLocation()
+        public async Task<Geopoint> GetCurrentLocation()
         {
-            UpdateCurrentLocation();
+            await UpdateCurrentLocation();
             return myPoint;
         }
     }

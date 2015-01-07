@@ -11,6 +11,10 @@ namespace TripViewBredaUnitTest.Model.Information
     [TestClass]
     public class OpenComponentTest
     {
+        /// <summary>
+        /// This method tests if this object can contain a day, an openfrom and an opentill time.
+        /// To test this there will be checked if the values are equal to the start value, so the value is saved in the component and not modified.
+        /// </summary>
         [TestMethod]
         public void OpenComponentObjectTest()
         {
@@ -22,11 +26,11 @@ namespace TripViewBredaUnitTest.Model.Information
             OpenComponent oc = new OpenComponent(day, openFrom, openTill);
 
             //act
-            DateTime actual = oc.getOpenTill();
+            DateTime actualTill = oc.GetOpenTill();
 
             //Assert
-            DateTime expected = openFrom.AddHours(8);
-            Assert.AreEqual(expected, actual);
+            DateTime expectedTill = openFrom.AddHours(8);
+            Assert.AreEqual(expectedTill, actualTill);
 
             //act
             OpenComponent.Day actualDay = oc.GetDay();

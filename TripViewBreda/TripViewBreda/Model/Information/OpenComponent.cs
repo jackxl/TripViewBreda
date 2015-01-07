@@ -40,7 +40,7 @@ namespace TripViewBreda.Model.Information
             this.openFrom = openFrom;
         }
 
-        public DateTime getOpenTill()
+        public DateTime GetOpenTill()
         {
             return openTill;
         }

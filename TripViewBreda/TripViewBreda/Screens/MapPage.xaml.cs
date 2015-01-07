@@ -19,11 +19,16 @@ using Windows.UI.Xaml.Navigation;
 using TripViewBreda.GeoLocation;
 using Windows.Devices.Geolocation;
 using TripViewBreda.Navigation;
-using Windows.UI.Xaml.Controls.Maps;
 using TripViewBreda.Model.Information;
 using Windows.Services.Maps;
 using Windows.UI;
 using Windows.UI.Xaml.Documents;
+using Windows.UI.Xaml.Shapes;
+using System.Threading.Tasks;
+using Windows.UI.Core;
+using Windows.UI.Popups;
+using Windows.UI.Xaml.Controls.Maps;
+using TripViewBreda.Screens;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -35,28 +40,28 @@ namespace TripViewBreda
     public sealed partial class MapPage : Page
     {
         private NavigationHelper navigationHelper;
+        private Geopoint myPoint;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private GPS gps= new GPS();
-        private Subjects subjects = new Subjects();
+        private Subjects subjects;
+
+        private Subject requestedSubject;
+
         public MapPage()
         {
             this.InitializeComponent();
 
             GeofenceMonitor.Current.Geofences.Clear();
+            GeofenceMonitor.Current.GeofenceStateChanged += Current_GeofenceStateChanged;
 
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            subjects.AddSubject(new Subject(new GPSPoint(51.592342, 4.548881), "Thuis"));
-            subjects.AddSubject(new Subject(new GPSPoint(51.585477, 4.793091), "School"));
-            foreach(Subject s in subjects.GetSubjects())
-            {
-                AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
-                CreateGeofence(s);
-                
-            }
-            GetRouteAndDirections(subjects.GetSubjects().First<Subject>(), subjects.GetSubjects().Last<Subject>());
+
+
+            
+  
         }
+
 
         private void AddPoint_Map(double lattitude, double longitude, String name)
         {
@@ -71,37 +76,122 @@ namespace TripViewBreda
             MyMap.MapElements.Add(addIcon);
         }
 
-        public async void GoToCurrentPosition()
+
+
+        public async Task GoToCurrentPosition()
         {
             var locator = new Geolocator();
             locator.DesiredAccuracyInMeters = 50;
 
             var position = await locator.GetGeopositionAsync();
-            Geopoint myPoint = position.Coordinate.Point;
+            myPoint = position.Coordinate.Point;
             await MyMap.TrySetViewAsync(myPoint, 16D);
+            MyMap.ZoomLevel = 16;
+            MyMap.LandmarksVisible = true;
+
+            Ellipse myCircle = new Ellipse();
+            myCircle.Fill = new SolidColorBrush(Colors.Blue);
+            myCircle.Height = 20;
+            myCircle.Width = 20;
+            myCircle.Opacity = 50;
+
+            MyMap.WatermarkMode = new MapWatermarkMode();
+
 
         }
 
-        private void CreateGeofence(Subject s)
+        private void CreateGeofence(Subject subject)
         {
-            var position = new BasicGeoposition
-            {
-                Latitude = s.GetLocation().GetLattitude(),
-                Longitude = s.GetLocation().GetLongitude()
-            };
+                Geofence geofence = null;
 
-            var georcircle = new Geocircle(position, 20);
+                BasicGeoposition position;
+                position.Latitude = subject.GetLocation().GetLattitude();
+                position.Longitude = subject.GetLocation().GetLongitude();
+                position.Altitude = 0.0;
 
-            var mask = MonitoredGeofenceStates.Entered | MonitoredGeofenceStates.Exited;
+                double radius = 30;
 
-            var dwellTime = TimeSpan.FromSeconds(0);
+                Geocircle geocircle = new Geocircle(position,radius);
 
-            var geofence = new Geofence(s.GetName(), georcircle, mask, false, dwellTime);
-            GeofenceMonitor.Current.Geofences.Add(geofence);
+                MonitoredGeofenceStates mask = 0;
+
+                mask |= MonitoredGeofenceStates.Entered;
+                mask |= MonitoredGeofenceStates.Exited;
+
+                geofence = new Geofence(subjects.GetSubjects().IndexOf(subject).ToString(), geocircle, mask,true);
+                GeofenceMonitor.Current.Geofences.Add(geofence);
+            
         }
 
+        private async void Current_GeofenceStateChanged(GeofenceMonitor sender, object args)
+        {
+            var reports = sender.ReadReports();
+
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            {
+                foreach (var report in reports)
+                {
+                    var state = report.NewState;
+                    var geofence = report.Geofence;
+                    Subject subject = null;
+
+
+                    if (state == GeofenceState.Entered)
+                    {
+                        int id = Convert.ToInt32(geofence.Id);
+
+                        for (int i = 0; i < subjects.GetSubjects().Count; i++)
+                        {
+                            if (id == i)
+                            {
+                                subject = subjects.GetSubjects().ElementAt(id);
+                            }
+                        }
+                        setRequestedSubject(subject);
+
+                        var dialog = new MessageDialog(subject.GetName(), "You have reach the following hotspot!");
+                        
+                        UICommand moreInfo = new UICommand("More info");
+                        moreInfo.Invoked = moreInfo_Click;
+                        dialog.Commands.Add(moreInfo);
+
+                        UICommand close = new UICommand("Close");
+                        close.Invoked = close_Click;
+                        dialog.Commands.Add(close);
+
+                        
+
+                        await dialog.ShowAsync();
+
+                        // User has entered the area.
+                        
+
+                    }
+                }
+            });
+        }
+
+        private void close_Click(IUICommand command)
+        {
+            
+        }
+
+        private void setRequestedSubject(Subject subject)
+        {
+            requestedSubject = subject;
+        }
+
+        private Subject getRequestedSubject()
+        {
+            return requestedSubject;
+        }
+
+        private void moreInfo_Click(IUICommand command)
+        {
+            this.Frame.Navigate(typeof(DetailPage), getRequestedSubject());
+        }
         
-        private async void GetRouteAndDirections(Subject start, Subject end)
+        private async Task GetRouteAndDirections(Subject start, Subject end)
         {
             // Start at start subject
             BasicGeoposition startLocation = new BasicGeoposition();
@@ -114,37 +204,22 @@ namespace TripViewBreda
             endLocation.Latitude = end.GetLocation().GetLattitude();
             endLocation.Longitude = end.GetLocation().GetLongitude();
             Geopoint endPoint = new Geopoint(endLocation);
+           
 
             // Get the route between the points.
             MapRouteFinderResult routeResult =
-                await MapRouteFinder.GetDrivingRouteAsync(
+                await MapRouteFinder.GetWalkingRouteAsync(
                 startPoint,
-                endPoint,
-                MapRouteOptimization.Time,
-                MapRouteRestrictions.None);
+                endPoint);
 
             //Display route with text
             if (routeResult.Status == MapRouteFinderStatus.Success)
             {
-                // Display summary info about the route.
-                InstructionsLabel.Inlines.Add(new Run()
-                {
-                    Text = "Total estimated time (minutes) = "
-                        + routeResult.Route.EstimatedDuration.TotalMinutes.ToString()
-                });
-                InstructionsLabel.Inlines.Add(new LineBreak());
-                InstructionsLabel.Inlines.Add(new Run()
-                {
-                    Text = "Total length (kilometers) = "
-                        + (routeResult.Route.LengthInMeters / 1000).ToString()
-                });
-                InstructionsLabel.Inlines.Add(new LineBreak());
-                InstructionsLabel.Inlines.Add(new LineBreak());
-
+                InstructionsLabel.Text += "\n";
                 // Display the directions.
                 InstructionsLabel.Inlines.Add(new Run()
                 {
-                    Text = "DIRECTIONS"
+                    Text = "Route van " + start.GetName() + " naar " + end.GetName()
                 });
                 InstructionsLabel.Inlines.Add(new LineBreak());
 
@@ -171,8 +246,8 @@ namespace TripViewBreda
             {
                 // Use the route to initialize a MapRouteView.
                 MapRouteView viewOfRoute = new MapRouteView(routeResult.Route);
-                viewOfRoute.RouteColor = Colors.Yellow;
-                viewOfRoute.OutlineColor = Colors.Black;
+                viewOfRoute.RouteColor = Colors.LightBlue;
+                viewOfRoute.OutlineColor = Colors.DarkBlue;
 
                 // Add the new MapRouteView to the Routes collection
                 // of the MapControl.
@@ -190,8 +265,11 @@ namespace TripViewBreda
                    "A problem occurred: " + routeResult.Status.ToString();
                 
             }
+            
 
         }
+
+	#region NavigationHelper registration
 
         /// <summary>
         /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
@@ -200,74 +278,43 @@ namespace TripViewBreda
         {
             get { return this.navigationHelper; }
         }
-
-        /// <summary>
-        /// Gets the view model for this <see cref="Page"/>.
-        /// This can be changed to a strongly typed view model.
-        /// </summary>
-        /// 
         public ObservableDictionary DefaultViewModel
         {
             get { return this.defaultViewModel; }
         }
-
-        /// <summary>
-        /// Populates the page with content passed during navigation.  Any saved state is also
-        /// provided when recreating a page from a prior session.
-        /// </summary>
-        /// <param name="sender">
-        /// The source of the event; typically <see cref="NavigationHelper"/>
-        /// </param>
-        /// <param name="e">Event data that provides both the navigation parameter passed to
-        /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
-        /// a dictionary of state preserved by this page during an earlier
-        /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
         }
-
-        /// <summary>
-        /// Preserves state associated with this page in case the application is suspended or the
-        /// page is discarded from the navigation cache.  Values must conform to the serialization
-        /// requirements of <see cref="SuspensionManager.SessionState"/>.
-        /// </summary>
-        /// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
-        /// <param name="e">Event data that provides an empty dictionary to be populated with
-        /// serializable state.</param>
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
         }
-
-        #region NavigationHelper registration
-
-        /// <summary>
-        /// The methods provided in this section are simply used to allow
-        /// NavigationHelper to respond to the page's navigation methods.
-        /// <para>
-        /// Page specific logic should be placed in event handlers for the  
-        /// <see cref="NavigationHelper.LoadState"/>
-        /// and <see cref="NavigationHelper.SaveState"/>.
-        /// The navigation parameter is available in the LoadState method 
-        /// in addition to page state preserved during an earlier session.
-        /// </para>
-        /// </summary>
-        /// <param name="e">Provides data for navigation methods and event
-        /// handlers that cannot cancel the navigation request.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            NavigateToVVV();
-        }
-        private async void NavigateToVVV()
-        {
-            var locator = new Geolocator();
-            locator.DesiredAccuracyInMeters = 50;
+            subjects = e.Parameter as Subjects;
+            
+            foreach (Subject s in subjects.GetSubjects())
+            {
+                AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
+                CreateGeofence(s);
+            }
+            await GoToCurrentPosition();
+            Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
+            DestinationLabel.Text = "";
+            foreach (Subject s in subjects.GetSubjects())
+            {
+                DestinationLabel.Text += s.GetName() + "\n";
+                if (lastSub != null)
+                {
+                   await GetRouteAndDirections(lastSub, s);
+                   MyMap.CancelDirectManipulations();
 
-            var position = await locator.GetGeopositionAsync();
-            Geopoint myPoint = position.Coordinate.Point;
-            await MyMap.TrySetViewAsync(myPoint);
-            MyMap.ZoomLevel = 16;
-            MyMap.LandmarksVisible = true;
+                }
+                lastSub = s;
+            }
+            MyMap.CancelDirectManipulations();
+            await GoToCurrentPosition();
+            
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
