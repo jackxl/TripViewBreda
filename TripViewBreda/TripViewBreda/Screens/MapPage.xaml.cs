@@ -192,6 +192,7 @@ namespace TripViewBreda
             }
 
         }
+
         /// <summary>
         /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
         /// </summary>
@@ -275,5 +276,17 @@ namespace TripViewBreda
         }
 
         #endregion
+
+        private void MyMap_MapTapped(MapControl sender, MapInputEventArgs args)
+        {
+            var list = MyMap.FindMapElementsAtOffset(args.Position);
+
+            if (list.Count > 0)
+            {
+                var query = (from g in subjects.GetSubjects() where (g.GetName()) == ((MapIcon)list.First()).Title select g);
+                if (query.ToList().Count > 0)
+                    this.Frame.Navigate(typeof(HelpPage), query.ToList().First());
+            }
+        }
     }
 }
