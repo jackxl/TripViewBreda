@@ -37,10 +37,12 @@ namespace TripViewBreda
     public sealed partial class MapPage : Page
     {
         private NavigationHelper navigationHelper;
-        private Geopoint myPoint;
+        private Geopoint myPoint, myPreviousPoint;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private Subjects subjects;
         private Geolocator locator = new Geolocator();
+        private DispatcherTimer VirtualPositionTimer;
+        private short DispatchCounter; // no need to set this because it gets set on the first virtual update.
 
         public MapPage()
         {
@@ -54,12 +56,17 @@ namespace TripViewBreda
 
             locator.DesiredAccuracy = PositionAccuracy.High;
             locator.DesiredAccuracyInMeters = 10;
+
+            VirtualPositionTimer = new DispatcherTimer();
+            VirtualPositionTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000); // 1000 Milliseconds 
+            VirtualPositionTimer.Tick += new EventHandler<object>(CalculateCurrentPosition);
+            VirtualPositionTimer.Start();
         }
 
         private void AddPoint_Map(double lattitude, double longitude, String name)
         {
             MapIcon addIcon = new MapIcon();
-            
+
             var myPosition = new Windows.Devices.Geolocation.BasicGeoposition();
             myPosition.Longitude = longitude;
             myPosition.Latitude = lattitude;
@@ -69,12 +76,49 @@ namespace TripViewBreda
             MyMap.MapElements.Add(addIcon);
         }
 
+        public void CalculateCurrentPosition(object sender, object e) //Dirty fix (http://goo.gl/AzbolV)
+        {
+            double deltaLatitude;
+            double deltaLongitude;
 
+            if (myPreviousPoint == null)
+            {
+                myPreviousPoint = myPoint;
+                DispatchCounter = 0;
+            }
+            else if (DispatchCounter < 3)
+            {
+                deltaLatitude = myPoint.Position.Latitude - myPreviousPoint.Position.Latitude;
+                deltaLongitude = myPoint.Position.Longitude - myPreviousPoint.Position.Longitude;
 
-        public async Task GoToCurrentPosition()
+                BasicGeoposition postion = new BasicGeoposition();
+                postion.Latitude = myPoint.Position.Latitude + deltaLatitude;
+                postion.Longitude = myPoint.Position.Longitude + deltaLongitude;
+                myPoint = new Geopoint(postion);
+            }
+            else
+            {
+                DispatchCounter = 0;
+                try
+                {
+                    getCurrentPosition();
+                }
+                catch (Exception ex)
+                {
+                    CalculateCurrentPosition(sender, e);
+                }
+            }
+        }
+
+        private async void getCurrentPosition()
         {
             var position = await locator.GetGeopositionAsync();
             myPoint = position.Coordinate.Point;
+        }
+
+        public async Task GoToCurrentPosition()
+        {
+            //getCurrentPosition();
             await MyMap.TrySetViewAsync(myPoint, 16D);
             MyMap.ZoomLevel = 16;
             MyMap.LandmarksVisible = true;
@@ -106,7 +150,7 @@ namespace TripViewBreda
             GeofenceMonitor.Current.Geofences.Add(geofence);
         }
 
-        
+
         private async Task GetRouteAndDirections(Subject start, Subject end)
         {
             // Start at start subject
@@ -120,7 +164,7 @@ namespace TripViewBreda
             endLocation.Latitude = end.GetLocation().GetLattitude();
             endLocation.Longitude = end.GetLocation().GetLongitude();
             Geopoint endPoint = new Geopoint(endLocation);
-           
+
 
             // Get the route between the points.
             MapRouteFinderResult routeResult =
@@ -157,7 +201,7 @@ namespace TripViewBreda
                     "A problem occurred: " + routeResult.Status.ToString();
             }
 
-           // Displaying route on map
+            // Displaying route on map
             if (routeResult.Status == MapRouteFinderStatus.Success)
             {
                 // Use the route to initialize a MapRouteView.
@@ -179,9 +223,9 @@ namespace TripViewBreda
             {
                 InstructionsLabel.Text =
                    "A problem occurred: " + routeResult.Status.ToString();
-                
+
             }
-            
+
 
         }
         #region NavigationHelper registration
@@ -203,7 +247,7 @@ namespace TripViewBreda
         {
             this.navigationHelper.OnNavigatedTo(e);
             subjects = e.Parameter as Subjects;
-            
+
             foreach (Subject s in subjects.GetSubjects())
             {
                 AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
@@ -217,14 +261,14 @@ namespace TripViewBreda
                 DestinationLabel.Text += s.GetName() + "\n";
                 if (lastSub != null)
                 {
-                   await GetRouteAndDirections(lastSub, s);
+                    await GetRouteAndDirections(lastSub, s);
 
                 }
                 lastSub = s;
             }
             MyMap.CancelDirectManipulations();
             await GoToCurrentPosition();
-            
+
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
