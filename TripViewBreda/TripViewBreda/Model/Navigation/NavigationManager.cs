@@ -12,7 +12,7 @@ namespace TripViewBreda.Navigation
         private int currentStep;
         public NavigationManager()
         {
-
+            this.currentStep = 1;
         }
         public Route GetActiveRoute()
         {
@@ -21,6 +21,21 @@ namespace TripViewBreda.Navigation
         public void SetActiveRoute(Route activeRoute)
         {
             this.activeRoute = activeRoute;
+        }
+        public void IncreaseStep()
+        {
+            this.currentStep++;
+        }
+        public void DecreaseStep()
+        {
+            this.currentStep--;
+        }
+        public int CurrentStep
+        {
+            get
+            {
+                return currentStep;
+            }
         }
     }
 }

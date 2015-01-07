@@ -25,7 +25,13 @@ using Windows.UI;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Shapes;
 using System.Threading.Tasks;
+using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls.Maps;
+using TripViewBreda.Screens;
+using System.Diagnostics;
+using Windows.Storage;
+using Windows.Storage.Streams;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -44,11 +50,15 @@ namespace TripViewBreda
         private DispatcherTimer VirtualPositionTimer;
         private short DispatchCounter; // no need to set this because it gets set on the first virtual update.
 
+        private Subject requestedSubject;
+
+
         public MapPage()
         {
             this.InitializeComponent();
 
             GeofenceMonitor.Current.Geofences.Clear();
+            GeofenceMonitor.Current.GeofenceStateChanged += Current_GeofenceStateChanged;
 
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
@@ -63,6 +73,7 @@ namespace TripViewBreda
             VirtualPositionTimer.Start();
         }
 
+
         private void AddPoint_Map(double lattitude, double longitude, String name)
         {
             MapIcon addIcon = new MapIcon();
@@ -73,6 +84,7 @@ namespace TripViewBreda
             addIcon.Location = new Geopoint(myPosition);
             addIcon.Title = name;
             addIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
+            addIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/Location.png"));
             MyMap.MapElements.Add(addIcon);
         }
 
@@ -109,11 +121,8 @@ namespace TripViewBreda
                 }
             }
         }
-
         private async void getCurrentPosition()
         {
-            var position = await locator.GetGeopositionAsync();
-            myPoint = position.Coordinate.Point;
         }
 
         public async Task GoToCurrentPosition()
@@ -129,42 +138,112 @@ namespace TripViewBreda
             myCircle.Width = 20;
             myCircle.Opacity = 50;
 
-
+            MyMap.WatermarkMode = new MapWatermarkMode();
         }
 
-        private void CreateGeofence(Subject s)
+        private void CreateGeofence(Subject subject)
         {
-            var position = new BasicGeoposition
-            {
-                Latitude = s.GetLocation().GetLattitude(),
-                Longitude = s.GetLocation().GetLongitude()
-            };
+            Geofence geofence = null;
 
-            var georcircle = new Geocircle(position, 20);
+            BasicGeoposition position;
+            position.Latitude = subject.GetLocation().GetLattitude();
+            position.Longitude = subject.GetLocation().GetLongitude();
+            position.Altitude = 0.0;
 
-            var mask = MonitoredGeofenceStates.Entered | MonitoredGeofenceStates.Exited;
+            double radius = 30;
 
-            var dwellTime = TimeSpan.FromSeconds(0);
+            Geocircle geocircle = new Geocircle(position, radius);
 
-            var geofence = new Geofence(s.GetName(), georcircle, mask, false, dwellTime);
+            MonitoredGeofenceStates mask = 0;
+
+            mask |= MonitoredGeofenceStates.Entered;
+            mask |= MonitoredGeofenceStates.Exited;
+
+            geofence = new Geofence(subjects.GetSubjects().IndexOf(subject).ToString(), geocircle, mask, true);
             GeofenceMonitor.Current.Geofences.Add(geofence);
+
         }
 
+        private async void Current_GeofenceStateChanged(GeofenceMonitor sender, object args)
+        {
+            var reports = sender.ReadReports();
 
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            {
+                foreach (var report in reports)
+                {
+                    var state = report.NewState;
+                    var geofence = report.Geofence;
+                    Subject subject = null;
+
+
+                    if (state == GeofenceState.Entered)
+                    {
+                        int id = Convert.ToInt32(geofence.Id);
+
+                        for (int i = 0; i < subjects.GetSubjects().Count; i++)
+                        {
+                            if (id == i)
+                            {
+                                subject = subjects.GetSubjects().ElementAt(id);
+                            }
+                        }
+                        setRequestedSubject(subject);
+
+                        var dialog = new MessageDialog(subject.GetName(), "You have reach the following hotspot!");
+
+                        UICommand moreInfo = new UICommand("More info");
+                        moreInfo.Invoked = moreInfo_Click;
+                        dialog.Commands.Add(moreInfo);
+
+                        UICommand close = new UICommand("Close");
+                        close.Invoked = close_Click;
+                        dialog.Commands.Add(close);
+
+                        await dialog.ShowAsync();
+                        // User has entered the area.
+                    }
+                }
+            });
+        }
+
+        private void close_Click(IUICommand command)
+        { }
+
+        private void setRequestedSubject(Subject subject)
+        {
+            requestedSubject = subject;
+        }
+
+        private Subject getRequestedSubject()
+        {
+            return requestedSubject;
+        }
+
+        private void moreInfo_Click(IUICommand command)
+        {
+            this.Frame.Navigate(typeof(DetailPage), getRequestedSubject());
+        }
+        private Geopoint ToGeopointConverter(Subject subject)
+        { return ToGeopointConverter(subject.GetLocation().GetLattitude(), subject.GetLocation().GetLongitude()); }
+        private Geopoint ToGeopointConverter(double latitude, double longitude)
+        {
+            BasicGeoposition basicPoint = new BasicGeoposition
+            {
+                Latitude = latitude,
+                Longitude = longitude
+            };
+            Geopoint point = new Geopoint(basicPoint);
+            return point;
+        }
         private async Task GetRouteAndDirections(Subject start, Subject end)
         {
             // Start at start subject
-            BasicGeoposition startLocation = new BasicGeoposition();
-            startLocation.Latitude = start.GetLocation().GetLattitude();
-            startLocation.Longitude = start.GetLocation().GetLongitude();
-            Geopoint startPoint = new Geopoint(startLocation);
+            Geopoint startPoint = ToGeopointConverter(start);
 
             // End at end subject
-            BasicGeoposition endLocation = new BasicGeoposition();
-            endLocation.Latitude = end.GetLocation().GetLattitude();
-            endLocation.Longitude = end.GetLocation().GetLongitude();
-            Geopoint endPoint = new Geopoint(endLocation);
-
+            Geopoint endPoint = ToGeopointConverter(end);
+           
 
             // Get the route between the points.
             MapRouteFinderResult routeResult =
@@ -206,8 +285,8 @@ namespace TripViewBreda
             {
                 // Use the route to initialize a MapRouteView.
                 MapRouteView viewOfRoute = new MapRouteView(routeResult.Route);
-                viewOfRoute.RouteColor = Colors.Yellow;
-                viewOfRoute.OutlineColor = Colors.Black;
+                viewOfRoute.RouteColor = Colors.LightBlue;
+                viewOfRoute.OutlineColor = Colors.DarkBlue;
 
                 // Add the new MapRouteView to the Routes collection
                 // of the MapControl.
@@ -228,7 +307,12 @@ namespace TripViewBreda
 
 
         }
-        #region NavigationHelper registration
+
+	#region NavigationHelper registration
+
+        /// <summary>
+        /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
+        /// </summary>
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
@@ -245,6 +329,7 @@ namespace TripViewBreda
         }
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
+            Debug.WriteLine("Navigate To");
             this.navigationHelper.OnNavigatedTo(e);
             subjects = e.Parameter as Subjects;
 
@@ -253,7 +338,9 @@ namespace TripViewBreda
                 AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
                 CreateGeofence(s);
             }
-            await GoToCurrentPosition();
+            double[] lastKnownLocation = (double[])(ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation]);
+            Geopoint point = ToGeopointConverter(lastKnownLocation[0], lastKnownLocation[1]);
+            await GoToCurrentPosition(point);
             Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
             DestinationLabel.Text = "";
             foreach (Subject s in subjects.GetSubjects())
@@ -262,21 +349,33 @@ namespace TripViewBreda
                 if (lastSub != null)
                 {
                     await GetRouteAndDirections(lastSub, s);
+                    MyMap.CancelDirectManipulations();
 
                 }
                 lastSub = s;
             }
             MyMap.CancelDirectManipulations();
-            await GoToCurrentPosition();
 
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
+            Debug.WriteLine("Navigated From");
         }
 
         #endregion
 
+        private void MyMap_MapTapped(MapControl sender, MapInputEventArgs args)
+        {
+            var list = MyMap.FindMapElementsAtOffset(args.Position);
+
+            if (list.Count > 0)
+            {
+                var query = (from g in subjects.GetSubjects() where (g.GetName()) == ((MapIcon)list.First()).Title select g);
+                if (query.ToList().Count > 0)
+                    this.Frame.Navigate(typeof(DetailPage), query.ToList().First());
+            }
+        }
     }
 }
