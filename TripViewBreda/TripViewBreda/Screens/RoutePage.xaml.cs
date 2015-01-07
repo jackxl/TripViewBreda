@@ -18,6 +18,9 @@ using Windows.UI.Xaml.Navigation;
 using System.Diagnostics;
 using TripViewBreda.Model.Information;
 using TripViewBreda.GeoLocation;
+using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.Devices.Geolocation;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -30,7 +33,7 @@ namespace TripViewBreda
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
+        private bool LocationCalculated = false;
         public RoutePage()
         {
             this.InitializeComponent();
@@ -38,6 +41,20 @@ namespace TripViewBreda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            CalculateCurrentGPSLocation();
+        }
+        private async Task CalculateCurrentGPSLocation()
+        {
+            if (ApplicationData.Current.LocalSettings.Values.ContainsKey(AppSettings.LastKnownLocation) == true)
+            { LocationCalculated = true; }
+            var locator = new Geolocator();
+            locator.DesiredAccuracyInMeters = 50;
+            Debug.WriteLine("Calculating CurrentLocation");
+            var position = await locator.GetGeopositionAsync();
+            double[] lastKnownPosition = new double[] { position.Coordinate.Latitude, position.Coordinate.Longitude };
+            ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation] = lastKnownPosition;
+            Debug.WriteLine("Calculation Done. Location Calculated");
+            LocationCalculated = true;
         }
 
         #region NavigationHelper registration
@@ -140,8 +157,11 @@ namespace TripViewBreda
         }
         private void NavigateToMap(object sender, Subjects subs)
         {
-            Debug.WriteLine("Navigate To Map With '" + sender.ToString() + "'.");
-            this.Frame.Navigate(typeof(MapPage), subs);
+            if (this.LocationCalculated)
+            {
+                Debug.WriteLine("Navigate To Map With '" + sender.ToString() + "'.");
+                this.Frame.Navigate(typeof(MapPage), subs);
+            }
         }
         #endregion
         #endregion

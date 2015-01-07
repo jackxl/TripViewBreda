@@ -13,5 +13,6 @@ namespace TripViewBreda.Common
 
         // Local Data Storage
         public static readonly string IsFirstLaunch = "IsFirstLaunch";
+        public static readonly string LastKnownLocation = "LastKnownLocation";
     }
 }
