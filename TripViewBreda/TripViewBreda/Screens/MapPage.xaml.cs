@@ -40,6 +40,8 @@ namespace TripViewBreda
         private Geopoint myPoint;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private Subjects subjects;
+        private Geolocator locator = new Geolocator();
+
         public MapPage()
         {
             this.InitializeComponent();
@@ -49,7 +51,9 @@ namespace TripViewBreda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            
+
+            locator.DesiredAccuracy = PositionAccuracy.High;
+            locator.DesiredAccuracyInMeters = 10;
         }
 
         private void AddPoint_Map(double lattitude, double longitude, String name)
@@ -69,9 +73,6 @@ namespace TripViewBreda
 
         public async Task GoToCurrentPosition()
         {
-            var locator = new Geolocator();
-            locator.DesiredAccuracyInMeters = 50;
-
             var position = await locator.GetGeopositionAsync();
             myPoint = position.Coordinate.Point;
             await MyMap.TrySetViewAsync(myPoint, 16D);
