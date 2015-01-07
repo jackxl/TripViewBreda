@@ -31,6 +31,7 @@ using Windows.UI.Xaml.Controls.Maps;
 using TripViewBreda.Screens;
 using System.Diagnostics;
 using Windows.Storage;
+using Windows.Storage.Streams;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -71,6 +72,7 @@ namespace TripViewBreda
             addIcon.Location = new Geopoint(myPosition);
             addIcon.Title = name;
             addIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
+            addIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/Location.png"));
             MyMap.MapElements.Add(addIcon);
         }
 
@@ -324,7 +326,7 @@ namespace TripViewBreda
             {
                 var query = (from g in subjects.GetSubjects() where (g.GetName()) == ((MapIcon)list.First()).Title select g);
                 if (query.ToList().Count > 0)
-                    this.Frame.Navigate(typeof(HelpPage), query.ToList().First());
+                    this.Frame.Navigate(typeof(DetailPage), query.ToList().First());
             }
         }
     }
