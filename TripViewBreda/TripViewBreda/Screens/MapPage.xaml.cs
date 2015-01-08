@@ -57,7 +57,7 @@ namespace TripViewBreda.Screens
 
         private Subject requestedSubject;
 
-        private const uint? DesiredAccuracyInMeters = 10;
+        private const uint DesiredAccuracyInMeters = 10;
         private const Int16 dispatcherInterval = 1000;
         private const double zoomLevel = 16D;
 
