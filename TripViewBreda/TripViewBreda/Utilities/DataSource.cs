@@ -13,7 +13,7 @@ namespace TripViewBreda.Utilities
     class DataSource
     {
         private ObservableCollection<Model.Information.Subjects> _routes;
-        const string filename = "routes.json";
+        const string filename = "Assets/routes.json";
 
         public DataSource()
         {
