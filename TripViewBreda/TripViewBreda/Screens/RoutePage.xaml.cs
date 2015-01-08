@@ -91,8 +91,8 @@ namespace TripViewBreda
         #region Registration Route Buttons
         private void RegistrationRouteButtons()
         {
-            AddButton("Home", Home);
-            AddButton("Cafes", Cafes);
+            AddButton("Historische Kilometer", HistorischeKM);
+            AddButton("Kroegentocht", Cafes);
             AddButton("School", School);
             AddButton("Tourist Trail", Tourist_Trail);
             AddButton("Remaining", Remaining);
@@ -107,8 +107,8 @@ namespace TripViewBreda
             this.Route_Buttons_panel.Children.Add(button);
         }
         #region Functions
-        private void Home(object sender, RoutedEventArgs e)
-        { NavigateToMap(new Route.Home()); }
+        private void HistorischeKM(object sender, RoutedEventArgs e)
+        { NavigateToMap(new Route.HistorischeKM()); }
         private void School(object sender, RoutedEventArgs e)
         { NavigateToMap(new Route.School()); }
         private void Tourist_Trail(object sender, RoutedEventArgs e)
