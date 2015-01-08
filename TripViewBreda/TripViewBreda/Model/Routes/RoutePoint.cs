@@ -93,14 +93,31 @@ namespace TripViewBreda.Model.Routes
         {
             public override Subject GetSubject()
             {
-                return new Subject(new GPSPoint(51.592833, 4.778472), "The Light House");
+                return new Subject(new GPSPoint(51.592743, 4.778478), "The Light House");
             }
         }
+
+        public class TS_1 : IRoutePoint
+        {
+            public override Subject GetSubject()
+            {
+                return new Subject(new GPSPoint(51.592667, 4.777917), "");
+            }
+        }
+
+        public class TS_2 : IRoutePoint
+        {
+            public override Subject GetSubject()
+            {
+                return new Subject(new GPSPoint(51.591255, 4.777188), "");
+            }
+        }
+
         public class Kasteel_van_Breda : IRoutePoint
         {
             public override Subject GetSubject()
             {
-                return new Subject(new GPSPoint(51.590612, 4.776167), "Kasteel van Breda");
+                return new Subject(new GPSPoint(51.590515, 4.776223), "Kasteel van Breda");
             }
         }
         public class Stadhouderspoort : IRoutePoint

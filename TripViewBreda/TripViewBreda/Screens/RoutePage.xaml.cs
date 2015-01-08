@@ -123,7 +123,7 @@ namespace TripViewBreda.Screens
         {
             if (this.LocationCalculated)
             {
-                //Debug.WriteLine("Navigate To Map With '" + sender.Content.ToString() + "'.");
+                Debug.WriteLine("Navigate To Map With '" + subs.ToString());
                 this.Frame.Navigate(typeof(MapPage), subs);
             }
         }

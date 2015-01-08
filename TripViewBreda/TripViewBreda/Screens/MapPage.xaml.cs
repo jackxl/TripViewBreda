@@ -33,6 +33,7 @@ using System.Diagnostics;
 using Windows.Storage;
 using Windows.Storage.Streams;
 
+
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
 namespace TripViewBreda.Screens
@@ -46,11 +47,13 @@ namespace TripViewBreda.Screens
         private Geopoint myPoint, myPreviousPoint;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private Subjects subjects;
-        private Geolocator locator = new Geolocator();
+        private Geolocator locator;// = new Geolocator();
         private DispatcherTimer VirtualPositionTimer;
         private short DispatchCounter; // no need to set this because it gets set on the first virtual update.
         private bool goingToCurrentLocation = false;
         private bool LocatingMapLocation = false;
+
+        private MapIcon currentLocation;
 
         private Subject requestedSubject;
 
@@ -65,7 +68,8 @@ namespace TripViewBreda.Screens
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-
+            
+            locator = new Geolocator();
             locator.DesiredAccuracy = PositionAccuracy.High;
             locator.DesiredAccuracyInMeters = 10;
         }
@@ -74,7 +78,13 @@ namespace TripViewBreda.Screens
             VirtualPositionTimer = new DispatcherTimer();
             VirtualPositionTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000); // 1000 Milliseconds 
             VirtualPositionTimer.Tick += new EventHandler<object>(CalculateCurrentPosition);
-            VirtualPositionTimer.Start();
+          //  VirtualPositionTimer.Start();
+
+            
+            
+
+            
+
         }
 
 
@@ -89,6 +99,19 @@ namespace TripViewBreda.Screens
             addIcon.Title = name;
             addIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
             addIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/Location.png"));
+            MyMap.MapElements.Add(addIcon);
+        }
+
+        private void AddPoint_CurrentLocation(double lattitude, double longitude, string name)
+        {
+            MapIcon addIcon = new MapIcon();
+
+            var myPosition = new Windows.Devices.Geolocation.BasicGeoposition();
+            myPosition.Longitude = longitude;
+            myPosition.Latitude = lattitude;
+            addIcon.Location = new Geopoint(myPosition);
+            addIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
+            addIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/CurrentLocation.png"));
             MyMap.MapElements.Add(addIcon);
         }
 
@@ -113,6 +136,8 @@ namespace TripViewBreda.Screens
                 postion.Latitude = myPoint.Position.Latitude + deltaLatitude;
                 postion.Longitude = myPoint.Position.Longitude + deltaLongitude;
                 myPoint = new Geopoint(postion);
+
+                
             }
             else
             {
@@ -168,12 +193,9 @@ namespace TripViewBreda.Screens
                 MyMap.ZoomLevel = 16;
                 MyMap.LandmarksVisible = true;
 
-                Ellipse myCircle = new Ellipse();
-                myCircle.Fill = new SolidColorBrush(Colors.Blue);
-                myCircle.Height = 20;
-                myCircle.Width = 20;
-                myCircle.Opacity = 50;
+            
 
+            
                 MyMap.WatermarkMode = new MapWatermarkMode();
                 goingToCurrentLocation = false;
                 Debug.WriteLine("Done going to current location");
@@ -190,7 +212,6 @@ namespace TripViewBreda.Screens
             position.Latitude = subject.GetLocation().GetLattitude();
             position.Longitude = subject.GetLocation().GetLongitude();
             position.Altitude = 0.0;
-
             double radius = 30;
 
             Geocircle geocircle = new Geocircle(position, radius);
@@ -266,7 +287,9 @@ namespace TripViewBreda.Screens
             this.Frame.Navigate(typeof(DetailPage), getRequestedSubject());
         }
         private Geopoint ToGeopointConverter(Subject subject)
-        { return ToGeopointConverter(subject.GetLocation().GetLattitude(), subject.GetLocation().GetLongitude()); }
+        { 
+            return ToGeopointConverter(subject.GetLocation().GetLattitude(), subject.GetLocation().GetLongitude()); 
+        }
         private Geopoint ToGeopointConverter(double latitude, double longitude)
         {
             BasicGeoposition basicPoint = new BasicGeoposition
@@ -277,29 +300,21 @@ namespace TripViewBreda.Screens
             Geopoint point = new Geopoint(basicPoint);
             return point;
         }
-        private async Task GetRouteAndDirections(Subject start, Subject end)
+        private async Task GetRouteAndDirections(LinkedList<Geopoint> list)
         {
-            // Start at start subject
-            Geopoint startPoint = ToGeopointConverter(start);
-
-            // End at end subject
-            Geopoint endPoint = ToGeopointConverter(end);
-
-
             // Get the route between the points.
-            MapRouteFinderResult routeResult =
-                await MapRouteFinder.GetWalkingRouteAsync(
-                startPoint,
-                endPoint);
+            MapRouteFinderResult routeResult = await MapRouteFinder.GetWalkingRouteFromWaypointsAsync(list);
+
+            Debug.WriteLine("Route is opgehaald!");
 
             //Display route with text
             if (routeResult.Status == MapRouteFinderStatus.Success)
             {
-                InstructionsLabel.Text += "\n";
+                //InstructionsLabel.Text += "\n";
                 // Display the directions.
                 InstructionsLabel.Inlines.Add(new Run()
                 {
-                    Text = "Route van " + start.GetName() + " naar " + end.GetName()
+                    Text = "Start route bij het VVV."
                 });
                 InstructionsLabel.Inlines.Add(new LineBreak());
 
@@ -373,11 +388,18 @@ namespace TripViewBreda.Screens
             Debug.WriteLine("Navigate To");
             this.navigationHelper.OnNavigatedTo(e);
             subjects = e.Parameter as Subjects;
-
+            LinkedList<Geopoint> geopointList = new LinkedList<Geopoint>() ;
             foreach (Subject s in subjects.GetSubjects())
             {
-                AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
-                CreateGeofence(s);
+                if (s.GetName().Trim() != "")
+                {
+                    AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
+                    CreateGeofence(s);
+                }
+                BasicGeoposition bg = new BasicGeoposition();
+                bg.Latitude = s.location.GetLattitude();
+                bg.Longitude = s.location.GetLongitude();
+                geopointList.AddLast(new Geopoint(bg));
             }
             double[] lastKnownLocation = (double[])(ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation]);
             Geopoint point = ToGeopointConverter(lastKnownLocation[0], lastKnownLocation[1]);
@@ -387,18 +409,19 @@ namespace TripViewBreda.Screens
             Debug.WriteLine("NavigateTo");
             if (myPoint == null) { Debug.WriteLine("Mypoint = null!"); }
             Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
+            
+            await GetRouteAndDirections(geopointList);
             DestinationLabel.Text = "";
+            int i = 1;
             foreach (Subject s in subjects.GetSubjects())
             {
-                DestinationLabel.Text += s.GetName() + "\n";
-                if (lastSub != null)
+                if (s.GetName().Trim() != "")
                 {
-                    await GetRouteAndDirections(lastSub, s);
-                    MyMap.CancelDirectManipulations();
-
+                    DestinationLabel.Text += i + ": " + s.GetName() + "\n";
+                    i++;
                 }
-                lastSub = s;
             }
+            Debug.WriteLine("Route volledig getekend");
             MyMap.CancelDirectManipulations();
             StartVirtualPositionTimer();
         }
@@ -406,6 +429,8 @@ namespace TripViewBreda.Screens
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
+            MyMap.PedestrianFeaturesVisible = true;
+            MyMap.LandmarksVisible = true;
             Debug.WriteLine("Navigated From");
         }
 
