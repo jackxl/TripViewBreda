@@ -21,6 +21,11 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <Grid.Background>
+            <ImageBrush ImageSource="/Assets/Background.png"
+                    Stretch="UniformToFill" />
+        </Grid.Background>
+
         <!-- Title Panel -->
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
             <TextBlock x:Name="title" Text="Details" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0" FontSize="22"/>
