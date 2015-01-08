@@ -16,7 +16,7 @@ namespace TripViewBredaUnitTest.Model.Routes
         {
             // arrange
             List<IRoute> list = new List<IRoute>();
-            int[] values = new int[] { 4, 25, 0, 1, 1 };
+            int[] values = new int[] { 4, 28, 0, 1, 1 };
 
             // act
             list.Add(new Route.Cafes());
