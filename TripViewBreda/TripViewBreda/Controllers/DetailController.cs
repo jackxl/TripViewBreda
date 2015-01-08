@@ -7,7 +7,7 @@ using TripViewBreda.Model.Information;
 
 namespace TripViewBreda.Controllers
 {
-    class DetailController
+    public class DetailController
     {
         private Subject subject;
 

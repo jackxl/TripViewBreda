@@ -71,7 +71,6 @@ namespace TripViewBreda.Model.Routes
         {
             internal override void InitSubjectPoints()
             {
-                throw new NotImplementedException();
             }
         }
 

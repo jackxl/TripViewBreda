@@ -1,11 +1,11 @@
 ﻿<Page
+    x:Class="TripViewBreda.Screens.MapPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TripViewBreda"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
-    x:Class="TripViewBreda.MapPage"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -36,11 +36,11 @@
                              VerticalAlignment="Top"
                              Width="400" Height="400"
                              MapTapped="MyMap_MapTapped"/>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Route" VerticalAlignment="Top" FontSize="20"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Route" VerticalAlignment="Top" FontSize="20"/>
                 <ScrollViewer VerticalScrollMode="Enabled"  Height="150">
-                <TextBlock x:Name="InstructionsLabel" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="370" FontSize="14"/>
-            </ScrollViewer>
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Bestemmingen in deze route:" VerticalAlignment="Top" FontSize="20" Width="370" />
+                    <TextBlock x:Name="InstructionsLabel" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="370" FontSize="14"/>
+                </ScrollViewer>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Bestemmingen in deze route:" VerticalAlignment="Top" FontSize="20" Width="370" />
                 <ScrollViewer VerticalScrollMode="Enabled" Height="70">
                     <TextBlock x:Name="DestinationLabel" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Route aan het laden..." VerticalAlignment="Top" Width="370" FontSize="14"/>
                 </ScrollViewer>
