@@ -33,6 +33,7 @@ using System.Diagnostics;
 using Windows.Storage;
 using Windows.Storage.Streams;
 
+
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
 namespace TripViewBreda
@@ -50,6 +51,8 @@ namespace TripViewBreda
         private DispatcherTimer VirtualPositionTimer;
         private short DispatchCounter; // no need to set this because it gets set on the first virtual update.
 
+        private MapIcon currentLocation;
+
         private Subject requestedSubject;
 
 
@@ -63,6 +66,7 @@ namespace TripViewBreda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            
 
             locator.DesiredAccuracy = PositionAccuracy.High;
             locator.DesiredAccuracyInMeters = 10;
@@ -71,6 +75,12 @@ namespace TripViewBreda
             VirtualPositionTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000); // 1000 Milliseconds 
             VirtualPositionTimer.Tick += new EventHandler<object>(CalculateCurrentPosition);
             VirtualPositionTimer.Start();
+
+            
+            
+
+            
+
         }
 
 
@@ -85,6 +95,19 @@ namespace TripViewBreda
             addIcon.Title = name;
             addIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
             addIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/Location.png"));
+            MyMap.MapElements.Add(addIcon);
+        }
+
+        private void AddPoint_CurrentLocation(double lattitude, double longitude, string name)
+        {
+            MapIcon addIcon = new MapIcon();
+
+            var myPosition = new Windows.Devices.Geolocation.BasicGeoposition();
+            myPosition.Longitude = longitude;
+            myPosition.Latitude = lattitude;
+            addIcon.Location = new Geopoint(myPosition);
+            addIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
+            addIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/CurrentLocation.png"));
             MyMap.MapElements.Add(addIcon);
         }
 
@@ -107,6 +130,8 @@ namespace TripViewBreda
                 postion.Latitude = myPoint.Position.Latitude + deltaLatitude;
                 postion.Longitude = myPoint.Position.Longitude + deltaLongitude;
                 myPoint = new Geopoint(postion);
+
+                
             }
             else
             {
@@ -120,6 +145,8 @@ namespace TripViewBreda
                     CalculateCurrentPosition(sender, e);
                 }
             }
+
+            
         }
         private async Task UpdateCurrentPosition()
         {
@@ -127,6 +154,10 @@ namespace TripViewBreda
             myPoint = position.Coordinate.Point;
             double[] pos = new double[] { myPoint.Position.Latitude, myPoint.Position.Longitude };
             ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation] = pos;
+
+            AddPoint_CurrentLocation(myPoint.Position.Latitude, myPoint.Position.Longitude, "You");
+
+            
         }
 
         public async Task GoToCurrentPosition()
@@ -136,11 +167,7 @@ namespace TripViewBreda
             MyMap.ZoomLevel = 16;
             MyMap.LandmarksVisible = true;
 
-            Ellipse myCircle = new Ellipse();
-            myCircle.Fill = new SolidColorBrush(Colors.Blue);
-            myCircle.Height = 20;
-            myCircle.Width = 20;
-            myCircle.Opacity = 50;
+            
 
             MyMap.WatermarkMode = new MapWatermarkMode();
         }
@@ -153,8 +180,7 @@ namespace TripViewBreda
             position.Latitude = subject.GetLocation().GetLattitude();
             position.Longitude = subject.GetLocation().GetLongitude();
             position.Altitude = 0.0;
-
-            double radius = 30;
+            double radius = 50;
 
             Geocircle geocircle = new Geocircle(position, radius);
 
