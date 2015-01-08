@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
   <Identity Name="d331c9f9-780a-494c-a5d3-a96ae385b180" Publisher="CN=Jack" Version="1.0.0.0" />
-  <mp:PhoneIdentity PhoneProductId="d331c9f9-780a-494c-a5d3-a96ae385b180" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <mp:PhoneIdentity PhoneProductId="71c065e6-f3d8-471f-aa9e-7845ea0f84d3" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>TripViewBreda</DisplayName>
     <PublisherDisplayName>Jack</PublisherDisplayName>

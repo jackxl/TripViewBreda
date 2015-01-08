@@ -25,7 +25,10 @@ namespace TripViewBreda.Model.Routes
             {
                 AddSubject(new RoutePoint.VVV());
                 AddSubject(new RoutePoint.Liefdeszuster());
+                AddSubject(new RoutePoint.Nassau_Baronie_Monument());
                 AddSubject(new RoutePoint.The_Light_House());
+                AddSubject(new RoutePoint.TS_1());
+                AddSubject(new RoutePoint.TS_2());
                 AddSubject(new RoutePoint.Kasteel_van_Breda());
                 AddSubject(new RoutePoint.Stadhouderspoort());
                 AddSubject(new RoutePoint.Huis_van_Brecht());
