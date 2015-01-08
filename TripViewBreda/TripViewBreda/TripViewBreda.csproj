@@ -188,6 +188,11 @@
   <ItemGroup>
     <PRIResource Include="Model\LanguageResources\English.resw" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="routes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

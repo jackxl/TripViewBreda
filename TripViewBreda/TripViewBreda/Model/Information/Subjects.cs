@@ -9,10 +9,17 @@ namespace TripViewBreda.Model.Information
     public class Subjects
     {
         private List<Subject> subjects;
+        private string name;
 
         public Subjects()
         {
             subjects = new List<Subject>();
+        }
+
+        public Subjects(string name)
+        {
+            subjects = new List<Subject>();
+            this.name = name;
         }
 
         public List<Subject> GetSubjects()
@@ -28,6 +35,16 @@ namespace TripViewBreda.Model.Information
         public void RemoveSubject(Subject subject)
         {
             subjects.Remove(subject);
+        }
+
+        public string GetName()
+        {
+            return name;
+        }
+
+        public void SetName(string name)
+        {
+            this.name = name;
         }
     }
 }

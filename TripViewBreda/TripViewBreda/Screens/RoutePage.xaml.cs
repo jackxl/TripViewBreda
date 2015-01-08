@@ -35,6 +35,8 @@ namespace TripViewBreda
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private bool LocationCalculated = false;
+
+        Model.FileIO.JsonIO model;
         public RoutePage()
         {
             this.InitializeComponent();
@@ -42,6 +44,7 @@ namespace TripViewBreda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            model = new Model.FileIO.JsonIO();
             CalculateCurrentGPSLocation();
         }
         private async Task CalculateCurrentGPSLocation()
@@ -108,17 +111,55 @@ namespace TripViewBreda
         }
         #region Functions
         private void HistorischeKM(object sender, RoutedEventArgs e)
-        { NavigateToMap(new Route.HistorischeKM()); }
+        {
+            model.read();
+            foreach (Model.Information.Subjects route in model.GetSubjects())
+            {
+                if(route.GetName() == "") // hier moet de routenaam nog toegevegd worden
+                    NavigateToMap(route);
+            }
+        }
         private void School(object sender, RoutedEventArgs e)
-        { NavigateToMap(new Route.School()); }
+        {
+            model.read();
+            foreach (Model.Information.Subjects route in model.GetSubjects())
+            {
+                if (route.GetName() == "") // hier moet de routenaam nog toegevegd worden
+                    NavigateToMap(route);
+            }
+        }
         private void Tourist_Trail(object sender, RoutedEventArgs e)
-        { NavigateToMap(new Route.Tourist_Trail()); }
+        {
+            model.read();
+            foreach (Model.Information.Subjects route in model.GetSubjects())
+            {
+                if (route.GetName() == "") // hier moet de routenaam nog toegevegd worden
+                    NavigateToMap(route);
+            }
+        }
         public void Cafes(object sender, RoutedEventArgs e)
-        { NavigateToMap(new Route.Cafes()); }
+        {
+            model.read();
+            foreach (Model.Information.Subjects route in model.GetSubjects())
+            {
+                if (route.GetName() == "") // hier moet de routenaam nog toegevegd worden
+                    NavigateToMap(route);
+            }
+        }
         public void Remaining(object sender, RoutedEventArgs e)
-        { NavigateToMap(new Route.Remaining()); }
+        {
+            model.read();
+            foreach (Model.Information.Subjects route in model.GetSubjects())
+            {
+                if (route.GetName() == "") // hier moet de routenaam nog toegevegd worden
+                    NavigateToMap(route);
+            }
+        }
         private void NavigateToMap(IRoute route)
-        { NavigateToMap(route.GetSubjects()); }
+        {
+            model.read();
+            NavigateToMap(route.GetSubjects());
+        }
         private void NavigateToMap(Subjects subs)
         {
             if (this.LocationCalculated)
