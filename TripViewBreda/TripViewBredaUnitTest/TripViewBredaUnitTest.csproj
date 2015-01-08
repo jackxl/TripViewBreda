@@ -74,7 +74,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AppSettingsTest.cs" />
-    <Compile Include="Controllers\DetailControllerTest.cs" />
     <Compile Include="Model\FileIO\FileIOTest.cs" />
     <Compile Include="Model\GeoLocation\GPSPointTest.cs" />
     <Compile Include="Model\GeoLocation\GPSTest.cs" />

@@ -14,14 +14,18 @@ namespace TripViewBreda.Model.Routes
         {
             public override Subject GetSubject()
             {
-                return new Subject(new GPSPoint(51.592342, 4.548881), "Thuis");
+                Subject sub = new Subject(new GPSPoint(51.592342, 4.548881), "Thuis");
+                sub.SetImageName("1.jpg");
+                return sub;
             }
         }
         public class School : IRoutePoint
         {
             public override Subject GetSubject()
             {
-                return new Subject(new GPSPoint(51.585477, 4.793091), "School", "Avans Hogeschool info enzo...GG");
+                Subject sub = new Subject(new GPSPoint(51.585477, 4.793091), "School", "Avans Hogeschool info enzo...GG");
+                sub.SetImageName("2.jpg");
+                return sub;
             }
         }
 
@@ -72,14 +76,19 @@ namespace TripViewBreda.Model.Routes
         {
             public override Subject GetSubject()
             {
-                return new Subject(new GPSPoint(51.5942879, 4.779192), "VVV");
+                Subject sub = new Subject(new GPSPoint(51.5942879, 4.779192), "VVV");
+                sub.SetImageName("2.jpg");
+                sub.SetInformation("This is the building of the VVV-building. This is where you also return this phone.");
+                return sub;
             }
         }
         public class Liefdeszuster : IRoutePoint
         {
             public override Subject GetSubject()
             {
-                return new Subject(new GPSPoint(51.593278, 4.779388), "Liefdeszuster");
+                Subject sub = new Subject(new GPSPoint(51.593278, 4.779388), "Liefdeszuster");
+                sub.SetImageName("3.jpg");
+                return sub;
             }
         }
         public class Nassau_Baronie_Monument : IRoutePoint
@@ -138,7 +147,7 @@ namespace TripViewBreda.Model.Routes
         {
             public override Subject GetSubject()
             {
-                return new Subject(new GPSPoint(51.590195, 4.773445 ), "Spanjaardsgat (rechter zijde)");
+                return new Subject(new GPSPoint(51.590195, 4.773445), "Spanjaardsgat (rechter zijde)");
             }
         }
         public class Vismarkt : IRoutePoint
