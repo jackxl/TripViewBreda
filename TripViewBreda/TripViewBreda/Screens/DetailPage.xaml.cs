@@ -94,7 +94,7 @@ namespace TripViewBreda.Screens
         private void imageButton_Click(object sender, RoutedEventArgs e)
         {
             ShowImageFlyout();
-            SetFlyoutImage(subject.GetImagePath());
+            SetFlyoutImage(subject.GetImageName());
         }
 
         private void Flyout_Close_bn_Click(object sender, RoutedEventArgs e)

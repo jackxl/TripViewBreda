@@ -37,7 +37,12 @@
             <TextBlock HorizontalAlignment="Left" Margin="0,10,0,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" FontSize="18"/>
             <TextBlock x:Name="subjectName" HorizontalAlignment="Left" Margin="0,37,0,0" TextWrapping="Wrap" Text="{Binding}" VerticalAlignment="Top" FontSize="12" Height="53" Width="362"/>
             <TextBlock HorizontalAlignment="Left" Margin="0,95,0,0" TextWrapping="Wrap" Text="Information" VerticalAlignment="Top" FontSize="18"/>
-            <TextBlock x:Name="subjectInformation" HorizontalAlignment="Left" Margin="0,122,0,0" TextWrapping="Wrap" Text="{Binding}" VerticalAlignment="Top" FontSize="12" Height="398" Width="362"/>
+            <TextBlock x:Name="subjectInformation" HorizontalAlignment="Left" Margin="0,122,0,0" TextWrapping="Wrap" Text="{Binding}" VerticalAlignment="Top" FontSize="12" Height="350" Width="362"/>
+            <StackPanel Margin="0, 350,0,0" Width="350" Height="100" Orientation="Horizontal">
+                <TextBox x:Name="OpenTime_Day_tx" Text="[day]" Header="Day" HorizontalContentAlignment="Center" Margin="0,0,10,0" Width="100"/>
+                <TextBox x:Name="OpenTime_Open_tx" Text="[open]" Header="Open" HorizontalContentAlignment="Center" Margin="15,0,15,0" Width="100"/>
+                <TextBox x:Name="OpenTime_Till_tx" Text="[till]" Header="Closed" HorizontalContentAlignment="Center" Margin="10,0,0,0" Width="100"/>
+            </StackPanel>
             <Button x:Name="closeButton" Content="Close" HorizontalAlignment="Left" Margin="243,533,0,0" VerticalAlignment="Top" Click="closeButton_Click"/>
             <Button x:Name="imageButton" Content="Image" HorizontalAlignment="Left" Margin="0,533,0,0" VerticalAlignment="Top" Click="imageButton_Click"/>
             <FlyoutPresenter x:Name="Flyout_ImageShower" Visibility="Collapsed">
