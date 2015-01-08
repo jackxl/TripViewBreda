@@ -113,7 +113,7 @@ namespace TripViewBreda
                 DispatchCounter = 0;
                 try
                 {
-                    getCurrentPosition();
+                    UpdateCurrentPosition();
                 }
                 catch (Exception ex)
                 {
@@ -121,10 +121,12 @@ namespace TripViewBreda
                 }
             }
         }
-        private async void getCurrentPosition()
+        private async Task UpdateCurrentPosition()
         {
             var position = await locator.GetGeopositionAsync();
             myPoint = position.Coordinate.Point;
+            double[] pos = new double[] { myPoint.Position.Latitude, myPoint.Position.Longitude };
+            ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation] = pos;
         }
 
         public async Task GoToCurrentPosition()
@@ -245,7 +247,7 @@ namespace TripViewBreda
 
             // End at end subject
             Geopoint endPoint = ToGeopointConverter(end);
-           
+
 
             // Get the route between the points.
             MapRouteFinderResult routeResult =
@@ -310,7 +312,7 @@ namespace TripViewBreda
 
         }
 
-	#region NavigationHelper registration
+        #region NavigationHelper registration
 
         /// <summary>
         /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
@@ -342,7 +344,10 @@ namespace TripViewBreda
             }
             double[] lastKnownLocation = (double[])(ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation]);
             Geopoint point = ToGeopointConverter(lastKnownLocation[0], lastKnownLocation[1]);
+            await UpdateCurrentPosition();
             await GoToCurrentPosition();
+            if (myPoint == null)
+                Debug.WriteLine("Mypoint = null!");
             Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
             DestinationLabel.Text = "";
             foreach (Subject s in subjects.GetSubjects())
