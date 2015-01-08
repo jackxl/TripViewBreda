@@ -85,7 +85,7 @@ namespace TripViewBreda.Screens
         {
             StackPanel panel = new StackPanel();
             panel.Orientation = Orientation.Vertical;
-            panel.Height = CalculationStackPanelHeigth(question); // TODO: Make Algoritme
+            panel.Height = CalculationStackPanelHeigth(question);
             panel.Background = new SolidColorBrush(Colors.Brown);
             panel.Margin = new Thickness(0, 10, 0, 10);
 

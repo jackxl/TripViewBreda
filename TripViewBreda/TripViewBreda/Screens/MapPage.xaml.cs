@@ -57,6 +57,10 @@ namespace TripViewBreda.Screens
 
         private Subject requestedSubject;
 
+        private const uint? DesiredAccuracyInMeters = 10;
+        private const Int16 dispatcherInterval = 1000;
+        private const double zoomLevel = 16D;
+
 
         public MapPage()
         {
@@ -71,19 +75,14 @@ namespace TripViewBreda.Screens
 
             locator = new Geolocator();
             locator.DesiredAccuracy = PositionAccuracy.High;
-            locator.DesiredAccuracyInMeters = 10;
+            locator.DesiredAccuracyInMeters = DesiredAccuracyInMeters;
         }
         private void StartVirtualPositionTimer()
         {
             VirtualPositionTimer = new DispatcherTimer();
-            VirtualPositionTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000); // 1000 Milliseconds 
+            VirtualPositionTimer.Interval = new TimeSpan(0, 0, 0, 0, dispatcherInterval);
             VirtualPositionTimer.Tick += new EventHandler<object>(CalculateCurrentPosition);
             //  VirtualPositionTimer.Start();
-
-
-
-
-
 
         }
 
@@ -168,7 +167,7 @@ namespace TripViewBreda.Screens
                 Debug.WriteLine("Start update Current Position");
                 LocatingMapLocation = true;
                 Geolocator locator = new Geolocator();
-                locator.DesiredAccuracyInMeters = 10;
+                locator.DesiredAccuracyInMeters = DesiredAccuracyInMeters;
                 locator.DesiredAccuracy = PositionAccuracy.High;
 
                 var position = await locator.GetGeopositionAsync();
@@ -189,8 +188,8 @@ namespace TripViewBreda.Screens
             {
                 goingToCurrentLocation = true;
                 Debug.WriteLine("Go To Current Position()");
-                await MyMap.TrySetViewAsync(myPoint, 16D);
-                MyMap.ZoomLevel = 16;
+                await MyMap.TrySetViewAsync(myPoint, zoomLevel);
+                MyMap.ZoomLevel = zoomLevel;
                 MyMap.LandmarksVisible = true;
 
 
