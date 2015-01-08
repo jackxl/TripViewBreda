@@ -110,62 +110,42 @@ namespace TripViewBreda.Screens
             this.Route_Buttons_panel.Children.Add(button);
         }
         #region Functions
-        private void HistorischeKM(object sender, RoutedEventArgs e)
+        private async void HistorischeKM(object sender, RoutedEventArgs e)
         {
-            model.read();
-            foreach (Model.Information.Subjects route in model.GetSubjects())
-            {
-                if(route.GetName() == "") // hier moet de routenaam nog toegevegd worden
-                    NavigateToMap(route);
-            }
+            NavigateToMap(await model.Find("Historische Km")); // hier moet de routenaam nog toegevegd worden
         }
-        private void School(object sender, RoutedEventArgs e)
+        private async void School(object sender, RoutedEventArgs e)
         {
-            model.read();
-            foreach (Model.Information.Subjects route in model.GetSubjects())
-            {
-                if (route.GetName() == "") // hier moet de routenaam nog toegevegd worden
-                    NavigateToMap(route);
-            }
+            Subjects route = await model.Find("School"); // hier moet de routenaam nog toegevegd worden
+            NavigateToMap(route);
         }
-        private void Tourist_Trail(object sender, RoutedEventArgs e)
+        private async void Tourist_Trail(object sender, RoutedEventArgs e)
         {
-            model.read();
-            foreach (Model.Information.Subjects route in model.GetSubjects())
-            {
-                if (route.GetName() == "") // hier moet de routenaam nog toegevegd worden
-                    NavigateToMap(route);
-            }
+            NavigateToMap(await model.Find("Tourist")); // hier moet de routenaam nog toegevegd worden
         }
-        public void Cafes(object sender, RoutedEventArgs e)
+        public async void Cafes(object sender, RoutedEventArgs e)
         {
-            model.read();
-            foreach (Model.Information.Subjects route in model.GetSubjects())
-            {
-                if (route.GetName() == "") // hier moet de routenaam nog toegevegd worden
-                    NavigateToMap(route);
-            }
+            NavigateToMap(await model.Find("Cafes")); // hier moet de routenaam nog toegevegd worden
         }
-        public void Remaining(object sender, RoutedEventArgs e)
+        public async void Remaining(object sender, RoutedEventArgs e)
         {
-            model.read();
-            foreach (Model.Information.Subjects route in model.GetSubjects())
-            {
-                if (route.GetName() == "") // hier moet de routenaam nog toegevegd worden
-                    NavigateToMap(route);
-            }
+            NavigateToMap(await model.Find("Remaining")); // hier moet de routenaam nog toegevegd worden
         }
         private void NavigateToMap(IRoute route)
         {
-            model.read();
             NavigateToMap(route.GetSubjects());
         }
         private void NavigateToMap(Subjects subs)
         {
             if (this.LocationCalculated)
             {
-                Debug.WriteLine("Navigate To Map With '" + subs.ToString());
-                this.Frame.Navigate(typeof(MapPage), subs);
+                if (subs != null)
+                {
+                    Debug.WriteLine("Navigate To Map With '" + subs.ToString());
+                    this.Frame.Navigate(typeof(MapPage), subs);
+                }
+                else
+                { throw new ArgumentNullException(); }
             }
         }
         #endregion

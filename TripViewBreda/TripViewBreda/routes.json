@@ -1,17 +1,40 @@
 {
-    "subjects": [
+    "Subjects": [
         {
-            "subject": [
+            "Name": "School",
+            "Items": [
                 {
-                    "location": [
-                        {
-                            "lattitude": "",
-                            "longitude": ""
-                        }
-                    ],
-                    "name": "",
-                    "information": "",
-                    "imageName": ""
+                    "Name": "School",
+                    "ImageName": "1.jpg",
+                    "Information": "Avans Hogeschool Breda",
+                    "Lattitude": "51.585477",
+                    "Longitude": "4.793091",
+                    "Open": [
+                        { "OpenDay": "0", "OpenFrom": "8", "OpenTill": "18" },
+                        { "OpenDay": "1", "OpenFrom": "8", "OpenTill": "18" },
+                        { "OpenDay": "2", "OpenFrom": "8", "OpenTill": "18" },
+                        { "OpenDay": "3", "OpenFrom": "8", "OpenTill": "18" },
+                        { "OpenDay": "4", "OpenFrom": "8", "OpenTill": "18" }
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "Historische Km",
+            "Items": [
+                {
+                    "Name": "VVV",
+                    "ImageName": "2.jpg",
+                    "Information": "This is the building of the VVV-building. This is where you also return this phone.",
+                    "Lattitude": "51.5942879",
+                    "Longitude": "4.779192"
+                },
+                {
+                    "Name": "Liefdeszuster",
+                    "ImageName": "3.jpg",
+                    "Information": "Bla bla bla",
+                    "Lattitude": "51.593278",
+                    "Longitude": "4.779388"
                 }
             ]
         }

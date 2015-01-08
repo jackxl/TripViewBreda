@@ -46,5 +46,9 @@ namespace TripViewBreda.Model.Information
         {
             this.name = name;
         }
+        public override string ToString()
+        {
+            return name + " - Amount of subject(s) = " + subjects.Count;
+        }
     }
 }

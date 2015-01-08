@@ -8,7 +8,7 @@ namespace TripViewBreda.Model.FileIO
 {
     public interface FileIO
     {
-        void read();
+        Task read();
         bool write(Model.Information.Subjects subject);
     }
 }

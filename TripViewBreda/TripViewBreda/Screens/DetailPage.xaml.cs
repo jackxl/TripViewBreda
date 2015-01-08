@@ -37,6 +37,13 @@ namespace TripViewBreda.Screens
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            this.OpenTime_Day_tx.IsEnabled = false;
+            this.OpenTime_Open_tx.IsEnabled = false;
+            this.OpenTime_Till_tx.IsEnabled = false;
+            string placeholderText = "Unknown";
+            this.OpenTime_Day_tx.PlaceholderText = placeholderText;
+            this.OpenTime_Open_tx.PlaceholderText = placeholderText;
+            this.OpenTime_Till_tx.PlaceholderText = placeholderText;
         }
 
         #region Functions
@@ -44,8 +51,16 @@ namespace TripViewBreda.Screens
         {
             subjectName.DataContext = subject.GetName();
             subjectInformation.DataContext = subject.GetInformation();
+            if (subject.GetOpeningHours() != null)
+                if (subject.GetOpeningHours().GetOpeningHours().Count > 0)
+                    UpdateOpeningTime(subject.GetOpeningHours().GetOpeningHours()[0]);
         }
-
+        private void UpdateOpeningTime(OpenComponent open)
+        {
+            this.OpenTime_Day_tx.Text = open.GetDay().ToString();
+            this.OpenTime_Open_tx.Text = open.GetOpenFrom().Ticks.ToString();
+            this.OpenTime_Till_tx.Text = open.GetOpenTill().Ticks.ToString();
+        }
         private void ShowImageFlyout()
         { this.Flyout_ImageShower.Visibility = Windows.UI.Xaml.Visibility.Visible; }
         private void HideImageFlyout()
@@ -55,7 +70,7 @@ namespace TripViewBreda.Screens
         private BitmapImage LoadBitmapImage(string name)
         {
             Debug.WriteLine("Loading Bitmap Image: " + name);
-            return new BitmapImage(new Uri("ms-appx:///Assets/SubjectResources/"+ name));
+            return new BitmapImage(new Uri("ms-appx:///Assets/SubjectResources/" + name));
         }
         #endregion
 

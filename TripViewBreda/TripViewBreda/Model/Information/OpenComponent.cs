@@ -49,5 +49,13 @@ namespace TripViewBreda.Model.Information
         {
             this.openTill = openTill;
         }
+        public static Day GetDay(int dayOfTheWeek)
+        {
+            return (Day)(dayOfTheWeek);
+        }
+        public override string ToString()
+        {
+            return day + " - [" + openFrom + " - " + openTill + "]";
+        }
     }
 }
