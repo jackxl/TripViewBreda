@@ -16,10 +16,11 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using TripViewBreda.Controllers;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 using TripViewBreda.Model.Information;
+using Windows.UI.Xaml.Media.Imaging;
+using System.Diagnostics;
 
 namespace TripViewBreda.Screens
 {
@@ -27,7 +28,6 @@ namespace TripViewBreda.Screens
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private DetailController detailController;
         private Subject subject;
 
         public DetailPage()
@@ -39,11 +39,25 @@ namespace TripViewBreda.Screens
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
         }
 
-        private void ReadData()
+        #region Functions
+        private void UpdateInfo()
         {
-            subjectName.DataContext = detailController.GetSubject().GetName();
-            subjectInformation.DataContext = detailController.GetSubject().GetInformation();
+            subjectName.DataContext = subject.GetName();
+            subjectInformation.DataContext = subject.GetInformation();
         }
+
+        private void ShowImageFlyout()
+        { this.Flyout_ImageShower.Visibility = Windows.UI.Xaml.Visibility.Visible; }
+        private void HideImageFlyout()
+        { this.Flyout_ImageShower.Visibility = Windows.UI.Xaml.Visibility.Collapsed; }
+        private void SetFlyoutImage(string name)
+        { this.Flyout_Image_img.Source = LoadBitmapImage(name); }
+        private BitmapImage LoadBitmapImage(string name)
+        {
+            Debug.WriteLine("Loading Bitmap Image: " + name);
+            return new BitmapImage(new Uri("ms-appx:///Assets/SubjectResources/"+ name));
+        }
+        #endregion
 
         #region NavigationHelper registration
 
@@ -63,9 +77,7 @@ namespace TripViewBreda.Screens
         {
             this.navigationHelper.OnNavigatedTo(e);
             subject = e.Parameter as Subject;
-
-            detailController = new DetailController(subject);
-            ReadData();
+            UpdateInfo();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -79,5 +91,16 @@ namespace TripViewBreda.Screens
         {
             this.Frame.GoBack();
         }
+        private void imageButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowImageFlyout();
+            SetFlyoutImage(subject.GetImagePath());
+        }
+
+        private void Flyout_Close_bn_Click(object sender, RoutedEventArgs e)
+        {
+            HideImageFlyout();
+        }
+
     }
 }

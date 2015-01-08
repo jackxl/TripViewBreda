@@ -9,6 +9,7 @@ namespace TripViewBreda.Model.Information
     public class Subject
     {
         public GeoLocation.GPSPoint location;
+        private string path;
         private string name;
         private string information;
         private OpeningHours openingHours;
@@ -75,6 +76,14 @@ namespace TripViewBreda.Model.Information
         public void SetOpeningsHours(OpeningHours openingHours)
         {
             this.openingHours = openingHours;
+        }
+        public string GetImagePath()
+        {
+            return path;
+        }
+        public void SetImageName(string imagePath)
+        {
+            this.path = imagePath;
         }
     }
 }
