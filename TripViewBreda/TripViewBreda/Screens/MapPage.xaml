@@ -35,7 +35,8 @@
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Top"
                              Width="400" Height="400"
-                             MapTapped="MyMap_MapTapped"/>
+                             MapTapped="MyMap_MapTapped"
+                             MapServiceToken="K1S9I08fWz7DSPJ2aSOyyQ"/>
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Route" VerticalAlignment="Top" FontSize="20"/>
                 <ScrollViewer VerticalScrollMode="Enabled"  Height="150">
                 <TextBlock x:Name="InstructionsLabel" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="370" FontSize="14"/>

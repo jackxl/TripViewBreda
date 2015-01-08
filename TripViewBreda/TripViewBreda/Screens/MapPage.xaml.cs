@@ -33,6 +33,7 @@ using System.Diagnostics;
 using Windows.Storage;
 using Windows.Storage.Streams;
 
+
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
 namespace TripViewBreda
@@ -46,9 +47,13 @@ namespace TripViewBreda
         private Geopoint myPoint, myPreviousPoint;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private Subjects subjects;
-        private Geolocator locator = new Geolocator();
+        private Geolocator locator;// = new Geolocator();
         private DispatcherTimer VirtualPositionTimer;
         private short DispatchCounter; // no need to set this because it gets set on the first virtual update.
+        private bool goingToCurrentLocation = false;
+        private bool LocatingMapLocation = false;
+
+        private MapIcon currentLocation;
 
         private Subject requestedSubject;
 
@@ -63,14 +68,23 @@ namespace TripViewBreda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-
+            
+            locator = new Geolocator();
             locator.DesiredAccuracy = PositionAccuracy.High;
             locator.DesiredAccuracyInMeters = 10;
-
+        }
+        private void StartVirtualPositionTimer()
+        {
             VirtualPositionTimer = new DispatcherTimer();
             VirtualPositionTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000); // 1000 Milliseconds 
             VirtualPositionTimer.Tick += new EventHandler<object>(CalculateCurrentPosition);
-            VirtualPositionTimer.Start();
+          //  VirtualPositionTimer.Start();
+
+            
+            
+
+            
+
         }
 
 
@@ -88,6 +102,19 @@ namespace TripViewBreda
             MyMap.MapElements.Add(addIcon);
         }
 
+        private void AddPoint_CurrentLocation(double lattitude, double longitude, string name)
+        {
+            MapIcon addIcon = new MapIcon();
+
+            var myPosition = new Windows.Devices.Geolocation.BasicGeoposition();
+            myPosition.Longitude = longitude;
+            myPosition.Latitude = lattitude;
+            addIcon.Location = new Geopoint(myPosition);
+            addIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
+            addIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/CurrentLocation.png"));
+            MyMap.MapElements.Add(addIcon);
+        }
+
         public void CalculateCurrentPosition(object sender, object e) //Dirty fix (http://goo.gl/AzbolV)
         {
             double deltaLatitude;
@@ -100,47 +127,81 @@ namespace TripViewBreda
             }
             else if (DispatchCounter < 3)
             {
-                deltaLatitude = myPoint.Position.Latitude - myPreviousPoint.Position.Latitude;
-                deltaLongitude = myPoint.Position.Longitude - myPreviousPoint.Position.Longitude;
+                deltaLatitude = (myPoint.Position.Latitude - myPreviousPoint.Position.Latitude) / 3;
+                deltaLongitude = (myPoint.Position.Longitude - myPreviousPoint.Position.Longitude) / 3;
+
+                Debug.WriteLine("Delta: " + deltaLatitude + ", " + deltaLongitude);
 
                 BasicGeoposition postion = new BasicGeoposition();
                 postion.Latitude = myPoint.Position.Latitude + deltaLatitude;
                 postion.Longitude = myPoint.Position.Longitude + deltaLongitude;
                 myPoint = new Geopoint(postion);
+
+                
             }
             else
             {
                 DispatchCounter = 0;
                 try
                 {
-                    getCurrentPosition();
+                    myPreviousPoint = myPoint;
+                    UpdateCurrentPosition();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     CalculateCurrentPosition(sender, e);
                 }
             }
+            UpdateMapPosition();
+            DispatchCounter++;
         }
-        private async void getCurrentPosition()
+        private void UpdateMapPosition()
         {
-            var position = await locator.GetGeopositionAsync();
-            myPoint = position.Coordinate.Point;
+            MyMap.Center = myPoint;
+            Debug.WriteLine("Update Map Position: ");
+            //Debug.WriteLine(MyMap.Center.Position.Latitude + " == " + myPoint.Position.Latitude + ", " + MyMap.Center.Position.Longitude + " == " + myPoint.Position.Longitude);
+        }
+        private async Task UpdateCurrentPosition()
+        {
+            if (!LocatingMapLocation)
+            {
+                Debug.WriteLine("Start update Current Position");
+                LocatingMapLocation = true;
+                Geolocator locator = new Geolocator();
+                locator.DesiredAccuracyInMeters = 10;
+                locator.DesiredAccuracy = PositionAccuracy.High;
+
+                var position = await locator.GetGeopositionAsync();
+                myPoint = position.Coordinate.Point;
+
+                double[] pos = new double[] { myPoint.Position.Latitude, myPoint.Position.Longitude };
+                ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation] = pos;
+                LocatingMapLocation = false;
+                Debug.WriteLine("Done updating current position");
+            }
+            else { Debug.WriteLine("Could not Start Update Current Position"); }
         }
 
         public async Task GoToCurrentPosition()
         {
             //getCurrentPosition();
-            await MyMap.TrySetViewAsync(myPoint, 16D);
-            MyMap.ZoomLevel = 16;
-            MyMap.LandmarksVisible = true;
+            if (!goingToCurrentLocation)
+            {
+                goingToCurrentLocation = true;
+                Debug.WriteLine("Go To Current Position()");
+                await MyMap.TrySetViewAsync(myPoint, 16D);
+                MyMap.ZoomLevel = 16;
+                MyMap.LandmarksVisible = true;
 
-            Ellipse myCircle = new Ellipse();
-            myCircle.Fill = new SolidColorBrush(Colors.Blue);
-            myCircle.Height = 20;
-            myCircle.Width = 20;
-            myCircle.Opacity = 50;
+            
 
-            MyMap.WatermarkMode = new MapWatermarkMode();
+            
+                MyMap.WatermarkMode = new MapWatermarkMode();
+                goingToCurrentLocation = false;
+                Debug.WriteLine("Done going to current location");
+            }
+            else
+            { Debug.WriteLine("Could not go to current location"); }
         }
 
         private void CreateGeofence(Subject subject)
@@ -151,7 +212,6 @@ namespace TripViewBreda
             position.Latitude = subject.GetLocation().GetLattitude();
             position.Longitude = subject.GetLocation().GetLongitude();
             position.Altitude = 0.0;
-
             double radius = 30;
 
             Geocircle geocircle = new Geocircle(position, radius);
@@ -227,7 +287,9 @@ namespace TripViewBreda
             this.Frame.Navigate(typeof(DetailPage), getRequestedSubject());
         }
         private Geopoint ToGeopointConverter(Subject subject)
-        { return ToGeopointConverter(subject.GetLocation().GetLattitude(), subject.GetLocation().GetLongitude()); }
+        { 
+            return ToGeopointConverter(subject.GetLocation().GetLattitude(), subject.GetLocation().GetLongitude()); 
+        }
         private Geopoint ToGeopointConverter(double latitude, double longitude)
         {
             BasicGeoposition basicPoint = new BasicGeoposition
@@ -238,29 +300,21 @@ namespace TripViewBreda
             Geopoint point = new Geopoint(basicPoint);
             return point;
         }
-        private async Task GetRouteAndDirections(Subject start, Subject end)
+        private async Task GetRouteAndDirections(LinkedList<Geopoint> list)
         {
-            // Start at start subject
-            Geopoint startPoint = ToGeopointConverter(start);
-
-            // End at end subject
-            Geopoint endPoint = ToGeopointConverter(end);
-           
-
             // Get the route between the points.
-            MapRouteFinderResult routeResult =
-                await MapRouteFinder.GetWalkingRouteAsync(
-                startPoint,
-                endPoint);
+            MapRouteFinderResult routeResult = await MapRouteFinder.GetWalkingRouteFromWaypointsAsync(list);
+
+            Debug.WriteLine("Route is opgehaald!");
 
             //Display route with text
             if (routeResult.Status == MapRouteFinderStatus.Success)
             {
-                InstructionsLabel.Text += "\n";
+                //InstructionsLabel.Text += "\n";
                 // Display the directions.
                 InstructionsLabel.Inlines.Add(new Run()
                 {
-                    Text = "Route van " + start.GetName() + " naar " + end.GetName()
+                    Text = "Start route bij het VVV."
                 });
                 InstructionsLabel.Inlines.Add(new LineBreak());
 
@@ -310,7 +364,7 @@ namespace TripViewBreda
 
         }
 
-	#region NavigationHelper registration
+        #region NavigationHelper registration
 
         /// <summary>
         /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
@@ -334,35 +388,49 @@ namespace TripViewBreda
             Debug.WriteLine("Navigate To");
             this.navigationHelper.OnNavigatedTo(e);
             subjects = e.Parameter as Subjects;
-
+            LinkedList<Geopoint> geopointList = new LinkedList<Geopoint>() ;
             foreach (Subject s in subjects.GetSubjects())
             {
-                AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
-                CreateGeofence(s);
+                if (s.GetName().Trim() != "")
+                {
+                    AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
+                    CreateGeofence(s);
+                }
+                BasicGeoposition bg = new BasicGeoposition();
+                bg.Latitude = s.location.GetLattitude();
+                bg.Longitude = s.location.GetLongitude();
+                geopointList.AddLast(new Geopoint(bg));
             }
             double[] lastKnownLocation = (double[])(ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation]);
             Geopoint point = ToGeopointConverter(lastKnownLocation[0], lastKnownLocation[1]);
+            await UpdateCurrentPosition();
+            Debug.WriteLine("NavigateTo");
             await GoToCurrentPosition();
+            Debug.WriteLine("NavigateTo");
+            if (myPoint == null) { Debug.WriteLine("Mypoint = null!"); }
             Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
+            
+            await GetRouteAndDirections(geopointList);
             DestinationLabel.Text = "";
+            int i = 1;
             foreach (Subject s in subjects.GetSubjects())
             {
-                DestinationLabel.Text += s.GetName() + "\n";
-                if (lastSub != null)
+                if (s.GetName().Trim() != "")
                 {
-                    await GetRouteAndDirections(lastSub, s);
-                    MyMap.CancelDirectManipulations();
-
+                    DestinationLabel.Text += i + ": " + s.GetName() + "\n";
+                    i++;
                 }
-                lastSub = s;
             }
+            Debug.WriteLine("Route volledig getekend");
             MyMap.CancelDirectManipulations();
-
+            StartVirtualPositionTimer();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
+            MyMap.PedestrianFeaturesVisible = true;
+            MyMap.LandmarksVisible = true;
             Debug.WriteLine("Navigated From");
         }
 
