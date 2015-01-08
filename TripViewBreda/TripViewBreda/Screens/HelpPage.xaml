@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="TripViewBreda.HelpPage"
+    x:Class="TripViewBreda.Screens.HelpPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TripViewBreda"
@@ -21,6 +21,11 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="150"/>
         </Grid.RowDefinitions>
+
+        <Grid.Background>
+            <ImageBrush ImageSource="/Assets/Background.png"
+                    Stretch="UniformToFill" />
+        </Grid.Background>
 
         <!-- Title Panel -->
         <StackPanel Grid.Row="0" Margin="19,0,0,0">

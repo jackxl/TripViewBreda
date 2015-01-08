@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TripViewBreda.Common
 {
-    static class AppSettings
+    public static class AppSettings
     {
         public static readonly string APP_NAME = "TripView Breda";
 

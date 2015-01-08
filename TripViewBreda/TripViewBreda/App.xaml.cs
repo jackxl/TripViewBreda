@@ -10,6 +10,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Services.Maps;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -95,19 +96,15 @@ namespace TripViewBreda
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (SelectFirstScreen(e, rootFrame))
+                if (!rootFrame.Navigate(typeof(MainPage)))
                 {
                     throw new Exception("Failed to create initial page");
                 }
             }
+            MapService.ServiceToken = "Place your token here";
 
             // Ensure the current window is active
             Window.Current.Activate();
-        }
-
-        private static bool SelectFirstScreen(LaunchActivatedEventArgs e, Frame rootFrame)
-        {
-            return !rootFrame.Navigate(typeof(MainPage), e.Arguments);
         }
 
         /// <summary>

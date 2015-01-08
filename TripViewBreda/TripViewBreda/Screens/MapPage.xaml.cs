@@ -36,7 +36,7 @@ using Windows.Storage.Streams;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
-namespace TripViewBreda
+namespace TripViewBreda.Screens
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -57,6 +57,10 @@ namespace TripViewBreda
 
         private Subject requestedSubject;
 
+        private const uint DesiredAccuracyInMeters = 10;
+        private const Int16 dispatcherInterval = 1000;
+        private const double zoomLevel = 16D;
+
 
         public MapPage()
         {
@@ -68,22 +72,17 @@ namespace TripViewBreda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            
+
             locator = new Geolocator();
             locator.DesiredAccuracy = PositionAccuracy.High;
-            locator.DesiredAccuracyInMeters = 10;
+            locator.DesiredAccuracyInMeters = DesiredAccuracyInMeters;
         }
         private void StartVirtualPositionTimer()
         {
             VirtualPositionTimer = new DispatcherTimer();
-            VirtualPositionTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000); // 1000 Milliseconds 
+            VirtualPositionTimer.Interval = new TimeSpan(0, 0, 0, 0, dispatcherInterval);
             VirtualPositionTimer.Tick += new EventHandler<object>(CalculateCurrentPosition);
-          //  VirtualPositionTimer.Start();
-
-            
-            
-
-            
+            //  VirtualPositionTimer.Start();
 
         }
 
@@ -137,7 +136,7 @@ namespace TripViewBreda
                 postion.Longitude = myPoint.Position.Longitude + deltaLongitude;
                 myPoint = new Geopoint(postion);
 
-                
+
             }
             else
             {
@@ -168,7 +167,7 @@ namespace TripViewBreda
                 Debug.WriteLine("Start update Current Position");
                 LocatingMapLocation = true;
                 Geolocator locator = new Geolocator();
-                locator.DesiredAccuracyInMeters = 10;
+                locator.DesiredAccuracyInMeters = DesiredAccuracyInMeters;
                 locator.DesiredAccuracy = PositionAccuracy.High;
 
                 var position = await locator.GetGeopositionAsync();
@@ -189,13 +188,13 @@ namespace TripViewBreda
             {
                 goingToCurrentLocation = true;
                 Debug.WriteLine("Go To Current Position()");
-                await MyMap.TrySetViewAsync(myPoint, 16D);
-                MyMap.ZoomLevel = 16;
+                await MyMap.TrySetViewAsync(myPoint, zoomLevel);
+                MyMap.ZoomLevel = zoomLevel;
                 MyMap.LandmarksVisible = true;
 
-            
 
-            
+
+
                 MyMap.WatermarkMode = new MapWatermarkMode();
                 goingToCurrentLocation = false;
                 Debug.WriteLine("Done going to current location");
@@ -287,8 +286,8 @@ namespace TripViewBreda
             this.Frame.Navigate(typeof(DetailPage), getRequestedSubject());
         }
         private Geopoint ToGeopointConverter(Subject subject)
-        { 
-            return ToGeopointConverter(subject.GetLocation().GetLattitude(), subject.GetLocation().GetLongitude()); 
+        {
+            return ToGeopointConverter(subject.GetLocation().GetLattitude(), subject.GetLocation().GetLongitude());
         }
         private Geopoint ToGeopointConverter(double latitude, double longitude)
         {
@@ -388,7 +387,16 @@ namespace TripViewBreda
             Debug.WriteLine("Navigate To");
             this.navigationHelper.OnNavigatedTo(e);
             subjects = e.Parameter as Subjects;
-            LinkedList<Geopoint> geopointList = new LinkedList<Geopoint>() ;
+            double[] lastKnownLocation = (double[])(ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation]);
+            Geopoint point = ToGeopointConverter(lastKnownLocation[0], lastKnownLocation[1]);
+            await UpdateCurrentPosition();
+            Debug.WriteLine("NavigateTo");
+            await GoToCurrentPosition();
+            Debug.WriteLine("NavigateTo");
+            if (myPoint == null) { Debug.WriteLine("Mypoint = null!"); }
+
+            LinkedList<Geopoint> geopointList = new LinkedList<Geopoint>();
+            geopointList.AddFirst(myPoint);
             foreach (Subject s in subjects.GetSubjects())
             {
                 if (s.GetName().Trim() != "")
@@ -401,15 +409,8 @@ namespace TripViewBreda
                 bg.Longitude = s.location.GetLongitude();
                 geopointList.AddLast(new Geopoint(bg));
             }
-            double[] lastKnownLocation = (double[])(ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation]);
-            Geopoint point = ToGeopointConverter(lastKnownLocation[0], lastKnownLocation[1]);
-            await UpdateCurrentPosition();
-            Debug.WriteLine("NavigateTo");
-            await GoToCurrentPosition();
-            Debug.WriteLine("NavigateTo");
-            if (myPoint == null) { Debug.WriteLine("Mypoint = null!"); }
             Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
-            
+
             await GetRouteAndDirections(geopointList);
             DestinationLabel.Text = "";
             int i = 1;

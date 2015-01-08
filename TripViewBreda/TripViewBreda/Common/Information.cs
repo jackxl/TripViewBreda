@@ -24,8 +24,10 @@ namespace TripViewBreda.Common
             List<string[]> list = new List<string[]>();
             // the understanding line is to deside the font size in dependensie with line length
             //list.Add(Topic("1234567890123456789012345678901234567890", "123456789012345678901234567890123456789012345678901234567890"));
+
             list.Add(Topic("How can i zoom in on the map?", "You have to put two fingers on the screen and stretch them."));
             list.Add(Topic("How can I add a question?", "You have to contact the project group 23TI2A3 at Avans High School @Breda"));
+
             //list.Add(Topic("Test", "Test"));
             //list.Add(Topic("Test", "Test"));
             //list.Add(Topic("Test", "Test"));
