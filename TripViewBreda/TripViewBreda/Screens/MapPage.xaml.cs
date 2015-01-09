@@ -122,18 +122,12 @@ namespace TripViewBreda.Screens
         {
             Debug.WriteLine("Position changed");
             myPoint = args.Position.Coordinate.Point;
-            UpdateMapPosition();
             MyMap.Children.Remove(currentLocation);
             AddPoint_CurrentLocation(myPoint.Position.Latitude, myPoint.Position.Longitude,"");
+            MyMap.TrySetViewAsync(myPoint, 16D);
+
         }
 
-       
-        private void UpdateMapPosition()
-        {
-            MyMap.TrySetViewAsync(myPoint, 16D);
-            Debug.WriteLine("Update Map Position: ");
-            //Debug.WriteLine(MyMap.Center.Position.Latitude + " == " + myPoint.Position.Latitude + ", " + MyMap.Center.Position.Longitude + " == " + myPoint.Position.Longitude);
-        }
 
         private void CreateGeofence(Subject subject)
         {
