@@ -73,17 +73,9 @@ namespace TripViewBreda.Screens
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
 
-            locator = new Geolocator();
-            locator.DesiredAccuracy = PositionAccuracy.High;
-            locator.DesiredAccuracyInMeters = DesiredAccuracyInMeters;
-        }
-        private void StartVirtualPositionTimer()
-        {
-            VirtualPositionTimer = new DispatcherTimer();
-            VirtualPositionTimer.Interval = new TimeSpan(0, 0, 0, 0, dispatcherInterval);
-            VirtualPositionTimer.Tick += new EventHandler<object>(CalculateCurrentPosition);
-            //  VirtualPositionTimer.Start();
-
+            //locator = new Geolocator();
+            //locator.DesiredAccuracy = PositionAccuracy.High;
+            //locator.DesiredAccuracyInMeters = DesiredAccuracyInMeters;
         }
 
 
@@ -114,93 +106,33 @@ namespace TripViewBreda.Screens
             MyMap.MapElements.Add(addIcon);
         }
 
-        public void CalculateCurrentPosition(object sender, object e) //Dirty fix (http://goo.gl/AzbolV)
+        private async Task startup()
         {
-            double deltaLatitude;
-            double deltaLongitude;
-
-            if (myPreviousPoint == null)
-            {
-                myPreviousPoint = myPoint;
-                DispatchCounter = 0;
-            }
-            else if (DispatchCounter < 3)
-            {
-                deltaLatitude = (myPoint.Position.Latitude - myPreviousPoint.Position.Latitude) / 3;
-                deltaLongitude = (myPoint.Position.Longitude - myPreviousPoint.Position.Longitude) / 3;
-
-                Debug.WriteLine("Delta: " + deltaLatitude + ", " + deltaLongitude);
-
-                BasicGeoposition postion = new BasicGeoposition();
-                postion.Latitude = myPoint.Position.Latitude + deltaLatitude;
-                postion.Longitude = myPoint.Position.Longitude + deltaLongitude;
-                myPoint = new Geopoint(postion);
-
-
-            }
-            else
-            {
-                DispatchCounter = 0;
-                try
-                {
-                    myPreviousPoint = myPoint;
-                    UpdateCurrentPosition();
-                }
-                catch (Exception)
-                {
-                    CalculateCurrentPosition(sender, e);
-                }
-            }
-            UpdateMapPosition();
-            DispatchCounter++;
+            locator = new Geolocator();
+            locator.DesiredAccuracy = PositionAccuracy.High;
+            locator.MovementThreshold = 2; // The units are meters.
+            locator.PositionChanged += geolocator_PositionChanged;
+            Geoposition position = await locator.GetGeopositionAsync();
+            myPoint = position.Coordinate.Point;
+            MyMap.PedestrianFeaturesVisible = true;
+            MyMap.LandmarksVisible = true;
         }
+
+        private void geolocator_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
+        {
+            Debug.WriteLine("Position changed");
+            myPoint = args.Position.Coordinate.Point;
+            UpdateMapPosition();
+            MyMap.Children.Remove(currentLocation);
+            AddPoint_CurrentLocation(myPoint.Position.Latitude, myPoint.Position.Longitude,"");
+        }
+
+       
         private void UpdateMapPosition()
         {
-            MyMap.Center = myPoint;
+            MyMap.TrySetViewAsync(myPoint, 16D);
             Debug.WriteLine("Update Map Position: ");
             //Debug.WriteLine(MyMap.Center.Position.Latitude + " == " + myPoint.Position.Latitude + ", " + MyMap.Center.Position.Longitude + " == " + myPoint.Position.Longitude);
-        }
-        private async Task UpdateCurrentPosition()
-        {
-            if (!LocatingMapLocation)
-            {
-                Debug.WriteLine("Start update Current Position");
-                LocatingMapLocation = true;
-                Geolocator locator = new Geolocator();
-                locator.DesiredAccuracyInMeters = DesiredAccuracyInMeters;
-                locator.DesiredAccuracy = PositionAccuracy.High;
-
-                var position = await locator.GetGeopositionAsync();
-                myPoint = position.Coordinate.Point;
-
-                double[] pos = new double[] { myPoint.Position.Latitude, myPoint.Position.Longitude };
-                ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation] = pos;
-                LocatingMapLocation = false;
-                Debug.WriteLine("Done updating current position");
-            }
-            else { Debug.WriteLine("Could not Start Update Current Position"); }
-        }
-
-        public async Task GoToCurrentPosition()
-        {
-            //getCurrentPosition();
-            if (!goingToCurrentLocation)
-            {
-                goingToCurrentLocation = true;
-                Debug.WriteLine("Go To Current Position()");
-                await MyMap.TrySetViewAsync(myPoint, zoomLevel);
-                MyMap.ZoomLevel = zoomLevel;
-                MyMap.LandmarksVisible = true;
-
-
-
-
-                MyMap.WatermarkMode = new MapWatermarkMode();
-                goingToCurrentLocation = false;
-                Debug.WriteLine("Done going to current location");
-            }
-            else
-            { Debug.WriteLine("Could not go to current location"); }
         }
 
         private void CreateGeofence(Subject subject)
@@ -384,14 +316,12 @@ namespace TripViewBreda.Screens
         }
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
+            await startup();
             Debug.WriteLine("Navigate To");
             this.navigationHelper.OnNavigatedTo(e);
             subjects = e.Parameter as Subjects;
-            double[] lastKnownLocation = (double[])(ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation]);
-            Geopoint point = ToGeopointConverter(lastKnownLocation[0], lastKnownLocation[1]);
-            await UpdateCurrentPosition();
-            Debug.WriteLine("NavigateTo");
-            await GoToCurrentPosition();
+           // double[] lastKnownLocation = (double[])(ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation]);
+           // Geopoint point = ToGeopointConverter(lastKnownLocation[0], lastKnownLocation[1]);
             Debug.WriteLine("NavigateTo");
             if (myPoint == null) { Debug.WriteLine("Mypoint = null!"); }
 
@@ -424,14 +354,12 @@ namespace TripViewBreda.Screens
             }
             Debug.WriteLine("Route volledig getekend");
             MyMap.CancelDirectManipulations();
-            StartVirtualPositionTimer();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
-            MyMap.PedestrianFeaturesVisible = true;
-            MyMap.LandmarksVisible = true;
+            
             Debug.WriteLine("Navigated From");
         }
 
