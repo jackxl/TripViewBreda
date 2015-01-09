@@ -25,7 +25,7 @@ using TripViewBreda.Model.Routes;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
-namespace TripViewBreda
+namespace TripViewBreda.Screens
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -35,6 +35,8 @@ namespace TripViewBreda
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private bool LocationCalculated = false;
+
+        Model.FileIO.JsonIO model;
         public RoutePage()
         {
             this.InitializeComponent();
@@ -42,6 +44,7 @@ namespace TripViewBreda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            model = new Model.FileIO.JsonIO();
             CalculateCurrentGPSLocation();
         }
         private async Task CalculateCurrentGPSLocation()
@@ -107,24 +110,42 @@ namespace TripViewBreda
             this.Route_Buttons_panel.Children.Add(button);
         }
         #region Functions
-        private void HistorischeKM(object sender, RoutedEventArgs e)
-        { NavigateToMap(new Route.HistorischeKM()); }
-        private void School(object sender, RoutedEventArgs e)
-        { NavigateToMap(new Route.School()); }
-        private void Tourist_Trail(object sender, RoutedEventArgs e)
-        { NavigateToMap(new Route.Tourist_Trail()); }
-        public void Cafes(object sender, RoutedEventArgs e)
-        { NavigateToMap(new Route.Cafes()); }
-        public void Remaining(object sender, RoutedEventArgs e)
-        { NavigateToMap(new Route.Remaining()); }
+        private async void HistorischeKM(object sender, RoutedEventArgs e)
+        {
+            NavigateToMap(await model.Find("Historische Km")); // hier moet de routenaam nog toegevegd worden
+        }
+        private async void School(object sender, RoutedEventArgs e)
+        {
+            Subjects route = await model.Find("School"); // hier moet de routenaam nog toegevegd worden
+            NavigateToMap(route);
+        }
+        private async void Tourist_Trail(object sender, RoutedEventArgs e)
+        {
+            NavigateToMap(await model.Find("Tourist")); // hier moet de routenaam nog toegevegd worden
+        }
+        public async void Cafes(object sender, RoutedEventArgs e)
+        {
+            NavigateToMap(await model.Find("Cafes")); // hier moet de routenaam nog toegevegd worden
+        }
+        public async void Remaining(object sender, RoutedEventArgs e)
+        {
+            NavigateToMap(await model.Find("Remaining")); // hier moet de routenaam nog toegevegd worden
+        }
         private void NavigateToMap(IRoute route)
-        { NavigateToMap(route.GetSubjects()); }
+        {
+            NavigateToMap(route.GetSubjects());
+        }
         private void NavigateToMap(Subjects subs)
         {
             if (this.LocationCalculated)
             {
-                Debug.WriteLine("Navigate To Map With '" + subs.ToString());
-                this.Frame.Navigate(typeof(MapPage), subs);
+                if (subs != null)
+                {
+                    Debug.WriteLine("Navigate To Map With '" + subs.ToString());
+                    this.Frame.Navigate(typeof(MapPage), subs);
+                }
+                else
+                { throw new ArgumentNullException(); }
             }
         }
         #endregion

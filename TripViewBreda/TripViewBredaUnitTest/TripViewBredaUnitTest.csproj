@@ -73,6 +73,7 @@
     <SDKReference Include="TestPlatform, Version=12.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\AppSettingsTest.cs" />
     <Compile Include="Model\FileIO\FileIOTest.cs" />
     <Compile Include="Model\GeoLocation\GPSPointTest.cs" />
     <Compile Include="Model\GeoLocation\GPSTest.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Model\Navigation\NavigationManagerTest.cs" />
     <Compile Include="Model\Navigation\RoutePlannerTest.cs" />
     <Compile Include="Model\Navigation\RouteTest.cs" />
+    <Compile Include="Model\Routes\RouteTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\DataSourceTest.cs" />
   </ItemGroup>
