@@ -44,6 +44,7 @@ namespace TripViewBreda.Screens
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            Loading_Feedback_tx.Text = "";
             model = new Model.FileIO.JsonIO();
             CalculateCurrentGPSLocation();
         }
@@ -106,30 +107,42 @@ namespace TripViewBreda.Screens
             Button button = new Button();
             button.FontSize = 20;
             button.Content = text;
+            button.BorderThickness = new Thickness(0);
             button.Click += new RoutedEventHandler(Method);
             this.Route_Buttons_panel.Children.Add(button);
         }
         #region Functions
         private async void HistorischeKM(object sender, RoutedEventArgs e)
         {
-            NavigateToMap(await model.Find("Historische Km")); // hier moet de routenaam nog toegevegd worden
+            NavigateToMap(await Find("Historische Km")); // hier moet de routenaam nog toegevegd worden
         }
         private async void School(object sender, RoutedEventArgs e)
         {
-            Subjects route = await model.Find("School"); // hier moet de routenaam nog toegevegd worden
+            Subjects route = await Find("School"); // hier moet de routenaam nog toegevegd worden
             NavigateToMap(route);
         }
         private async void Tourist_Trail(object sender, RoutedEventArgs e)
         {
-            NavigateToMap(await model.Find("Tourist")); // hier moet de routenaam nog toegevegd worden
+            NavigateToMap(await Find("Tourist")); // hier moet de routenaam nog toegevegd worden
         }
         public async void Cafes(object sender, RoutedEventArgs e)
         {
-            NavigateToMap(await model.Find("Cafes")); // hier moet de routenaam nog toegevegd worden
+            NavigateToMap(await Find("Cafes")); // hier moet de routenaam nog toegevegd worden
         }
         public async void Remaining(object sender, RoutedEventArgs e)
         {
-            NavigateToMap(await model.Find("Remaining")); // hier moet de routenaam nog toegevegd worden
+            NavigateToMap(await Find("Remaining")); // hier moet de routenaam nog toegevegd worden
+        }
+        private async Task<Subjects> Find(string name)
+        {
+            Loading_Feedback_tx.Text = "";
+            try
+            {
+                Loading_Feedback_tx.Text = name;
+                Subjects subjects = await model.Find(name);
+                return subjects;
+            }
+            catch (ArgumentNullException) { return null; }
         }
         private void NavigateToMap(IRoute route)
         {
@@ -145,7 +158,7 @@ namespace TripViewBreda.Screens
                     this.Frame.Navigate(typeof(MapPage), subs);
                 }
                 else
-                { throw new ArgumentNullException(); }
+                { Loading_Feedback_tx.Text = "Could not load Subjects"; }
             }
         }
         #endregion

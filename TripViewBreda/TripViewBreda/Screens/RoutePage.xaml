@@ -19,7 +19,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="75"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
         <Grid.Background>
@@ -40,7 +41,10 @@
                 </StackPanel>
             </ScrollViewer>
         </Grid>
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock x:Name="Loading_Feedback_tx" Text="[feedback]" Foreground="Violet" TextWrapping="Wrap" FontSize="14" />
+        </Grid>
+        <Grid Grid.Row="3">
             <Button Content="Map" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="Map_bn_Click"/>
         </Grid>
     </Grid>

@@ -55,7 +55,7 @@ namespace TripViewBreda.Model.Information
         }
         public override string ToString()
         {
-            return day + " - [" + openFrom + " - " + openTill + "]";
+            return day + " - [" + openFrom.Ticks + " - " + openTill.Ticks + "]";
         }
     }
 }
