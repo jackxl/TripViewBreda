@@ -88,19 +88,6 @@ namespace TripViewBreda.Screens
             MyMap.MapElements.Add(addIcon);
         }
 
-        private void AddPoint_CurrentLocation(double lattitude, double longitude, string name)
-        {
-            MapIcon addIcon = new MapIcon();
-
-            var myPosition = new Windows.Devices.Geolocation.BasicGeoposition();
-            myPosition.Longitude = longitude;
-            myPosition.Latitude = lattitude;
-            addIcon.Location = new Geopoint(myPosition);
-            addIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
-            addIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/CurrentLocation.png"));
-            MyMap.MapElements.Add(addIcon);
-        }
-
         private async Task startup()
         {
             locator = new Geolocator();
