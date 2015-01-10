@@ -35,6 +35,80 @@
                     "Information": "Bla bla bla",
                     "Lattitude": "51.593278",
                     "Longitude": "4.779388"
+                },
+                {
+                    "Name": "Nassau Baronie Monument",
+                    "ImageName": "3.jpg",
+                    "Information": "Unknown",
+                    "Lattitude": "51.592500",
+                    "Longitude": "4.779695"
+                },
+                {
+                    "Name": "Light House",
+                    "ImageName": "4.jpg",
+                    "Information": "Light House",
+                    "Lattitude": "51.592743",
+                    Longitude: "4.778478s"
+                },
+                {
+
+                }
+            ]
+        },
+        {
+            "Name": "Cafes",
+            "Items": [
+                {
+                    "Name": "'t Hart",
+                    "ImageName": "5.jpg",
+                    "Ïnformation": "Cafe",
+                    "Lattitude": "51.587768",
+                    "Longitude": "4.776655"
+                },
+                {
+                    "Name": "Cafe SamSam",
+                    "ImageName": "6.jpg",
+                    "Ïnformation": "Cafe",
+                    "Lattitude": "51.587631",
+                    "Longitude": "4.77665S5"
+                },
+                {
+                    "Name": "Studio Dande Department.");
+                    "ImageName": "7.jpg",
+                    "Ïnformation": "Cafe",
+                    "Lattitude": "51.589645",
+                    "Longitude": "4.773857"
+                },
+                {
+                    "Name": "Miller Time",
+                    "ImageName": "6.jpg",
+                    "Ïnformation": "Cafe",
+                    "Lattitude": "51.588621",
+                    "Longitude": "4.776655"
+                },
+                {
+                    "Name": "Cafe Dirren",
+                    ÏmageName: "7.png",
+                    "Information "Cafe: ;
+                    "Lattitude" "51.589428",
+                    "Longitude  "4.774455
+                    "
+                }
+            ]
+        },
+        {
+            "Name": "Tourist Trail",
+            "Items": [
+                {
+
+                }
+            ]
+        },
+        {
+            "Name": "Remaining",
+            "Items": [
+                {
+
                 }
             ]
         }
