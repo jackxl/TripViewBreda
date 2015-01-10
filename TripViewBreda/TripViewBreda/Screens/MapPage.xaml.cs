@@ -116,7 +116,6 @@ namespace TripViewBreda.Screens
         private void geolocator_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
         {
           myPoint = args.Position.Coordinate.Point;
-          Debug.WriteLine(this.MyMap.Dispatcher.HasThreadAccess.ToString());
             this.MyMap.Dispatcher.RunAsync(new CoreDispatcherPriority(),new DispatchedHandler(
                 
             new Action(delegate()
