@@ -102,9 +102,9 @@ namespace TripViewBreda.Screens
 
         private void geolocator_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
         {
-          myPoint = args.Position.Coordinate.Point;
-            this.MyMap.Dispatcher.RunAsync(new CoreDispatcherPriority(),new DispatchedHandler(
-                
+            myPoint = args.Position.Coordinate.Point;
+            this.MyMap.Dispatcher.RunAsync(new CoreDispatcherPriority(), new DispatchedHandler(
+
             new Action(delegate()
               {
                   if (!MyMap.Children.Contains(currentPositionIcon))
@@ -348,14 +348,19 @@ namespace TripViewBreda.Screens
 
         private void MyMap_MapTapped(MapControl sender, MapInputEventArgs args)
         {
-            var list = MyMap.FindMapElementsAtOffset(args.Position);
-
-            if (list.Count > 0)
+            try
             {
-                var query = (from g in subjects.GetSubjects() where (g.GetName()) == ((MapIcon)list.First()).Title select g);
-                if (query.ToList().Count > 0)
-                    this.Frame.Navigate(typeof(DetailPage), query.ToList().First());
+                var list = MyMap.FindMapElementsAtOffset(args.Position);
+
+                if (list.Count > 0)
+                {
+                    var query = (from g in subjects.GetSubjects() where (g.GetName()) == ((MapIcon)list.First()).Title select g);
+                    if (query.ToList().Count > 0)
+                        this.Frame.Navigate(typeof(DetailPage), query.ToList().First());
+                }
             }
+            catch (Exception)
+            { Debug.WriteLine("MapPage, MyMap_MapTapped, Exception"); }
         }
     }
 }
