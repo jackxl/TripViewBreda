@@ -94,8 +94,17 @@ namespace TripViewBreda.Screens
             locator.DesiredAccuracy = PositionAccuracy.High;
             locator.MovementThreshold = 3; // The units are meters.
             locator.PositionChanged += geolocator_PositionChanged;
-            Geoposition position = await locator.GetGeopositionAsync();
-            myPoint = position.Coordinate.Point;
+            Geoposition position = null;
+            if (ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation] != null)
+            {
+                double[] lastKnownPosition = ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation] as double[];
+                myPoint = ToGeopointConverter(lastKnownPosition[0], lastKnownPosition[1]);
+            }
+            else
+            {
+                position = await locator.GetGeopositionAsync();
+                myPoint = position.Coordinate.Point;
+            }
             MyMap.PedestrianFeaturesVisible = true;
             MyMap.LandmarksVisible = true;
         }
@@ -302,6 +311,7 @@ namespace TripViewBreda.Screens
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             await startup();
+            await MyMap.TrySetViewAsync(myPoint, 18D);
             this.navigationHelper.OnNavigatedTo(e);
             subjects = e.Parameter as Subjects;
             Debug.WriteLine("NavigateTo");
