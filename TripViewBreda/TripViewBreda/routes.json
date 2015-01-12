@@ -6,6 +6,7 @@
                 {
                     "Name": "School",
                     "ImageName": "1.jpg",
+                    "YoutubeVideoID": "3UdfEKsFny8",
                     "Information": "Avans Hogeschool Breda",
                     "Lattitude": "51.585477",
                     "Longitude": "4.793091",
@@ -25,6 +26,7 @@
                 {
                     "Name": "VVV",
                     "ImageName": "2.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "This is the building of the VVV-building. This is where you also return this phone.",
                     "Lattitude": "51.5942879",
                     "Longitude": "4.779192",
@@ -33,6 +35,7 @@
                 {
                     "Name": "Liefdeszuster",
                     "ImageName": "3.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Bla bla bla",
                     "Lattitude": "51.593278",
                     "Longitude": "4.779388",
@@ -41,6 +44,7 @@
                 {
                     "Name": "Nassau Baronie Monument",
                     "ImageName": "4.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Nassau Baronie Monument",
                     "Lattitude": "51.592500",
                     "Longitude": "4.779695",
@@ -49,6 +53,7 @@
                 {
                     "Name": "Light House",
                     "ImageName": "5.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Light House",
                     "Lattitude": "51.592743",
                     "Longitude": "4.778478",
@@ -57,6 +62,7 @@
                 {
                     "Name": "TS 1",
                     "ImageName": "2.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Unknown",
                     "Lattitude": "51.592667",
                     "Longitude": "4.777917",
@@ -65,6 +71,7 @@
                 {
                     "Name": "TS 2",
                     "ImageName": "2.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Unknonw",
                     "Lattitude": "51.591255",
                     "Longitude": "4.777188",
@@ -73,6 +80,7 @@
                 {
                     "Name": "Kasteel van Breda",
                     "ImageName": "6.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Kasteel",
                     "Lattitude": "51.590515",
                     "Longitude": "4.776223",
@@ -81,6 +89,7 @@
                 {
                     "Name": "Stadhouderspoort",
                     "ImageName": "11.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Stadhouderspoort",
                     "Lattitude": "51.589695",
                     "Longitude": "4.776138",
@@ -89,6 +98,7 @@
                 {
                     "Name": "Huis van Brecht",
                     "ImageName": "7.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Huis van Brecht",
                     "Lattitude": "51.590028",
                     "Longitude": "4.774362",
@@ -97,6 +107,7 @@
                 {
                     "Name": "Spanjaardsgat",
                     "ImageName": "21.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Spanjaardsgat",
                     "Lattitude": "51.590195",
                     "Longitude": "4.773445",
@@ -105,6 +116,7 @@
                 {
                     "Name": "Vismarkt",
                     "ImageName": "19.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Vismarkt",
                     "Lattitude": "51.589833",
                     "Longitude": "4.773333",
@@ -113,6 +125,7 @@
                 {
                     "Name": "Havermarkt",
                     "ImageName": "19.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Havermarkt",
                     "Lattitude": "51.589362",
                     "Longitude": "4.774445",
@@ -121,6 +134,7 @@
                 {
                     "Name": "Grote Kerk",
                     "ImageName": "17.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Grote kerk",
                     "Lattitude": "51.588833",
                     "Longitude": "4.775278",
@@ -129,6 +143,7 @@
                 {
                     "Name": "Het Poortje",
                     "ImageName": "15.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Het poortje",
                     "Lattitude": "51.588195",
                     "Longitude": "4.775138",
@@ -137,6 +152,7 @@
                 {
                     "Name": "Ridderstraat",
                     "ImageName": "8.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Ridderstraat",
                     "Lattitude": "51.587083",
                     "Longitude": "4.775750",
@@ -145,6 +161,7 @@
                 {
                     "Name": "Grote Markt",
                     "ImageName": "19.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Grote markt",
                     "Lattitude": "51.587417",
                     "Longitude": "4.776555",
@@ -153,6 +170,7 @@
                 {
                     "Name": "Bevrijdingsmonument",
                     "ImageName": "18.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Bevrijdingsmonument",
                     "Lattitude": "51.588028",
                     "Longitude": "4.776333",
@@ -161,6 +179,7 @@
                 {
                     "Name": "Stadhuis",
                     "ImageName": "13.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Stadhuis",
                     "Lattitude": "51.588750",
                     "Longitude": "4.776112",
@@ -169,6 +188,7 @@
                 {
                     "Name": "Antonius van Paduakerk",
                     "ImageName": "16.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Antonius van Paduakerk",
                     "Lattitude": "51.587638",
                     "Longitude": "4.777250",
@@ -177,6 +197,7 @@
                 {
                     "Name": "Bibliotheek",
                     "ImageName": "26.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Bibliotheek",
                     "Lattitude": "51.588000",
                     "Longitude": "4.778945",
@@ -185,6 +206,7 @@
                 {
                     "Name": "Kloosterkazerne",
                     "ImageName": "12.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Klooster kazerne",
                     "Lattitude": "51.587722",
                     "Longitude": "4.781028",
@@ -193,6 +215,7 @@
                 {
                     "Name": "Chasse theater",
                     "ImageName": "26.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Chasse theater",
                     "Lattitude": "51.587750",
                     "Longitude": "4.782000",
@@ -201,6 +224,7 @@
                 {
                     "Name": "Binding van Isaac",
                     "ImageName": "25.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Binding van Isaac",
                     "Lattitude": "51.588612",
                     "Longitude": "4.780888",
@@ -209,6 +233,7 @@
                 {
                     "Name": "Beyerd",
                     "ImageName": "24.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Beyerd",
                     "Lattitude": "51.589667",
                     "Longitude": "4.781000",
@@ -217,6 +242,7 @@
                 {
                     "Name": "Gasthuispoort",
                     "ImageName": "23.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Gasthuis poort",
                     "Lattitude": "51.589555",
                     "Longitude": "4.780000",
@@ -225,6 +251,7 @@
                 {
                     "Name": "Willem Merkxtuin",
                     "ImageName": "7.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Willem Merkxtuin",
                     "Lattitude": "51.589112",
                     "Longitude": "4.777945",
@@ -233,6 +260,7 @@
                 {
                     "Name": "Begijnenhof",
                     "ImageName": "8.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Begijnenhof",
                     "Lattitude": "51.589695",
                     "Longitude": "4.778362",
@@ -241,6 +269,7 @@
                 {
                     "Name": "Einde HistorischeKM",
                     "ImageName": "2.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Einde Historische KM",
                     "Lattitude": "51.589500",
                     "Longitude": "4.776250",
@@ -254,6 +283,7 @@
                 {
                     "Name": "'t Hart",
                     "ImageName": "2.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Cafe",
                     "Lattitude": "51.587768",
                     "Longitude": "4.776655",
@@ -262,6 +292,7 @@
                 {
                     "Name": "Cafe SamSam",
                     "ImageName": "2.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Cafe",
                     "Lattitude": "51.587631",
                     "Longitude": "4.776749",
@@ -270,6 +301,7 @@
                 {
                     "Name": "Studio Dande Department.",
                     "ImageName": "2.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Cafe",
                     "Lattitude": "51.589645",
                     "Longitude": "4.773857",
@@ -278,6 +310,7 @@
                 {
                     "Name": "Miller Time",
                     "ImageName": "2.jpg",
+                    "YoutubeVideoID": "",
                     "Information": "Cafe",
                     "Lattitude": "51.588621",
                     "Longitude": "4.776655",
@@ -286,6 +319,7 @@
                 {
                     "Name": "Cafe Dikke",
                     "ImageName": "2.png",
+                    "YoutubeVideoID": "",
                     "Information": "Cafe",
                     "Lattitude": "51.589428",
                     "Longitude": "4.774455",
