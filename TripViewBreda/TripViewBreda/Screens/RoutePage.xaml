@@ -44,8 +44,5 @@
         <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock x:Name="Loading_Feedback_tx" Text="[feedback]" Foreground="Violet" TextWrapping="Wrap" FontSize="14" />
         </Grid>
-        <Grid Grid.Row="3">
-            <Button Content="Map" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="Map_bn_Click"/>
-        </Grid>
     </Grid>
 </Page>
