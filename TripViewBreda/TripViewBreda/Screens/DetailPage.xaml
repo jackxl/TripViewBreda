@@ -46,6 +46,7 @@
                 <TextBox x:Name="OpenTime_Till_tx" Header="Closed" HorizontalContentAlignment="Center" Margin="10,0,0,0" Width="100"/>
             </StackPanel>
             <Button x:Name="closeButton" Content="Close" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="closeButton_Click"/>
+            <Button x:Name="videoButton" Content="Video" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="videoButton_Click"/>
             <Button x:Name="imageButton" Content="Image" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="imageButton_Click"/>
             <FlyoutPresenter x:Name="Flyout_ImageShower" Visibility="Collapsed">
                 <Grid>

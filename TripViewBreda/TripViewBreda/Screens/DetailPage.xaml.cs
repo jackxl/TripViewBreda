@@ -112,6 +112,11 @@ namespace TripViewBreda.Screens
             SetFlyoutImage(subject.GetImageName());
         }
 
+        private void videoButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(VideoPage), e);
+        }
+
         private void Flyout_Close_bn_Click(object sender, RoutedEventArgs e)
         {
             HideImageFlyout();
