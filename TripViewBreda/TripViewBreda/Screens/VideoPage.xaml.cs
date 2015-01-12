@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using TripViewBreda.Model.Information;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -36,9 +37,6 @@ namespace TripViewBreda.Screens
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
 
-            string videoId = "8Iz0WWkd-WQ";
-            string html = @"<style> body{margin:0; padding:0;} iframe{width:100%;height:100%;}@media screen and (max-width:300px) { iframe{width:100%;height:180px;}}  </style><iframe style=""padding:0px;margin-bottom:-20px;""   src=""http://www.youtube.com/embed/" + videoId + @"?rel=0"" frameborder=""0"" allowfullscreen></iframe>";
-            videoView.NavigateToString(html);
         }
 
         /// <summary>
@@ -103,6 +101,18 @@ namespace TripViewBreda.Screens
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
+            Subject subject = e.Parameter as Subject;
+            string videoId = subject.GetYoutubeVideoID();
+            string html;
+            if (videoId != "")
+            {
+                html = @"<style> body{margin:0; padding:0;} iframe{width:100%;height:100%;}@media screen and (max-width:300px) { iframe{width:100%;height:180px;}}  </style><iframe style=""padding:0px;margin-bottom:-20px;""   src=""http://www.youtube.com/embed/" + videoId + @"?rel=0"" frameborder=""0"" allowfullscreen></iframe>";
+            }
+            else
+            {
+                html = @"no video available";
+            }
+            videoView.NavigateToString(html);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

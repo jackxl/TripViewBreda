@@ -69,7 +69,7 @@ namespace TripViewBreda.Screens
                 OpenTime_Open_tx.Visibility = Visibility.Collapsed;
                 OpenTime_Till_tx.Visibility = Visibility.Collapsed;
             }
-                
+
         }
         private void UpdateOpeningTime(OpenComponent open)
         {
@@ -130,7 +130,7 @@ namespace TripViewBreda.Screens
 
         private void videoButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(VideoPage), e);
+            this.Frame.Navigate(typeof(VideoPage), subject);
         }
 
         private void Flyout_Close_bn_Click(object sender, RoutedEventArgs e)
