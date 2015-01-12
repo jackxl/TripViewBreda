@@ -19,6 +19,7 @@ using TripViewBreda.Screens;
 using Windows.Phone.UI.Input;
 using System.Diagnostics;
 using Windows.Storage;
+using TripViewBreda.Model.Information;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -92,13 +93,14 @@ namespace TripViewBreda.Screens
         {
             this.Frame.Navigate(typeof(RoutePage), e);
         }
+        private void Button_Map_Click(object sender, RoutedEventArgs e)
+        {
+            Subjects subjects = new Subjects();
+            this.Frame.Navigate(typeof(MapPage), subjects);
+        }
         private void Button_Help_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(HelpPage));
-        }
-        private void MapButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(MapPage));
         }
         private void Button_Exit_Click(object sender, RoutedEventArgs e)
         {

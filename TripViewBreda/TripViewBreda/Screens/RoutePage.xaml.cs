@@ -98,8 +98,6 @@ namespace TripViewBreda.Screens
             AddButton("Historische Kilometer", HistorischeKM);
             AddButton("Kroegentocht", Cafes);
             AddButton("School", School);
-            AddButton("Tourist Trail", Tourist_Trail);
-            AddButton("Remaining", Remaining);
         }
 
         private void AddButton(string text, Action<object, RoutedEventArgs> Method)
@@ -107,6 +105,7 @@ namespace TripViewBreda.Screens
             Button button = new Button();
             button.FontSize = 20;
             button.Content = text;
+            button.HorizontalContentAlignment = Windows.UI.Xaml.HorizontalAlignment.Left;
             button.BorderThickness = new Thickness(0);
             button.Click += new RoutedEventHandler(Method);
             this.Route_Buttons_panel.Children.Add(button);
@@ -121,17 +120,9 @@ namespace TripViewBreda.Screens
             Subjects route = await Find("School"); // hier moet de routenaam nog toegevegd worden
             NavigateToMap(route);
         }
-        private async void Tourist_Trail(object sender, RoutedEventArgs e)
-        {
-            NavigateToMap(await Find("Tourist")); // hier moet de routenaam nog toegevegd worden
-        }
         public async void Cafes(object sender, RoutedEventArgs e)
         {
             NavigateToMap(await Find("Cafes")); // hier moet de routenaam nog toegevegd worden
-        }
-        public async void Remaining(object sender, RoutedEventArgs e)
-        {
-            NavigateToMap(await Find("Remaining")); // hier moet de routenaam nog toegevegd worden
         }
         private async Task<Subjects> Find(string name)
         {
@@ -164,12 +155,5 @@ namespace TripViewBreda.Screens
         #endregion
         #endregion
 
-        #region Other Buttons
-        private void Map_bn_Click(object sender, RoutedEventArgs e)
-        {
-            Subjects subjects = new Subjects();
-            this.Frame.Navigate(typeof(MapPage), subjects);
-        }
-        #endregion
     }
 }
