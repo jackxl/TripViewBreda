@@ -103,15 +103,8 @@ namespace TripViewBreda.Screens
             this.navigationHelper.OnNavigatedTo(e);
             Subject subject = e.Parameter as Subject;
             string videoId = subject.GetYoutubeVideoID();
-            string html;
-            if (videoId != "")
-            {
-                html = @"<style> body{margin:0; padding:0;} iframe{width:100%;height:100%;}@media screen and (max-width:300px) { iframe{width:100%;height:180px;}}  </style><iframe style=""padding:0px;margin-bottom:-20px;""   src=""http://www.youtube.com/embed/" + videoId + @"?rel=0"" frameborder=""0"" allowfullscreen></iframe>";
-            }
-            else
-            {
-                html = @"no video available";
-            }
+            string html = @"<style> body{margin:0; padding:0;} iframe{width:100%;height:100%;}@media screen and (max-width:300px) { iframe{width:100%;height:180px;}}  </style><iframe style=""padding:0px;margin-bottom:-20px;""   src=""http://www.youtube.com/embed/" + videoId + @"?rel=0"" frameborder=""0"" allowfullscreen></iframe>";
+
             videoView.NavigateToString(html);
         }
 

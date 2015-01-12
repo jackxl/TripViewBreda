@@ -21,6 +21,7 @@ using Windows.UI.Xaml.Navigation;
 using TripViewBreda.Model.Information;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Diagnostics;
+using Windows.UI.Popups;
 
 namespace TripViewBreda.Screens
 {
@@ -128,9 +129,17 @@ namespace TripViewBreda.Screens
             SetFlyoutImage(subject.GetImageName());
         }
 
-        private void videoButton_Click(object sender, RoutedEventArgs e)
+        private async void videoButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(VideoPage), subject);
+            if(subject.GetYoutubeVideoID() != "")
+            {
+                this.Frame.Navigate(typeof(VideoPage), subject);
+            }
+            else
+            {
+                var dialog = new MessageDialog(subject.GetName(), "Geen video beschikbaar");
+                await dialog.ShowAsync();
+            }
         }
 
         private void Flyout_Close_bn_Click(object sender, RoutedEventArgs e)
