@@ -52,6 +52,7 @@
             </FlyoutPresenter>
             <StackPanel>
                 <Button x:Name="Button_Routes" Content="Routes" Height="60" BorderThickness="0" FontSize="24" Click="Button_Routes_Click"/>
+                <Button x:Name="Button_Map" Content="Map" Height="60" BorderThickness="0" FontSize="24" Click="Button_Map_Click"/>
                 <Button x:Name="Button_Help" Content="Help"  Height="60" BorderThickness="0" FontSize="24" Click="Button_Help_Click"/>
                 <Button x:Name="Button_Exit" Content="Exit" Height="60" BorderThickness="0" FontSize="24" Click="Button_Exit_Click"/>
             </StackPanel>

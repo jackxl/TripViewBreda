@@ -120,9 +120,9 @@ namespace TripViewBreda.Screens
             Subjects route = await Find("School"); // hier moet de routenaam nog toegevegd worden
             NavigateToMap(route);
         }
-        private async void Tourist_Trail(object sender, RoutedEventArgs e)
+        public async void Cafes(object sender, RoutedEventArgs e)
         {
-            NavigateToMap(await Find("Tourist")); // hier moet de routenaam nog toegevegd worden
+            NavigateToMap(await Find("Cafes")); // hier moet de routenaam nog toegevegd worden
         }
         private async Task<Subjects> Find(string name)
         {
@@ -155,12 +155,5 @@ namespace TripViewBreda.Screens
         #endregion
         #endregion
 
-        #region Other Buttons
-        private void Map_bn_Click(object sender, RoutedEventArgs e)
-        {
-            Subjects subjects = new Subjects();
-            this.Frame.Navigate(typeof(MapPage), subjects);
-        }
-        #endregion
     }
 }
