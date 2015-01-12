@@ -21,6 +21,7 @@ using TripViewBreda.GeoLocation;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Devices.Geolocation;
+using Windows.UI.Popups;
 using TripViewBreda.Model.Routes;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
@@ -50,18 +51,35 @@ namespace TripViewBreda.Screens
         }
         private async Task CalculateCurrentGPSLocation()
         {
-            if (ApplicationData.Current.LocalSettings.Values.ContainsKey(AppSettings.LastKnownLocation) == true)
-            { LocationCalculated = true; }
-            var locator = new Geolocator();
-            locator.DesiredAccuracyInMeters = 50;
-            Debug.WriteLine("Calculating CurrentLocation");
-            var position = await locator.GetGeopositionAsync();
-            double[] lastKnownPosition = new double[] { position.Coordinate.Latitude, position.Coordinate.Longitude };
-            ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation] = lastKnownPosition;
-            Debug.WriteLine("Calculation Done. Location Calculated");
-            LocationCalculated = true;
+            try
+            {
+                if (ApplicationData.Current.LocalSettings.Values.ContainsKey(AppSettings.LastKnownLocation) == true)
+                {
+                    LocationCalculated = true;
+                }
+                var locator = new Geolocator();
+                locator.DesiredAccuracyInMeters = 50;
+                Debug.WriteLine("Calculating CurrentLocation");
+                var position = await locator.GetGeopositionAsync();
+                double[] lastKnownPosition = new double[] {position.Coordinate.Latitude, position.Coordinate.Longitude};
+                ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation] = lastKnownPosition;
+                Debug.WriteLine("Calculation Done. Location Calculated");
+                LocationCalculated = true;
+            }
+            catch (Exception e)
+            {
+                ShowError(); 
+            }
+            
         }
 
+        private async void ShowError()
+        {
+            var dialog = new MessageDialog("Localization is not possible! Make sure that GPS is set to ON!", "Error!");
+            await dialog.ShowAsync();
+            this.Frame.GoBack();
+        }
+          
         #region NavigationHelper registration
         public NavigationHelper NavigationHelper
         {
