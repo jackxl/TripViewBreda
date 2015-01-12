@@ -292,23 +292,6 @@
                     "Open": [ ]
                 }
             ]
-        },
-        {
-            "Name": "Tourist Trail",
-            "Items": [
-                {
-                    "Name": "Valkenberg",
-                    "ImageName": "2.png",
-                    "Information": "Park",
-                    "Lattitude": "51.590843",
-                    "Longitude": "4.77887",
-                    "Open": [ ]
-                }
-            ]
-        },
-        {
-            "Name": "Remaining",
-            "Items": [ ]
         }
     ]
 }

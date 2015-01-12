@@ -98,8 +98,6 @@ namespace TripViewBreda.Screens
             AddButton("Historische Kilometer", HistorischeKM);
             AddButton("Kroegentocht", Cafes);
             AddButton("School", School);
-            AddButton("Tourist Trail", Tourist_Trail);
-            AddButton("Remaining", Remaining);
         }
 
         private void AddButton(string text, Action<object, RoutedEventArgs> Method)
@@ -125,14 +123,6 @@ namespace TripViewBreda.Screens
         private async void Tourist_Trail(object sender, RoutedEventArgs e)
         {
             NavigateToMap(await Find("Tourist")); // hier moet de routenaam nog toegevegd worden
-        }
-        public async void Cafes(object sender, RoutedEventArgs e)
-        {
-            NavigateToMap(await Find("Cafes")); // hier moet de routenaam nog toegevegd worden
-        }
-        public async void Remaining(object sender, RoutedEventArgs e)
-        {
-            NavigateToMap(await Find("Remaining")); // hier moet de routenaam nog toegevegd worden
         }
         private async Task<Subjects> Find(string name)
         {
