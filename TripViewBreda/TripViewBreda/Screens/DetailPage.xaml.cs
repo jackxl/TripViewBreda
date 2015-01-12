@@ -21,6 +21,7 @@ using Windows.UI.Xaml.Navigation;
 using TripViewBreda.Model.Information;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Diagnostics;
+using Windows.UI.Popups;
 
 namespace TripViewBreda.Screens
 {
@@ -40,7 +41,7 @@ namespace TripViewBreda.Screens
             this.OpenTime_Day_tx.IsEnabled = false;
             this.OpenTime_Open_tx.IsEnabled = false;
             this.OpenTime_Till_tx.IsEnabled = false;
-            string placeholderText = "Unknown";
+            string placeholderText = "Onbekend";
             this.OpenTime_Day_tx.PlaceholderText = placeholderText;
             this.OpenTime_Open_tx.PlaceholderText = placeholderText;
             this.OpenTime_Till_tx.PlaceholderText = placeholderText;
@@ -49,11 +50,27 @@ namespace TripViewBreda.Screens
         #region Functions
         private void UpdateInfo()
         {
+            if (subject.GetInformation().Equals(""))
+            {
+                subjectInformation.DataContext = "Geen informatie beschikbaar.";
+            }
             subjectName.DataContext = subject.GetName();
             subjectInformation.DataContext = subject.GetInformation();
             if (subject.GetOpeningHours() != null)
+            {
                 if (subject.GetOpeningHours().GetOpeningHours().Count > 0)
+                {
                     UpdateOpeningTime(subject.GetOpeningHours().GetOpeningHours()[0]);
+                }
+
+            }
+            else
+            {
+                OpenTime_Day_tx.Visibility = Visibility.Collapsed;
+                OpenTime_Open_tx.Visibility = Visibility.Collapsed;
+                OpenTime_Till_tx.Visibility = Visibility.Collapsed;
+            }
+
         }
         private void UpdateOpeningTime(OpenComponent open)
         {
@@ -110,6 +127,19 @@ namespace TripViewBreda.Screens
         {
             ShowImageFlyout();
             SetFlyoutImage(subject.GetImageName());
+        }
+
+        private async void videoButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(subject.GetYoutubeVideoID() != "")
+            {
+                this.Frame.Navigate(typeof(VideoPage), subject);
+            }
+            else
+            {
+                var dialog = new MessageDialog(subject.GetName(), "Geen video beschikbaar");
+                await dialog.ShowAsync();
+            }
         }
 
         private void Flyout_Close_bn_Click(object sender, RoutedEventArgs e)

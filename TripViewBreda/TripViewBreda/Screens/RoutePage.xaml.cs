@@ -21,6 +21,7 @@ using TripViewBreda.GeoLocation;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Devices.Geolocation;
+using Windows.UI.Popups;
 using TripViewBreda.Model.Routes;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
@@ -50,18 +51,35 @@ namespace TripViewBreda.Screens
         }
         private async Task CalculateCurrentGPSLocation()
         {
-            if (ApplicationData.Current.LocalSettings.Values.ContainsKey(AppSettings.LastKnownLocation) == true)
-            { LocationCalculated = true; }
-            var locator = new Geolocator();
-            locator.DesiredAccuracyInMeters = 50;
-            Debug.WriteLine("Calculating CurrentLocation");
-            var position = await locator.GetGeopositionAsync();
-            double[] lastKnownPosition = new double[] { position.Coordinate.Latitude, position.Coordinate.Longitude };
-            ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation] = lastKnownPosition;
-            Debug.WriteLine("Calculation Done. Location Calculated");
-            LocationCalculated = true;
+            try
+            {
+                if (ApplicationData.Current.LocalSettings.Values.ContainsKey(AppSettings.LastKnownLocation) == true)
+                {
+                    LocationCalculated = true;
+                }
+                var locator = new Geolocator();
+                locator.DesiredAccuracyInMeters = 50;
+                Debug.WriteLine("Calculating CurrentLocation");
+                var position = await locator.GetGeopositionAsync();
+                double[] lastKnownPosition = new double[] {position.Coordinate.Latitude, position.Coordinate.Longitude};
+                ApplicationData.Current.LocalSettings.Values[AppSettings.LastKnownLocation] = lastKnownPosition;
+                Debug.WriteLine("Calculation Done. Location Calculated");
+                LocationCalculated = true;
+            }
+            catch (Exception e)
+            {
+                ShowError(); 
+            }
+            
         }
 
+        private async void ShowError()
+        {
+            var dialog = new MessageDialog("Localization is not possible! Make sure that GPS is set to ON!", "Error!");
+            await dialog.ShowAsync();
+            this.Frame.GoBack();
+        }
+          
         #region NavigationHelper registration
         public NavigationHelper NavigationHelper
         {
@@ -96,10 +114,8 @@ namespace TripViewBreda.Screens
         private void RegistrationRouteButtons()
         {
             AddButton("Historische Kilometer", HistorischeKM);
-            AddButton("Kroegentocht", Cafes);
+            //AddButton("Kroegentocht", Cafes);
             AddButton("School", School);
-            AddButton("Tourist Trail", Tourist_Trail);
-            AddButton("Remaining", Remaining);
         }
 
         private void AddButton(string text, Action<object, RoutedEventArgs> Method)
@@ -122,17 +138,9 @@ namespace TripViewBreda.Screens
             Subjects route = await Find("School"); // hier moet de routenaam nog toegevegd worden
             NavigateToMap(route);
         }
-        private async void Tourist_Trail(object sender, RoutedEventArgs e)
-        {
-            NavigateToMap(await Find("Tourist")); // hier moet de routenaam nog toegevegd worden
-        }
         public async void Cafes(object sender, RoutedEventArgs e)
         {
             NavigateToMap(await Find("Cafes")); // hier moet de routenaam nog toegevegd worden
-        }
-        public async void Remaining(object sender, RoutedEventArgs e)
-        {
-            NavigateToMap(await Find("Remaining")); // hier moet de routenaam nog toegevegd worden
         }
         private async Task<Subjects> Find(string name)
         {
@@ -165,12 +173,5 @@ namespace TripViewBreda.Screens
         #endregion
         #endregion
 
-        #region Other Buttons
-        private void Map_bn_Click(object sender, RoutedEventArgs e)
-        {
-            Subjects subjects = new Subjects();
-            this.Frame.Navigate(typeof(MapPage), subjects);
-        }
-        #endregion
     }
 }
