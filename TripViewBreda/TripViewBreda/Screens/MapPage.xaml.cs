@@ -100,6 +100,27 @@ namespace TripViewBreda.Screens
             MyMap.LandmarksVisible = true;
         }
 
+        private async void ShowError()
+        {
+            var dialog = new MessageDialog("Localization is not possible! Make sure that GPS is set to ON!", "Error!");
+            await dialog.ShowAsync();
+
+            try
+            {
+                if (this.Frame.CanGoBack)
+                {
+                    this.Frame.GoBack();
+                }
+                
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Message");
+                Debug.WriteLine(e.ToString());
+            }
+            
+        }
+
         private void geolocator_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
         {
             myPoint = args.Position.Coordinate.Point;
@@ -301,43 +322,58 @@ namespace TripViewBreda.Screens
         }
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            await startup();
-            this.navigationHelper.OnNavigatedTo(e);
-            subjects = e.Parameter as Subjects;
-            Debug.WriteLine("NavigateTo");
+            await Check(e);
+        }
 
-            LinkedList<Geopoint> geopointList = new LinkedList<Geopoint>();
-            geopointList.AddFirst(myPoint);
-            foreach (Subject s in subjects.GetSubjects())
+        protected async Task Check(NavigationEventArgs e)
+        {
+            try
             {
-                if (s.GetName().Trim() != "")
-                {
-                    AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
-                    CreateGeofence(s);
-                }
-                BasicGeoposition bg = new BasicGeoposition();
-                bg.Latitude = s.location.GetLattitude();
-                bg.Longitude = s.location.GetLongitude();
-                geopointList.AddLast(new Geopoint(bg));
-            }
-            Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
-            if (geopointList.Count > 1)
-                await GetRouteAndDirections(geopointList);
-            else
-                await MyMap.TrySetViewAsync(myPoint, 18D);
+                await startup();
 
-            DestinationLabel.Text = "";
-            int i = 1;
-            foreach (Subject s in subjects.GetSubjects())
-            {
-                if (s.GetName().Trim() != "")
+                this.navigationHelper.OnNavigatedTo(e);
+                subjects = e.Parameter as Subjects;
+                Debug.WriteLine("NavigateTo");
+
+                LinkedList<Geopoint> geopointList = new LinkedList<Geopoint>();
+                geopointList.AddFirst(myPoint);
+                foreach (Subject s in subjects.GetSubjects())
                 {
-                    DestinationLabel.Text += i + ": " + s.GetName() + "\n";
-                    i++;
+                    if (s.GetName().Trim() != "")
+                    {
+                        AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
+                        CreateGeofence(s);
+                    }
+                    BasicGeoposition bg = new BasicGeoposition();
+                    bg.Latitude = s.location.GetLattitude();
+                    bg.Longitude = s.location.GetLongitude();
+                    geopointList.AddLast(new Geopoint(bg));
                 }
+                Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
+                if (geopointList.Count > 1)
+                    await GetRouteAndDirections(geopointList);
+                else
+                    await MyMap.TrySetViewAsync(myPoint, 18D);
+
+                DestinationLabel.Text = "";
+                int i = 1;
+                foreach (Subject s in subjects.GetSubjects())
+                {
+                    if (s.GetName().Trim() != "")
+                    {
+                        DestinationLabel.Text += i + ": " + s.GetName() + "\n";
+                        i++;
+                    }
+                }
+                Debug.WriteLine("Route volledig getekend");
+                MyMap.CancelDirectManipulations();
             }
-            Debug.WriteLine("Route volledig getekend");
-            MyMap.CancelDirectManipulations();
+            catch (Exception ex)
+            {
+                ShowError();
+            }
+
+           
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
