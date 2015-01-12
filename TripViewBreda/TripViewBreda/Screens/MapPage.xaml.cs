@@ -321,8 +321,11 @@ namespace TripViewBreda.Screens
                 geopointList.AddLast(new Geopoint(bg));
             }
             Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
+            if (geopointList.Count > 1)
+                await GetRouteAndDirections(geopointList);
+            else
+                await MyMap.TrySetViewAsync(myPoint, 18D);
 
-            await GetRouteAndDirections(geopointList);
             DestinationLabel.Text = "";
             int i = 1;
             foreach (Subject s in subjects.GetSubjects())

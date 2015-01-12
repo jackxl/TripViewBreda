@@ -107,6 +107,7 @@ namespace TripViewBreda.Screens
             Button button = new Button();
             button.FontSize = 20;
             button.Content = text;
+            button.HorizontalContentAlignment = Windows.UI.Xaml.HorizontalAlignment.Left;
             button.BorderThickness = new Thickness(0);
             button.Click += new RoutedEventHandler(Method);
             this.Route_Buttons_panel.Children.Add(button);
