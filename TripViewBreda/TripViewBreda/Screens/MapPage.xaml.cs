@@ -134,7 +134,7 @@ namespace TripViewBreda.Screens
                   }
                   MapControl.SetLocation(currentPositionIcon, myPoint);
                   MapControl.SetNormalizedAnchorPoint(currentPositionIcon, new Point(0.5, 0.5));
-                  Debug.WriteLine("Current position added to map");
+                  Debug.WriteLine("Huidige positie toegevoegd aan de kaart!");
               })));
 
 
@@ -189,13 +189,13 @@ namespace TripViewBreda.Screens
                         }
                         setRequestedSubject(subject);
 
-                        var dialog = new MessageDialog(subject.GetName(), "You have reach the following hotspot!");
+                        var dialog = new MessageDialog(subject.GetName(), "Het volgende punt is bereikt");
 
-                        UICommand moreInfo = new UICommand("More info");
+                        UICommand moreInfo = new UICommand("meer info");
                         moreInfo.Invoked = moreInfo_Click;
                         dialog.Commands.Add(moreInfo);
 
-                        UICommand close = new UICommand("Close");
+                        UICommand close = new UICommand("Sluiten");
                         close.Invoked = close_Click;
                         dialog.Commands.Add(close);
 

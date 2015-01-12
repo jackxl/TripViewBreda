@@ -114,7 +114,7 @@ namespace TripViewBreda.Screens
         private void RegistrationRouteButtons()
         {
             AddButton("Historische Kilometer", HistorischeKM);
-            AddButton("Kroegentocht", Cafes);
+            //AddButton("Kroegentocht", Cafes);
             AddButton("School", School);
         }
 

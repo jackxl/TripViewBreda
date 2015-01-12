@@ -62,6 +62,7 @@ namespace TripViewBreda.Utilities
         }
         private async Task SecondStep(string jsonText)
         {
+            string subjectName = "'Unknown'";
             JsonObject jsonObject = JsonObject.Parse(jsonText);
             JsonArray jsonArray = jsonObject["Subjects"].GetArray();
             foreach (JsonValue jsonSubjects in jsonArray)
@@ -80,11 +81,13 @@ namespace TripViewBreda.Utilities
                     {
                         JsonObject subjectObject = jsonSubject.GetObject();
                         corruptKey = "Subject Name";
-                        string subjectName = subjectObject["Name"].GetString();
+                        subjectName = subjectObject["Name"].GetString();
                         corruptKey = "Subject Information";
                         string subjectInformation = subjectObject["Information"].GetString();
                         corruptKey = "Subject ImageName";
                         string subjectImageName = subjectObject["ImageName"].GetString();
+                        corruptKey = "Subject YoutubeVideoID";
+                        string subjectVideoID = subjectObject["YoutubeVideoID"].GetString();
                         double lattitude = 0;
                         double longitude = 0;
                         try
@@ -94,7 +97,7 @@ namespace TripViewBreda.Utilities
                         }
                         catch
                         { Debug.WriteLine("Could not catch position from '" + subjectName + "'."); }
-                        Subject subject = new Subject(new GPSPoint(lattitude, longitude), subjectName, subjectInformation, subjectImageName);
+                        Subject subject = new Subject(new GPSPoint(lattitude, longitude), subjectName, subjectInformation, subjectImageName, subjectVideoID);
                         try
                         { subject.SetOpeningsHours(GetOpeningHoursFromJsonObject(subjectObject)); }
                         catch (Exception)
@@ -105,7 +108,7 @@ namespace TripViewBreda.Utilities
                     }
                     _routes.Add(subjects);
                 }
-                catch (KeyNotFoundException) { Debug.WriteLine("Could not add subject. Key not found! (Key: " + corruptKey + ")"); }
+                catch (KeyNotFoundException) { Debug.WriteLine("Could not add subject. Key not found! (Key: " + subjectName + " - " + corruptKey + ")"); }
             }
         }
         private OpeningHours GetOpeningHoursFromJsonObject(JsonObject subjectObject)

@@ -10,6 +10,7 @@ namespace TripViewBreda.Model.Information
     {
         public GeoLocation.GPSPoint location;
         private string imageName;
+        private string youtubeVideoID;
         private string name;
         private string information;
         private OpeningHours openingHours;
@@ -39,12 +40,13 @@ namespace TripViewBreda.Model.Information
             this.openingHours = openingHours;
         }
 
-        public Subject(GeoLocation.GPSPoint location, string name, string information, string imageName)
+        public Subject(GeoLocation.GPSPoint location, string name, string information, string imageName, string youtubeVideoID)
         {
             this.location = location;
             this.name = name;
             this.information = information;
             this.imageName = imageName;
+            this.youtubeVideoID = youtubeVideoID;
         }
 
         public GeoLocation.GPSPoint GetLocation()
@@ -93,6 +95,14 @@ namespace TripViewBreda.Model.Information
         public void SetImageName(string imageName)
         {
             this.imageName = imageName;
+        }
+        public string GetYoutubeVideoID()
+        {
+            return youtubeVideoID;
+        }
+        public void SetYoutubeVideoID(string videoID)
+        {
+            this.youtubeVideoID = videoID;
         }
         public override string ToString()
         {
