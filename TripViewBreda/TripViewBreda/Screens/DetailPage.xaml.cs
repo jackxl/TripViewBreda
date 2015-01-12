@@ -40,7 +40,7 @@ namespace TripViewBreda.Screens
             this.OpenTime_Day_tx.IsEnabled = false;
             this.OpenTime_Open_tx.IsEnabled = false;
             this.OpenTime_Till_tx.IsEnabled = false;
-            string placeholderText = "Unknown";
+            string placeholderText = "Onbekend";
             this.OpenTime_Day_tx.PlaceholderText = placeholderText;
             this.OpenTime_Open_tx.PlaceholderText = placeholderText;
             this.OpenTime_Till_tx.PlaceholderText = placeholderText;
@@ -49,11 +49,27 @@ namespace TripViewBreda.Screens
         #region Functions
         private void UpdateInfo()
         {
+            if (subject.GetInformation().Equals(""))
+            {
+                subjectInformation.DataContext = "Geen informatie beschikbaar.";
+            }
             subjectName.DataContext = subject.GetName();
             subjectInformation.DataContext = subject.GetInformation();
             if (subject.GetOpeningHours() != null)
+            {
                 if (subject.GetOpeningHours().GetOpeningHours().Count > 0)
+                {
                     UpdateOpeningTime(subject.GetOpeningHours().GetOpeningHours()[0]);
+                }
+
+            }
+            else
+            {
+                OpenTime_Day_tx.Visibility = Visibility.Collapsed;
+                OpenTime_Open_tx.Visibility = Visibility.Collapsed;
+                OpenTime_Till_tx.Visibility = Visibility.Collapsed;
+            }
+                
         }
         private void UpdateOpeningTime(OpenComponent open)
         {
