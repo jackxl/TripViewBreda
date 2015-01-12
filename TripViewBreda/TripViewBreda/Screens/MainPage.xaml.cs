@@ -96,7 +96,8 @@ namespace TripViewBreda.Screens
         private void Button_Map_Click(object sender, RoutedEventArgs e)
         {
             Subjects subjects = new Subjects();
-            this.Frame.Navigate(typeof(MapPage), subjects);
+            Subjects events = new Subjects();
+            this.Frame.Navigate(typeof(MapPage), new Tuple<Subjects, Subjects>(subjects, events));
         }
         private void Button_Help_Click(object sender, RoutedEventArgs e)
         {

@@ -48,6 +48,7 @@ namespace TripViewBreda.Screens
         private Geopoint myPoint;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private Subjects subjects;
+        private Subjects events;
         private Geolocator locator;
 
 
@@ -77,7 +78,7 @@ namespace TripViewBreda.Screens
         private void AddPoint_Map(double lattitude, double longitude, String name)
         {
             MapIcon addIcon = new MapIcon();
-
+            Debug.WriteLine("Add Map Icon: " + name);
             var myPosition = new Windows.Devices.Geolocation.BasicGeoposition();
             myPosition.Longitude = longitude;
             myPosition.Latitude = lattitude;
@@ -221,11 +222,11 @@ namespace TripViewBreda.Screens
             // Get the route between the points.
             MapRouteFinderResult routeResult = await MapRouteFinder.GetWalkingRouteFromWaypointsAsync(list);
 
-            Debug.WriteLine("Route is opgehaald!");
 
             //Display route with text
             if (routeResult.Status == MapRouteFinderStatus.Success)
             {
+                Debug.WriteLine("Route is opgehaald!");
                 //InstructionsLabel.Text += "\n";
                 // Display the directions.
                 InstructionsLabel.Inlines.Add(new Run()
@@ -303,8 +304,10 @@ namespace TripViewBreda.Screens
         {
             await startup();
             this.navigationHelper.OnNavigatedTo(e);
-            subjects = e.Parameter as Subjects;
-            Debug.WriteLine("NavigateTo");
+            Tuple<Subjects, Subjects> information = e.Parameter as Tuple<Subjects, Subjects>;
+            subjects = information.Item1;
+            events = information.Item2;
+            Debug.WriteLine("Navigate To " + subjects.GetSubjects().Count + ", " + events.GetSubjects().Count);
 
             LinkedList<Geopoint> geopointList = new LinkedList<Geopoint>();
             geopointList.AddFirst(myPoint);
@@ -320,7 +323,15 @@ namespace TripViewBreda.Screens
                 bg.Longitude = s.location.GetLongitude();
                 geopointList.AddLast(new Geopoint(bg));
             }
-            Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
+            foreach (Subject s in events.GetSubjects())
+            {
+                if (s.GetName().Trim() != "")
+                {
+                    AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
+                    CreateGeofence(s);
+                }
+                //geopointList.AddLast(ToGeopointConverter(s));
+            }
             if (geopointList.Count > 1)
                 await GetRouteAndDirections(geopointList);
             else
@@ -336,6 +347,14 @@ namespace TripViewBreda.Screens
                     i++;
                 }
             }
+            //foreach (Subject s in events.GetSubjects())
+            //{
+            //    if (s.GetName().Trim() != "")
+            //    {
+            //        DestinationLabel.Text += i + ": " + s.GetName() + "\n";
+            //        i++;
+            //    }
+            //}
             Debug.WriteLine("Route volledig getekend");
             MyMap.CancelDirectManipulations();
         }

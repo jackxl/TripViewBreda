@@ -226,7 +226,12 @@
     <PRIResource Include="Model\LanguageResources\English.resw" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="routes.json">
+    <Content Include="jsonFiles\routes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="jsonFiles\events.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

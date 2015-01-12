@@ -96,7 +96,7 @@ namespace TripViewBreda.Screens
         private void RegistrationRouteButtons()
         {
             AddButton("Historische Kilometer", HistorischeKM);
-            //AddButton("Kroegentocht", Cafes);
+            AddButton("Kroegentocht", Cafes);
             AddButton("School", School);
         }
 
@@ -113,7 +113,8 @@ namespace TripViewBreda.Screens
         #region Functions
         private async void HistorischeKM(object sender, RoutedEventArgs e)
         {
-            NavigateToMap(await Find("Historische Km")); // hier moet de routenaam nog toegevegd worden
+            Subjects route = await Find("Historische Km"); // hier moet de routenaam nog toegevegd worden
+            NavigateToMap(route);
         }
         private async void School(object sender, RoutedEventArgs e)
         {
@@ -122,7 +123,8 @@ namespace TripViewBreda.Screens
         }
         public async void Cafes(object sender, RoutedEventArgs e)
         {
-            NavigateToMap(await Find("Cafes")); // hier moet de routenaam nog toegevegd worden
+            Subjects route = await Find("Cafes"); // hier moet de routenaam nog toegevegd worden
+            NavigateToMap(route);
         }
         private async Task<Subjects> Find(string name)
         {
@@ -135,22 +137,49 @@ namespace TripViewBreda.Screens
             }
             catch (ArgumentNullException) { return null; }
         }
+        private async Task<Subjects> GetAllEvents()
+        {
+            Subjects allEvents = new Subjects();
+            foreach (Subjects subjects in model.GetEvents())
+            {
+                foreach (Subject subject in subjects.GetSubjects())
+                {
+                    allEvents.AddSubject(subject);
+                }
+            }
+            return allEvents;
+        }
         private void NavigateToMap(IRoute route)
         {
             NavigateToMap(route.GetSubjects());
         }
-        private void NavigateToMap(Subjects subs)
+        private async void NavigateToMap(Subjects subs)
         {
+            Subjects events = await GetAllEvents();
             if (this.LocationCalculated)
             {
                 if (subs != null)
                 {
                     Debug.WriteLine("Navigate To Map With '" + subs.ToString());
-                    this.Frame.Navigate(typeof(MapPage), subs);
                 }
                 else
-                { Loading_Feedback_tx.Text = "Could not load Subjects"; }
+                {
+                    Loading_Feedback_tx.Text = "Could not load Subjects";
+                    return;
+                }
+                if (events != null)
+                {
+                    Debug.WriteLine("Navigate To Map With '" + events.ToString());
+                }
+                else
+                {
+                    Loading_Feedback_tx.Text = "Could not load Events";
+                    return;
+                }
             }
+            Debug.WriteLine("Navigate to Map Page with: " + subs.GetSubjects().Count + " subjects and " + events.GetSubjects().Count + " events.");
+            Tuple<Subjects, Subjects> information = new Tuple<Subjects, Subjects>(subs, events);
+            this.Frame.Navigate(typeof(MapPage), information);
         }
         #endregion
         #endregion

@@ -19,25 +19,38 @@ namespace TripViewBreda.Utilities
     class DataSource
     {
         private ObservableCollection<Subjects> _routes;
-        const string filename = @"ms-appx:///routes.json";
+        private ObservableCollection<Subjects> _events;
+        const string routefilename = @"ms-appx:///jsonFiles/routes.json";
+        const string eventfilename = @"ms-appx:///jsonFiles/events.json";
         //const string filename = "routes.json";
 
         public DataSource()
         {
             _routes = new ObservableCollection<Model.Information.Subjects>();
+            _events = new ObservableCollection<Subjects>();
         }
 
         public async Task<ObservableCollection<Model.Information.Subjects>> GetRoutes()
         {
-            await ensureDataLoaded();
+            await ensureSubjectDataLoaded();
             return _routes;
         }
+        public async Task<ObservableCollection<Subjects>> GetEvents()
+        {
+            await ensureEventDataLoaded();
+            return _events;
+        }
 
-        private async Task ensureDataLoaded()
+        private async Task ensureSubjectDataLoaded()
         {
             if (_routes.Count == 0)
                 await getSubjectDataAsync();
-
+            return;
+        }
+        private async Task ensureEventDataLoaded()
+        {
+            if (_events.Count == 0)
+                await getEventDataAsync();
             return;
         }
 
@@ -48,11 +61,11 @@ namespace TripViewBreda.Utilities
 
             try
             {
-                Uri dataUri = new Uri(filename);
+                Uri dataUri = new Uri(routefilename);
                 StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(dataUri);
                 string jsonText = await FileIO.ReadTextAsync(file);
 
-                await SecondStep(jsonText);
+                await LoadSubjectsFromFileToCollection(jsonText, _routes);
             }
             catch (Exception)
             {
@@ -60,7 +73,25 @@ namespace TripViewBreda.Utilities
                 throw new NotImplementedException("Not Implemented Exception, Path: DataSource/getSubjectDataAsync()");
             }
         }
-        private async Task SecondStep(string jsonText)
+        private async Task getEventDataAsync()
+        {
+            if (_events.Count != 0)
+                return;
+            try
+            {
+                Uri dataUri = new Uri(eventfilename);
+                StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(dataUri);
+                string jsonText = await FileIO.ReadTextAsync(file);
+
+                await LoadSubjectsFromFileToCollection(jsonText, _events);
+            }
+            catch (Exception)
+            {
+                _events = new ObservableCollection<Subjects>();
+                throw new NotImplementedException("Not Implemented Exception, Path: DataSource/getEventDataAsync()");
+            }
+        }
+        private async Task LoadSubjectsFromFileToCollection(string jsonText, ObservableCollection<Subjects> toCollection)
         {
             string subjectName = "'Unknown'";
             JsonObject jsonObject = JsonObject.Parse(jsonText);
@@ -102,11 +133,10 @@ namespace TripViewBreda.Utilities
                         { subject.SetOpeningsHours(GetOpeningHoursFromJsonObject(subjectObject)); }
                         catch (Exception)
                         { Debug.WriteLine("Could not add Openinghours to : " + subjectName); }
-
                         subjects.AddSubject(subject);
 
                     }
-                    _routes.Add(subjects);
+                    toCollection.Add(subjects);
                 }
                 catch (KeyNotFoundException) { Debug.WriteLine("Could not add subject. Key not found! (Key: " + subjectName + " - " + corruptKey + ")"); }
             }
@@ -126,25 +156,45 @@ namespace TripViewBreda.Utilities
             }
             return openinghours;
         }
-        public async void AddSubject(ObservableCollection<Model.Information.Subjects> subjects)
+
+        public async void AddSubjectToRoutes(ObservableCollection<Model.Information.Subjects> subjects)
         {
             _routes = subjects;
-            await saveSubjectDataAsync();
+            await saveRouteSubjectDataAsync();
+        }
+        public async void AddSubjectToEvent(ObservableCollection<Subjects> subjects)
+        {
+            _events = subjects;
+            await saveEventSubjectDataAsync();
         }
 
-        public async void DeleteSubject(ObservableCollection<Model.Information.Subjects> subjects)
+        public async void DeleteSubjectFromRoutes(ObservableCollection<Model.Information.Subjects> subjects)
         {
             _routes = subjects;
-            await saveSubjectDataAsync();
+            await saveRouteSubjectDataAsync();
+        }
+        public async void DeleteSubjectFromEvents(ObservableCollection<Subjects> subjects)
+        {
+            _events = subjects;
+            await saveEventSubjectDataAsync();
         }
 
-        private async Task saveSubjectDataAsync()
+        private async Task saveRouteSubjectDataAsync()
         {
             var jsonSerializer = new DataContractJsonSerializer(typeof(ObservableCollection<Model.Information.Subjects>));
-            using (var stream = await ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync(filename,
+            using (var stream = await ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync(routefilename,
                 CreationCollisionOption.ReplaceExisting))
             {
                 jsonSerializer.WriteObject(stream, _routes);
+            }
+        }
+        private async Task saveEventSubjectDataAsync()
+        {
+            var jsonSerializer = new DataContractJsonSerializer(typeof(ObservableCollection<Subjects>));
+            using (var stream = await ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync(eventfilename,
+                CreationCollisionOption.ReplaceExisting))
+            {
+                jsonSerializer.WriteObject(stream, _events);
             }
         }
     }
