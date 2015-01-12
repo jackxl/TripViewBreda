@@ -27,9 +27,7 @@ namespace TripViewBreda.Model.FileIO
 
         public async Task read()
         {
-            Debug.WriteLine("Start Reading");
             subjects = await datacontroller.GetRoutes();
-            Debug.WriteLine("Done Reading");
         }
 
         public bool write(Subjects subject)
@@ -55,10 +53,8 @@ namespace TripViewBreda.Model.FileIO
         public async Task<Subjects> Find(string name)
         {
             await read();
-            Debug.WriteLine("Subjects Size: " + GetSubjects().Count);
             foreach (Subjects route in GetSubjects())
             {
-                Debug.WriteLine("Subjects name: " + route.GetName());
                 if (route.GetName() == name)
                     return route;
             }
