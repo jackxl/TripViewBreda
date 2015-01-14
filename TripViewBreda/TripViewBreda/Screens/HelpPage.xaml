@@ -35,14 +35,14 @@
 
         <!--TODO: Content should be placed within the following grid-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="350" Height="400">
-            <TextBlock x:Name="TextBox_HelpContent" TextWrapping="Wrap" Text="TextBox" FontSize="18"/>
+            <TextBlock x:Name="TextBox_HelpContent" TextWrapping="Wrap" Text="Tekst..." FontSize="18"/>
 
         </Grid>
 
         <Grid Grid.Row="2">
             <StackPanel>
-                <Button x:Name="Button_F_A_Q" Content="Frequently Asked Questions" FontSize="20" Click="Button_F_A_Q_Click" HorizontalAlignment="Center"/>
-                <Button x:Name="Button_ResetSettings" Content="Reset Settings" FontSize="20" Click="Button_ResetSettings_Click" HorizontalAlignment="Center"/>
+                <Button x:Name="Button_F_A_Q" Content="Meeste gestelde vragen" FontSize="20" Click="Button_F_A_Q_Click" HorizontalAlignment="Center"/>
+                <Button x:Name="Button_ResetSettings" Content="Herstel instellingen" FontSize="20" Click="Button_ResetSettings_Click" HorizontalAlignment="Center"/>
             </StackPanel>
         </Grid>
     </Grid>

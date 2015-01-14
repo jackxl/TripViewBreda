@@ -41,20 +41,20 @@
                         <RowDefinition Height="75"/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
-                        <TextBlock x:Name="Title_Flyout" Text="Welcome" Margin="10" FontSize="32"/>
+                        <TextBlock x:Name="Title_Flyout" Text="Welkom!" Margin="10" FontSize="32"/>
                     </Grid>
                     <Grid Grid.Row="1">
-                        <TextBlock x:Name="TextBlok_WelcomeMessage" Text="hello...." Margin="10" FontSize="20"/>
+                        <TextBlock x:Name="TextBlok_WelcomeMessage" Text="hallo...." Margin="10" FontSize="20"/>
                     </Grid>
-                    <Button Grid.Row="2" x:Name="Button_Close" Content="Continue" Click="Button_Close_Click" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <CheckBox Grid.Row="2" x:Name="CheckBox_Dont_Show_Again" Content="Don't Show Again" FontSize="12" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <Button Grid.Row="2" x:Name="Button_Close" Content="Ga verder" Click="Button_Close_Click" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="2" x:Name="CheckBox_Dont_Show_Again" Content="Laat niet opnieuw zien" FontSize="12" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                 </Grid>
             </FlyoutPresenter>
             <StackPanel>
                 <Button x:Name="Button_Routes" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Content="Routes" Height="60" BorderThickness="0" FontSize="24" Click="Button_Routes_Click"/>
-                <Button x:Name="Button_Map" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Content="Map" Height="60" BorderThickness="0" FontSize="24" Click="Button_Map_Click"/>
+                <Button x:Name="Button_Map" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Content="Kaart" Height="60" BorderThickness="0" FontSize="24" Click="Button_Map_Click"/>
                 <Button x:Name="Button_Help" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Content="Help"  Height="60" BorderThickness="0" FontSize="24" Click="Button_Help_Click"/>
-                <Button x:Name="Button_Exit" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Content="Exit" Height="60" BorderThickness="0" FontSize="24" Click="Button_Exit_Click"/>
+                <Button x:Name="Button_Exit" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Content="Stop" Height="60" BorderThickness="0" FontSize="24" Click="Button_Exit_Click"/>
             </StackPanel>
         </Grid>
     </Grid>

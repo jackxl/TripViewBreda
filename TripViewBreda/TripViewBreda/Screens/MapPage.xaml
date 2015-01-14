@@ -29,7 +29,7 @@
         </Grid.Background>
 
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
-            <TextBlock Text="Route Page" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+            <TextBlock Text="Route pagina" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
 
         </StackPanel>
 

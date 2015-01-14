@@ -66,10 +66,10 @@ namespace TripViewBreda.Screens
         }
         private string CreateWelcomeMessage()
         {
-            string text = "Welkom user\n";
-            text += "This is the guide for Breda.\n\n";
-            text += "For more information contact the VVV\n\n";
-            text += "To continue press '" + this.Button_Close.Content + "'";
+            string text = "Welkom gebruiker\n";
+            text += "Dit is de digitale gids van Breda!\n\n";
+            text += "Voor meer informatie kunt u\nterecht bij het VVV\n\n";
+            text += "Om verder te gaan, druk op '" + this.Button_Close.Content + "'";
             return text;
         }
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)

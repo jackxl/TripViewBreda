@@ -27,7 +27,7 @@
                     "Name": "VVV",
                     "ImageName": "2.jpg",
                     "YoutubeVideoID": "",
-                    "Information": "This is the building of the VVV-building. This is where you also return this phone.",
+                    "Information": "Dit is het VVV-Gebouw. Hier moet u aan het eind van de route ook de telefoon retourneren.",
                     "Lattitude": "51.5942879",
                     "Longitude": "4.779192",
                     "Open": [ ]
@@ -60,19 +60,19 @@
                     "Open": [ ]
                 },
                 {
-                    "Name": "TS 1",
+                    "Name": "",
                     "ImageName": "2.jpg",
                     "YoutubeVideoID": "",
-                    "Information": "Unknown",
+                    "Information": "Tussenstop",
                     "Lattitude": "51.592667",
                     "Longitude": "4.777917",
                     "Open": [ ]
                 },
                 {
-                    "Name": "TS 2",
+                    "Name": " ",
                     "ImageName": "2.jpg",
                     "YoutubeVideoID": "",
-                    "Information": "Unknonw",
+                    "Information": "Tussenstop",
                     "Lattitude": "51.591255",
                     "Longitude": "4.777188",
                     "Open": [ ]
