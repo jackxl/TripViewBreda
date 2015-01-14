@@ -108,6 +108,7 @@ namespace TripViewBreda.Screens
             }
             MyMap.PedestrianFeaturesVisible = true;
             MyMap.LandmarksVisible = true;
+            await MyMap.TrySetViewAsync(myPoint, 18D);
         }
 
         private async void ShowError()
