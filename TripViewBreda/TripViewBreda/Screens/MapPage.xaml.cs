@@ -340,64 +340,54 @@ namespace TripViewBreda.Screens
             try
             {
                 await startup();
-                this.navigationHelper.OnNavigatedTo(e);
-                subjects = e.Parameter as Subjects;
-                Debug.WriteLine("Navigate To " + subjects.GetSubjects().Count + ", " + events.GetSubjects().Count);
-
-                LinkedList<Geopoint> geopointList = new LinkedList<Geopoint>();
-                geopointList.AddFirst(myPoint);
-                foreach (Subject s in subjects.GetSubjects())
-                {
-                    if (s.GetName().Trim() != "")
-                    {
-                        AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
-                        CreateGeofence(s);
-                    }
-                    BasicGeoposition bg = new BasicGeoposition();
-                    bg.Latitude = s.location.GetLattitude();
-                    bg.Longitude = s.location.GetLongitude();
-                    geopointList.AddLast(new Geopoint(bg));
-                }
-                foreach (Subject s in events.GetSubjects())
-                {
-                    if (s.GetName().Trim() != "")
-                    {
-                        AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
-                        CreateGeofence(s);
-                    }
-                    //geopointList.AddLast(ToGeopointConverter(s));
-                }
-                Subject lastSub = new Subject(new GPSPoint(myPoint.Position.Latitude, myPoint.Position.Longitude), "Huidige locatie");
-                if (geopointList.Count > 1)
-                    await GetRouteAndDirections(geopointList);
-                else
-                    await MyMap.TrySetViewAsync(myPoint, 18D);
-
-                DestinationLabel.Text = "";
-                int i = 1;
-                foreach (Subject s in subjects.GetSubjects())
-                {
-                    if (s.GetName().Trim() != "")
-                    {
-                        DestinationLabel.Text += i + ": " + s.GetName() + "\n";
-                        i++;
-                    }
-                }
-                Debug.WriteLine("Route volledig getekend");
-                MyMap.CancelDirectManipulations();
             }
             catch (Exception ex)
             {
                 ShowError();
             }
-            //foreach (Subject s in events.GetSubjects())
-            //{
-            //    if (s.GetName().Trim() != "")
-            //    {
-            //        DestinationLabel.Text += i + ": " + s.GetName() + "\n";
-            //        i++;
-            //    }
-            //}
+            this.navigationHelper.OnNavigatedTo(e);
+            Tuple<Subjects, Subjects> information = e.Parameter as Tuple<Subjects, Subjects>;
+            subjects = information.Item1;
+            events = information.Item2;
+            Debug.WriteLine("Navigate To " + subjects.GetSubjects().Count + ", " + events.GetSubjects().Count);
+
+            LinkedList<Geopoint> geopointList = new LinkedList<Geopoint>();
+            geopointList.AddFirst(myPoint);
+            foreach (Subject s in subjects.GetSubjects())
+            {
+                if (s.GetName().Trim() != "")
+                {
+                    AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
+                    CreateGeofence(s);
+                }
+                BasicGeoposition bg = new BasicGeoposition();
+                bg.Latitude = s.location.GetLattitude();
+                bg.Longitude = s.location.GetLongitude();
+                geopointList.AddLast(new Geopoint(bg));
+            }
+            foreach (Subject s in events.GetSubjects())
+            {
+                if (s.GetName().Trim() != "")
+                {
+                    AddPoint_Map(s.GetLocation().GetLattitude(), s.GetLocation().GetLongitude(), s.GetName());
+                    CreateGeofence(s);
+                }
+            }
+            if (geopointList.Count > 1)
+                await GetRouteAndDirections(geopointList);
+            else
+                await MyMap.TrySetViewAsync(myPoint, 18D);
+
+            DestinationLabel.Text = "";
+            int i = 1;
+            foreach (Subject s in subjects.GetSubjects())
+            {
+                if (s.GetName().Trim() != "")
+                {
+                    DestinationLabel.Text += i + ": " + s.GetName() + "\n";
+                    i++;
+                }
+            }
             Debug.WriteLine("Route volledig getekend");
             MyMap.CancelDirectManipulations();
         }
